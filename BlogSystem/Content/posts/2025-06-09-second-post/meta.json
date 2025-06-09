@@ -1,0 +1,11 @@
+﻿{
+    "id": "2025-06-09-second-post",
+    "title": "Second Post",
+    "description": "This is the second post in our new blog system, continuing our journey.",
+    "author": "John Smith",
+    "date": "2025-06-09T12:00:00Z",
+    "tags": ["update", "blog", "news"],
+    "category": "Updates",
+    "image": "/images/posts/second-post.jpg",
+    "slug": "second-post"
+}

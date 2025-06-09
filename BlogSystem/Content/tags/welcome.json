@@ -1,0 +1,7 @@
+{
+    "tag": "welcome",
+    "description": "Posts that welcome readers to the blog, introducing them to the content and purpose of the blog system.",
+    "posts": [
+        "2025-06-09-first-post"
+    ]
+}
