@@ -1,0 +1,19 @@
+﻿using BlogSystem.Domain.Models;
+
+namespace BlogSystem.Features.Posts.Get
+{
+    public static class GetPostEndpoint
+    {
+        public static void MapGetPostEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/posts/{slug}", async (string slug, IGetPostHandler handler) =>
+            {
+                var post = await handler.GetPostAsync(slug);
+                return Results.Ok(post);
+            })
+            .WithName("GetPostBySlug")
+            .Produces<Post>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound);
+        }
+    }
+}
