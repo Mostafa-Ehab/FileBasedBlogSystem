@@ -2,15 +2,15 @@
     "posts": [
         {
             "slug": "first-post",
-            "path": "2025-06-09-first-post"
+            "id": "2025-06-09-first-post"
         },
         {
             "slug": "second-post",
-            "path": "2025-06-09-second-post"
+            "id": "2025-06-09-second-post"
         },
         {
             "slug": "third-post",
-            "path": "2025-06-09-third-post"
+            "id": "2025-06-09-third-post"
         }
     ]
 }
