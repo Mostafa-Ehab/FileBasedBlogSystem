@@ -1,9 +1,19 @@
+using System.Text.Json;
 using BlogSystem.Features.Posts.Data;
 
 namespace BlogSystemTest.Posts.Data
 {
     public class GetPostBySlugTest
     {
+        private readonly PostRepository postRepository;
+        public GetPostBySlugTest()
+        {
+            postRepository = new PostRepository(new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+        }
+
         [Fact]
         public void GetPost_ShouldReturnPost_WhenPostExists()
         {
@@ -17,7 +27,7 @@ namespace BlogSystemTest.Posts.Data
             var expectedSlug = "first-post";
 
             // Act
-            var postRepository = new PostRepository();
+            
             var post = postRepository.GetPostBySlug(postSlug);
 
             // Assert
@@ -36,7 +46,6 @@ namespace BlogSystemTest.Posts.Data
             var postSlug = "non-existent-post";
 
             // Act
-            var postRepository = new PostRepository();
             var post = postRepository.GetPostBySlug(postSlug);
 
             // Assert
@@ -53,7 +62,6 @@ namespace BlogSystemTest.Posts.Data
             var expectedContent = File.ReadAllText(Path.Combine(path, "content.md"));
 
             // Act
-            var postRepository = new PostRepository();
             var post = postRepository.GetPostBySlug(postSlug);
 
             // Assert
