@@ -9,7 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add services to the container.
-builder.Services.AddPostServices();
+builder.Services.AddServices();
 
 var app = builder.Build();
 

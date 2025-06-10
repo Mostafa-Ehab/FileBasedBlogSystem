@@ -5,12 +5,13 @@ namespace BlogSystem.Features.Posts.Data
 {
     public class PostRepository : IPostRepository
     {
-        private readonly JsonSerializerOptions jsonSerializerOptions;
-        private readonly SlugResolver slugResolver;
-        public PostRepository()
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
+        private readonly SlugResolver _slugResolver;
+
+        public PostRepository(JsonSerializerOptions jsonSerializerOptions)
         {
-            jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
-            slugResolver = new SlugResolver();
+            _jsonSerializerOptions = jsonSerializerOptions;
+            _slugResolver = new SlugResolver();
         }
 
         public Post? GetPostById(string id)
@@ -22,7 +23,7 @@ namespace BlogSystem.Features.Posts.Data
             }
 
             string json = File.ReadAllText(Path.Combine(path, "meta.json"));
-            Post? items = JsonSerializer.Deserialize<Post>(json, jsonSerializerOptions);
+            Post? items = JsonSerializer.Deserialize<Post>(json, _jsonSerializerOptions);
 
             if (items != null)
             {
@@ -31,9 +32,10 @@ namespace BlogSystem.Features.Posts.Data
 
             return items;
         }
+
         public Post? GetPostBySlug(string slug)
         {
-            var id = slugResolver.ResolveSlug(slug);
+            var id = _slugResolver.ResolveSlug(slug);
             return !string.IsNullOrWhiteSpace(id) ? GetPostById(id) : null;
         }
     }
