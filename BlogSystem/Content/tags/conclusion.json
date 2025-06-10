@@ -1,5 +1,6 @@
 {
-    "tag": "conclusion",
+    "name": "conclusion",
+    "slug": "conclusion",
     "description": "Posts that conclude a series or provide final thoughts on a topic.",
     "posts": [
         "2025-06-09-third-post"

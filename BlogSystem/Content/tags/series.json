@@ -1,5 +1,6 @@
 {
-    "tag": "series",
+    "name": "series",
+    "slug": "series",
     "description": "Posts that are part of a series, providing a continuous narrative or exploration of a topic over multiple entries.",
     "posts": [
         "2025-06-09-third-post"

@@ -1,5 +1,6 @@
 {
-    "tag": "update",
+    "name": "update",
+    "slug": "update",
     "description": "Posts that provide updates on the blog system, including new features, changes, and improvements.",
     "posts": [
         "2025-06-09-second-post"
