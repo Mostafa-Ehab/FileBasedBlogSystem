@@ -56,16 +56,25 @@ namespace BlogSystem.Common.Middlewares
 
             var response = context.Response;
             response.ContentType = "application/json";
-            response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            var (statusCode, errorMessage) = exception switch
+            {
+                KeyNotFoundException => (HttpStatusCode.NotFound, "Resource not found."),
+                UnauthorizedAccessException => (HttpStatusCode.Unauthorized, "Access denied."),
+                ArgumentException => (HttpStatusCode.BadRequest, exception.Message),
+                _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
+            };
+
+            response.StatusCode = (int)statusCode;
 
             var errorResponse = new
             {
-                StatusCode = HttpStatusCode.InternalServerError,
-                Message = "An unexpected error occurred.",
-                Timestamp = DateTime.UtcNow
-            };
+                StatusCode = statusCode,
+                Message = errorMessage,
+            Timestamp = DateTime.UtcNow
+        };
 
-            await response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+        await response.WriteAsync(JsonSerializer.Serialize(errorResponse));
         }
     }
 }
