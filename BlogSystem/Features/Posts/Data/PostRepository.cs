@@ -61,5 +61,26 @@ namespace BlogSystem.Features.Posts.Data
                 .Where(post => post != null)
                 .ToArray()!;
         }
+
+        public Post[] GetPostsByTag(string tagSlug)
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, "Content", "tags", $"{tagSlug}.json");
+            if (!File.Exists(path))
+            {
+                return [];
+            }
+
+            string json = File.ReadAllText(path);
+            Tag? tag = JsonSerializer.Deserialize<Tag>(json, _jsonSerializerOptions);
+            if (tag == null || tag.Posts == null || tag.Posts.Count == 0)
+            {
+                return [];
+            }
+
+            return tag.Posts
+                .Select(GetPostById)
+                .Where(post => post != null)
+                .ToArray()!;
+        }
     }
 }
