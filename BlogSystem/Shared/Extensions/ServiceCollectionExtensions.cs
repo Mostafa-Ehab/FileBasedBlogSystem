@@ -1,3 +1,6 @@
+using System.Text.Json;
+using BlogSystem.Features.Categories.Data;
+using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.Get;
 
@@ -21,6 +24,13 @@ namespace BlogSystem.Shared.Extensions
         {
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IGetPostHandler, GetPostHandler>();
+            return services;
+        }
+
+        private static IServiceCollection AddCategoryServices(this IServiceCollection services)
+        {
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IGetCategoryHandler, GetCategoryHandler>();
             return services;
         }
     }

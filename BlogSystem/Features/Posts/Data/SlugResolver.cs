@@ -1,13 +1,14 @@
+using System.IO;
+using System.Text.Json;
+using BlogSystem.Domain.Models;
+
 namespace BlogSystem.Features.Posts.Data
 {
-    using System.IO;
-    using System.Text.Json;
-    using BlogSystem.Domain.Models;
-
     public class SlugResolver
     {
         private readonly JsonSerializerOptions jsonSerializerOptions;
         private Dictionary<string, string> slugCache = new();
+        
         public SlugResolver()
         {
             jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
@@ -18,6 +19,7 @@ namespace BlogSystem.Features.Posts.Data
         {
             return slugCache.TryGetValue(slug.ToLowerInvariant(), out var cachedId) ? cachedId : null;
         }
+
         public void AddSlug(string slug, string id)
         {
             if (string.IsNullOrWhiteSpace(slug) || string.IsNullOrWhiteSpace(id))
@@ -28,6 +30,7 @@ namespace BlogSystem.Features.Posts.Data
             slugCache[slug.ToLowerInvariant()] = id;
             SaveSlugs();
         }
+
         public void RemoveSlug(string slug)
         {
             if (string.IsNullOrWhiteSpace(slug))
@@ -38,6 +41,7 @@ namespace BlogSystem.Features.Posts.Data
             slugCache.Remove(slug.ToLowerInvariant());
             SaveSlugs();
         }
+
         public bool SlugExists(string slug)
         {
             return slugCache.ContainsKey(slug.ToLowerInvariant());

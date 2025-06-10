@@ -1,4 +1,3 @@
-using BlogSystem.Features.Posts.Get;
 using BlogSystem.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +23,6 @@ app.UseGlobalExceptionHandler();
 
 app.UseHttpsRedirection();
 
-app.MapPostEndpoints();
+app.MapEndpoints();
 
 app.Run();
