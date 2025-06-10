@@ -12,6 +12,7 @@ namespace BlogSystem.Features.Posts.Get
                 return Results.Ok(post);
             })
             .WithName("GetPostBySlug")
+            .WithTags("Posts")
             .Produces<Post>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
         }

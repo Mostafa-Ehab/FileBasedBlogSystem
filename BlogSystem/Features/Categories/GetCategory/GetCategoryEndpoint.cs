@@ -12,6 +12,7 @@ namespace BlogSystem.Features.Categories.GetCategory
                 return Results.Ok(categories);
             })
             .WithName("GetAllCategories")
+            .WithTags("Categories")
             .Produces<Category[]>(StatusCodes.Status200OK);
         }
 
@@ -23,6 +24,7 @@ namespace BlogSystem.Features.Categories.GetCategory
                 return Results.Ok(category);
             })
             .WithName("GetCategoryBySlug")
+            .WithTags("Categories")
             .Produces<Category>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
         }
@@ -35,6 +37,7 @@ namespace BlogSystem.Features.Categories.GetCategory
                 return Results.Ok(posts);
             })
             .WithName("GetPostsByCategory")
+            .WithTags("Categories")
             .Produces<Post[]>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
         }
