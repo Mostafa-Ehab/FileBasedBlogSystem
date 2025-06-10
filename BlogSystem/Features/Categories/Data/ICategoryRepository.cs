@@ -1,5 +1,4 @@
 using BlogSystem.Domain.Entities;
-using BlogSystem.Domain.Models;
 
 namespace BlogSystem.Features.Categories.Data
 {

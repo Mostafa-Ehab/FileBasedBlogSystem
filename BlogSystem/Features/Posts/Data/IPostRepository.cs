@@ -1,4 +1,4 @@
-﻿using BlogSystem.Domain.Models;
+﻿using BlogSystem.Domain.Entities;
 
 namespace BlogSystem.Features.Posts.Data
 {

@@ -1,4 +1,4 @@
-﻿namespace BlogSystem.Domain.Models
+﻿namespace BlogSystem.Domain.Entities
 {
     public class Post
     {

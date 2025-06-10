@@ -1,4 +1,4 @@
-namespace BlogSystem.Shared.Exceptions.Posts
+namespace BlogSystem.Shared.Exceptions.Categories
 {
     public class CategoryNotFoundException : ApplicationCustomException
     {

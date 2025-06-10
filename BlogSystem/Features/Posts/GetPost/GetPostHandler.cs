@@ -1,4 +1,4 @@
-﻿using BlogSystem.Domain.Models;
+﻿using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Shared.Exceptions.Posts;
 

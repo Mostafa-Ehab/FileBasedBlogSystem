@@ -1,8 +1,7 @@
 using BlogSystem.Domain.Entities;
-using BlogSystem.Domain.Models;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Posts.Data;
-using BlogSystem.Shared.Exceptions.Posts;
+using BlogSystem.Shared.Exceptions.Categories;
 
 namespace BlogSystem.Features.Categories.GetCategory
 {

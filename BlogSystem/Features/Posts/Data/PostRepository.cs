@@ -1,6 +1,4 @@
 ﻿using BlogSystem.Domain.Entities;
-using BlogSystem.Domain.Models;
-using BlogSystem.Shared.Exceptions.Posts;
 using System.Text.Json;
 
 namespace BlogSystem.Features.Posts.Data
