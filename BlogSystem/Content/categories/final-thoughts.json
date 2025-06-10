@@ -1,5 +1,6 @@
 {
-    "category": "Final Thoughts",
+    "name": "Final Thoughts",
+    "slug": "final-thoughts",
     "description": "Wrapping up our initial series with final thoughts and reflections.",
     "posts": [
         "2025-06-09-third-post"

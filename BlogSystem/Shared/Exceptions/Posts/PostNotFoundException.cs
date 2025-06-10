@@ -1,6 +1,6 @@
 namespace BlogSystem.Shared.Exceptions.Posts
 {
-    public class PostNotFoundException : ApplicationException
+    public class PostNotFoundException : ApplicationCustomException
     {
         public PostNotFoundException(string id) : base($"Post '{id}' not found.", 404, 404)
         {
