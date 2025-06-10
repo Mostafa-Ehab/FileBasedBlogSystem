@@ -26,7 +26,19 @@ namespace BlogSystem.Features.Categories.Data
 
         public Category[] GetAllCategories()
         {
-            throw new NotImplementedException();
+            var path = Path.Combine(AppContext.BaseDirectory, "Content", "categories");
+            if (!Directory.Exists(path))
+            {
+                return [];
+            }
+
+            var files = Directory.GetFiles(path, "*.json");
+            return files
+                .Select(file => JsonSerializer.Deserialize<Category>(
+                    File.ReadAllText(file), _jsonSerializerOptions
+                ))
+                .Where(category => category != null)
+                .ToArray()!;
         }
     }
 }

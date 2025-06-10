@@ -22,6 +22,7 @@ namespace BlogSystem.Shared.Extensions
         
         private static IEndpointRouteBuilder MapCategoryEndpoints(this IEndpointRouteBuilder app)
         {
+            app.MapGetAllCategoriesEndpoint();
             app.MapGetCategoryEndpoint();
             app.MapGetPostsByCategoryEndpoint();
 

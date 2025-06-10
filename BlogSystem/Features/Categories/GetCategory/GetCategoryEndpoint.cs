@@ -5,6 +5,17 @@ namespace BlogSystem.Features.Categories.GetCategory
 {
     public static class GetCategoryEndpoint
     {
+        public static void MapGetAllCategoriesEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/categories", async (IGetCategoryHandler handler) =>
+            {
+                var categories = await handler.GetAllCategoriesAsync();
+                return Results.Ok(categories);
+            })
+            .WithName("GetAllCategories")
+            .Produces<Category[]>(StatusCodes.Status200OK);
+        }
+
         public static void MapGetCategoryEndpoint(this IEndpointRouteBuilder app)
         {
             app.MapGet("/categories/{slug}", async (string slug, IGetCategoryHandler handler) =>

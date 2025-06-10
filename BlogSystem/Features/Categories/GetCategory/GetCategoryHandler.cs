@@ -39,7 +39,8 @@ namespace BlogSystem.Features.Categories.GetCategory
 
         public Task<Category[]> GetAllCategoriesAsync()
         {
-            throw new NotImplementedException();
+            Category[] categories = _categoryRepository.GetAllCategories();
+            return Task.FromResult(categories);
         }
     }
 }
