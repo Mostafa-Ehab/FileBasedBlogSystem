@@ -2,9 +2,13 @@
     "id": "2025-06-09-third-post",
     "title": "Third Post",
     "description": "This is the third post in our new blog system, wrapping up our initial series.",
-    "author": "Alice Johnson",
+    "author": "john-smith",
     "date": "2025-06-09T14:00:00Z",
-    "tags": ["conclusion", "blog", "series"],
+    "tags": [
+        "conclusion",
+        "blog",
+        "series"
+    ],
     "category": "Final Thoughts",
     "image": "/images/posts/third-post.jpg",
     "slug": "third-post"

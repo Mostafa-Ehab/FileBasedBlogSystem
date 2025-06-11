@@ -2,9 +2,13 @@
     "id": "2025-06-09-first-post",
     "title": "First Post",
     "description": "This is the first post in our new blog system.",
-    "author": "Jane Doe",
+    "author": "jane-doe",
     "date": "2025-06-09T10:00:00Z",
-    "tags": ["introduction", "welcome", "blog"],
+    "tags": [
+        "introduction",
+        "welcome",
+        "blog"
+    ],
     "category": "Announcements",
     "image": "/images/posts/first-post.jpg",
     "slug": "first-post"
