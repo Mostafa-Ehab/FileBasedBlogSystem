@@ -23,7 +23,7 @@ namespace BlogSystemTest.Posts.Data
             var expectedTitle = "First Post";
             var expectedDescription = "This is the first post in our new blog system.";
             var expectedTags = new List<string> { "introduction", "welcome" };
-            var expectedAuthor = "Jane Doe";
+            var expectedAuthor = "jane-doe";
             var expectedSlug = "first-post";
 
             // Act
