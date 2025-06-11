@@ -6,7 +6,7 @@ namespace BlogSystem.Features.Tags.GetTag
     {
         public static void MapGetAllTagsEndpoint(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/tags", async (IGetTagHandler handler) =>
+            endpoints.MapGet("/", async (IGetTagHandler handler) =>
             {
                 return Results.Ok(await handler.GetAllTagsAsync());
             })
@@ -17,7 +17,7 @@ namespace BlogSystem.Features.Tags.GetTag
 
         public static void MapGetTagEndpoint(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/tags/{slug}", async (string slug, IGetTagHandler handler) =>
+            endpoints.MapGet("/{slug}", async (string slug, IGetTagHandler handler) =>
             {
                 return Results.Ok(await handler.GetTagAsync(slug));
             })
@@ -29,7 +29,7 @@ namespace BlogSystem.Features.Tags.GetTag
 
         public static void MapGetPostsByTagEndpoint(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet("/tags/{slug}/posts", async (string slug, IGetTagHandler handler) =>
+            endpoints.MapGet("/{slug}/posts", async (string slug, IGetTagHandler handler) =>
             {
                 return Results.Ok(await handler.GetPostsByTagAsync(slug));
             })
