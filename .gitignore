@@ -60,3 +60,5 @@ nunit-*.xml
 
 # Visual Studio
 .vs/
+
+Content/
