@@ -17,6 +17,8 @@ namespace BlogSystem.Shared.Extensions
                 PropertyNameCaseInsensitive = true
             });
 
+            services.AddSingleton<AuthHelper>();
+
             services.AddCategoryServices();
             services.AddPostServices();
             services.AddTagServices();

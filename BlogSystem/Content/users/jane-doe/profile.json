@@ -5,9 +5,10 @@
     "fullName": "Jane Doe",
     "bio": "This is Jane's profile. They love blogging about technology and travel.",
     "profilePicture": "https://example.com/images/jane-doe.jpg",
-    "hashedPassword": "5f4dcc3b5aa765d61d8327deb882cf99",
+    "hashedPassword": "$2a$10$0bYzBUdwKdUV6E4HYUNs5OkjPQVCAGyqDSJoJUmXukFSYBoh1pzLy",
     "createdAt": "2023-01-01T12:00:00Z",
     "updatedAt": "2023-01-10T12:00:00Z",
+    "role": "Author",
     "posts": [
         "2025-06-09-first-post"
     ]
