@@ -1,16 +1,15 @@
 using System.Text.Json;
-using BlogSystem.Domain.Entities;
 
 namespace BlogSystem.Features.Posts.Data
 {
     public class SlugResolver
     {
-        private readonly JsonSerializerOptions jsonSerializerOptions;
-        private Dictionary<string, string> slugCache = new();
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
+        private Dictionary<string, string> slugCache = [];
 
-        public SlugResolver()
+        public SlugResolver(JsonSerializerOptions jsonSerializerOptions)
         {
-            jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
+            _jsonSerializerOptions = jsonSerializerOptions;
             LoadSlugs();
         }
 
@@ -48,11 +47,11 @@ namespace BlogSystem.Features.Posts.Data
 
         private void LoadSlugs()
         {
-            var pathsFile = Path.Combine(AppContext.BaseDirectory, "Content", "posts", "slugs.json");
+            var pathsFile = Path.Combine("Content", "posts", "slugs.json");
             if (File.Exists(pathsFile))
             {
                 var json = File.ReadAllText(pathsFile);
-                var pathsData = JsonSerializer.Deserialize<PostsJson>(json, jsonSerializerOptions)
+                var pathsData = JsonSerializer.Deserialize<PostsJson>(json, _jsonSerializerOptions)
                     ?? throw new InvalidOperationException("Failed to load slugs.json");
                 slugCache = pathsData.Posts.ToDictionary(p => p.Slug.ToLowerInvariant(), p => p.Id);
             }
@@ -64,12 +63,12 @@ namespace BlogSystem.Features.Posts.Data
 
         private void SaveSlugs()
         {
-            var pathsFile = Path.Combine(AppContext.BaseDirectory, "Content", "posts", "slugs.json");
+            var pathsFile = Path.Combine("Content", "posts", "slugs.json");
             var pathsData = new PostsJson
             {
                 Posts = slugCache.Select(kvp => new PostData { Slug = kvp.Key, Id = kvp.Value }).ToList()
             };
-            var json = JsonSerializer.Serialize(pathsData, jsonSerializerOptions);
+            var json = JsonSerializer.Serialize(pathsData, _jsonSerializerOptions);
             File.WriteAllText(pathsFile, json);
         }
     }

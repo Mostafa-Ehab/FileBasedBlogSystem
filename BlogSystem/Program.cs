@@ -37,6 +37,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (!Directory.Exists("Content"))
+{
+    Directory.CreateDirectory("Content");
+}
+
 app.UseGlobalExceptionHandler();
 
 app.UseHttpsRedirection();

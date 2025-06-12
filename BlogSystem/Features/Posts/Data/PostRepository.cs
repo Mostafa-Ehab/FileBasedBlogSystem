@@ -8,15 +8,15 @@ namespace BlogSystem.Features.Posts.Data
         private readonly JsonSerializerOptions _jsonSerializerOptions;
         private readonly SlugResolver _slugResolver;
 
-        public PostRepository(JsonSerializerOptions jsonSerializerOptions)
+        public PostRepository(JsonSerializerOptions jsonSerializerOptions, SlugResolver slugResolver)
         {
             _jsonSerializerOptions = jsonSerializerOptions;
-            _slugResolver = new SlugResolver();
+            _slugResolver = slugResolver;
         }
 
         public Post? GetPostById(string id)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "posts", id);
+            var path = Path.Combine("Content", "posts", id);
             if (path == null || !Directory.Exists(path))
             {
                 return null;
@@ -41,7 +41,7 @@ namespace BlogSystem.Features.Posts.Data
 
         public Post[] GetPostsByCategory(string categorySlug)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "categories", $"{categorySlug}.json");
+            var path = Path.Combine("Content", "categories", $"{categorySlug}.json");
             if (!File.Exists(path))
             {
                 return [];
@@ -62,7 +62,7 @@ namespace BlogSystem.Features.Posts.Data
 
         public Post[] GetPostsByTag(string tagSlug)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "tags", $"{tagSlug}.json");
+            var path = Path.Combine("Content", "tags", $"{tagSlug}.json");
             if (!File.Exists(path))
             {
                 return [];

@@ -10,5 +10,8 @@ namespace BlogSystem.Features.Users.Data
         User CreateUser(User user);
         void UpdateUser(User user);
         void DeleteUser(User user);
+        bool UserExists(string id);
+        bool UserExistsByUsername(string username);
+        bool UserExistsByEmail(string email);
     }
 }
