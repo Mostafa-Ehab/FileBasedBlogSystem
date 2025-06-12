@@ -2,7 +2,7 @@ using System.Net;
 using System.Text.Json;
 using BlogSystem.Shared.Exceptions;
 
-namespace BlogSystem.Common.Middlewares
+namespace BlogSystem.Shared.Middlewares
 {
     public class ExceptionHandlerMiddleware
     {
@@ -47,7 +47,13 @@ namespace BlogSystem.Common.Middlewares
                 Timestamp = DateTime.UtcNow
             };
 
-            await response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+            await response.WriteAsync(
+                JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                })
+            );
         }
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
@@ -71,10 +77,16 @@ namespace BlogSystem.Common.Middlewares
             {
                 StatusCode = statusCode,
                 Message = errorMessage,
-            Timestamp = DateTime.UtcNow
-        };
+                Timestamp = DateTime.UtcNow
+            };
 
-        await response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+            await response.WriteAsync(
+                JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                })
+            );
         }
     }
 }

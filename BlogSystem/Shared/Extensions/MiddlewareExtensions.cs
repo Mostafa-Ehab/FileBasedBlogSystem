@@ -1,4 +1,4 @@
-using BlogSystem.Common.Middlewares;
+using BlogSystem.Shared.Middlewares;
 
 namespace BlogSystem.Shared.Extensions
 {

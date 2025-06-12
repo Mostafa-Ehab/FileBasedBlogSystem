@@ -4,7 +4,7 @@ namespace BlogSystem.Shared.Exceptions
     {
         public int StatusCode { get; }
         public int ErrorCode { get; }
-        protected ApplicationCustomException(string message, int statusCode, int errorCode): base(message)
+        protected ApplicationCustomException(string message, int statusCode, int errorCode) : base(message)
         {
             StatusCode = statusCode;
             ErrorCode = errorCode;

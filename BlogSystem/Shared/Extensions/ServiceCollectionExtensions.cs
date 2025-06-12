@@ -5,9 +5,15 @@ using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.Get;
 using BlogSystem.Features.Tags.Data;
 using BlogSystem.Features.Tags.GetTag;
+using BlogSystem.Features.Users.CreateUser;
+using BlogSystem.Features.Users.CreateUser.DTOs;
+using BlogSystem.Features.Users.CreateUser.Validators;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.Login;
+using BlogSystem.Features.Users.Login.DTOs;
+using BlogSystem.Features.Users.Login.Validators;
 using BlogSystem.Shared.Helpers;
+using FluentValidation;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -22,11 +28,22 @@ namespace BlogSystem.Shared.Extensions
 
             services.AddSingleton<AuthHelper>();
 
+            services.AddSingleton<SlugResolver>();
+            services.AddSingleton<UserResolver>();
+
+            services.AddValidators();
             services.AddCategoryServices();
             services.AddPostServices();
             services.AddTagServices();
             services.AddUserServices();
 
+            return services;
+        }
+
+        private static IServiceCollection AddValidators(this IServiceCollection services)
+        {
+            services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
+            services.AddScoped<IValidator<CreateUserRequestDTO>, CreateUserRequestValidator>();
             return services;
         }
 
@@ -50,11 +67,12 @@ namespace BlogSystem.Shared.Extensions
             services.AddScoped<IGetTagHandler, GetTagHandler>();
             return services;
         }
-        
+
         private static IServiceCollection AddUserServices(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILoginHandler, LoginHandler>();
+            services.AddScoped<ICreateUserHandler, CreateUserHandler>();
             return services;
         }
     }

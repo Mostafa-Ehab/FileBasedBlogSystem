@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using BlogSystem.Shared.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,6 +26,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         };
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
+    options.AddPolicy("Editor", policy => policy.RequireClaim("Role", "Editor"));
+});
+
 // Add services to the container.
 builder.Services.AddServices();
 
@@ -44,7 +51,15 @@ if (!Directory.Exists("Content"))
 
 app.UseGlobalExceptionHandler();
 
+//app.UseCors(
+//    options => options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()
+//);
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapEndpoints();
 
