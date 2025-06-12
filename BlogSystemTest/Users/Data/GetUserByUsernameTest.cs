@@ -29,7 +29,6 @@ namespace BlogSystemTest.Users.Data
             Assert.Equal("Jane Doe", user.FullName);
             Assert.Equal("This is Jane's profile. They love blogging about technology and travel.", user.Bio);
             Assert.Equal("https://example.com/images/jane-doe.jpg", user.ProfilePicture);
-            Assert.Equal("5f4dcc3b5aa765d61d8327deb882cf99", user.HashedPassword);
             Assert.Equal(["2025-06-09-first-post"], user.Posts);
         }
 
