@@ -1,5 +1,3 @@
-using BlogSystem.Shared.Exceptions;
-
 namespace BlogSystem.Shared.Exceptions.Users
 {
     public class NotAuthenticatedException : ApplicationCustomException

@@ -7,7 +7,7 @@ namespace BlogSystem.Features.Posts.Data
     {
         private readonly JsonSerializerOptions jsonSerializerOptions;
         private Dictionary<string, string> slugCache = new();
-        
+
         public SlugResolver()
         {
             jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
@@ -52,7 +52,7 @@ namespace BlogSystem.Features.Posts.Data
             if (File.Exists(pathsFile))
             {
                 var json = File.ReadAllText(pathsFile);
-                var pathsData = JsonSerializer.Deserialize<PathsJson>(json, jsonSerializerOptions)
+                var pathsData = JsonSerializer.Deserialize<PostsJson>(json, jsonSerializerOptions)
                     ?? throw new InvalidOperationException("Failed to load slugs.json");
                 slugCache = pathsData.Posts.ToDictionary(p => p.Slug.ToLowerInvariant(), p => p.Id);
             }
@@ -65,22 +65,22 @@ namespace BlogSystem.Features.Posts.Data
         private void SaveSlugs()
         {
             var pathsFile = Path.Combine(AppContext.BaseDirectory, "Content", "posts", "slugs.json");
-            var pathsData = new PathsJson
+            var pathsData = new PostsJson
             {
-                Posts = slugCache.Select(kvp => new PostPath { Slug = kvp.Key, Id = kvp.Value }).ToList()
+                Posts = slugCache.Select(kvp => new PostData { Slug = kvp.Key, Id = kvp.Value }).ToList()
             };
             var json = JsonSerializer.Serialize(pathsData, jsonSerializerOptions);
             File.WriteAllText(pathsFile, json);
         }
+    }
 
-        private class PathsJson
-        {
-            public List<PostPath> Posts { get; set; } = new();
-        }
-        private class PostPath
-        {
-            public string Slug { get; set; } = string.Empty;
-            public string Id { get; set; } = string.Empty;
-        }
+    internal class PostsJson
+    {
+        public List<PostData> Posts { get; set; } = new();
+    }
+    internal class PostData
+    {
+        public string Slug { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
     }
 }
