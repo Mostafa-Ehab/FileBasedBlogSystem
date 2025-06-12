@@ -5,6 +5,9 @@ using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.Get;
 using BlogSystem.Features.Tags.Data;
 using BlogSystem.Features.Tags.GetTag;
+using BlogSystem.Features.Users.Data;
+using BlogSystem.Features.Users.Login;
+using BlogSystem.Shared.Helpers;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -22,7 +25,8 @@ namespace BlogSystem.Shared.Extensions
             services.AddCategoryServices();
             services.AddPostServices();
             services.AddTagServices();
-            
+            services.AddUserServices();
+
             return services;
         }
 
@@ -44,6 +48,13 @@ namespace BlogSystem.Shared.Extensions
         {
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<IGetTagHandler, GetTagHandler>();
+            return services;
+        }
+        
+        private static IServiceCollection AddUserServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ILoginHandler, LoginHandler>();
             return services;
         }
     }
