@@ -1,23 +1,21 @@
 using System.Text.Json;
 using BlogSystem.Features.Posts.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Posts.Data
 {
-    public class GetPostBySlugTest
+    public class GetPostBySlugTest : UnitTestBase
     {
-        private readonly PostRepository postRepository;
         public GetPostBySlugTest()
         {
-            postRepository = new PostRepository(new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            SeedContent();
         }
 
         [Fact]
         public void GetPost_ShouldReturnPost_WhenPostExists()
         {
             // Arrange
+            var postRepository = CreatePostRepository();
             var postSlug = "first-post";
 
             var expectedTitle = "First Post";
@@ -27,7 +25,6 @@ namespace BlogSystemTest.Posts.Data
             var expectedSlug = "first-post";
 
             // Act
-            
             var post = postRepository.GetPostBySlug(postSlug);
 
             // Assert
@@ -43,6 +40,7 @@ namespace BlogSystemTest.Posts.Data
         public void GetPost_ShouldReturnNull_WhenPostDoesNotExist()
         {
             // Arrange
+            var postRepository = CreatePostRepository();
             var postSlug = "non-existent-post";
 
             // Act
@@ -56,9 +54,10 @@ namespace BlogSystemTest.Posts.Data
         public void GetPost_ShouldReturnPostContent_WhenPostExists()
         {
             // Arrange
+            var postRepository = CreatePostRepository();
             var postSlug = "first-post";
             var postId = "2025-06-09-first-post";
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "posts", postId);
+            var path = Path.Combine("Content", "posts", postId);
             var expectedContent = File.ReadAllText(Path.Combine(path, "content.md"));
 
             // Act

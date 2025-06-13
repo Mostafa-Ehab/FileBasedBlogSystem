@@ -1,24 +1,21 @@
 using System.Text.Json;
 using BlogSystem.Features.Posts.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Posts.Data
 {
-    public class GetPostsByTagTest
+    public class GetPostsByTagTest : UnitTestBase
     {
-        private readonly PostRepository postRepository;
-
         public GetPostsByTagTest()
         {
-            postRepository = new PostRepository(new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            SeedContent();
         }
 
         [Fact]
         public void GetPostsByTag_ShouldReturnPosts_WhenTagExists()
         {
             // Arrange
+            var postRepository = CreatePostRepository();
             var slug = "update";
             var expectedPost = postRepository.GetPostById("2025-06-09-second-post");
 
@@ -35,6 +32,7 @@ namespace BlogSystemTest.Posts.Data
         public void GetPostsByTag_ShouldReturnEmptyArray_WhenTagDoesNotExist()
         {
             // Arrange
+            var postRepository = CreatePostRepository();
             var slug = "non-existent-tag";
 
             // Act

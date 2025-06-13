@@ -64,8 +64,11 @@ namespace DevTools
         {
             try
             {
-                var sourcePath = Path.Combine("BlogSystem", "SeedData");
-                var targetPath = Path.Combine("BlogSystem", "Content");
+                Console.WriteLine("Seeding content...");
+                Directory.SetCurrentDirectory("BlogSystem");
+
+                var sourcePath = Path.Combine("SeedData");
+                var targetPath = Path.Combine("Content");
 
                 if (!Directory.Exists(sourcePath))
                 {

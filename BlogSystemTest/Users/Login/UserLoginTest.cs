@@ -1,36 +1,22 @@
-using System.Text.Json;
-using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.Login.DTOs;
 using BlogSystem.Shared.Exceptions.Users;
-using BlogSystem.Shared.Helpers;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Users.Login
 {
-    public class UserLoginTest
+    public class UserLoginTest : UnitTestBase
     {
-        private readonly LoginHandler _loginHandler;
-
         public UserLoginTest()
         {
-            var builder = new ConfigurationBuilder()
-                .AddUserSecrets<UserLoginTest>();
-            var configuration = builder.Build();
-
-            var jsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var userRepository = new UserRepository(jsonSerializerOptions);
-            var authHelper = new AuthHelper(configuration);
-            _loginHandler = new LoginHandler(userRepository, authHelper);
+            SeedContent();
         }
 
         [Fact]
         public async Task Login_ValidCredentials_ReturnsToken()
         {
             // Arrange
+            var loginHandler = CreateLoginHandler();
             var loginRequest = new LoginRequestDTO
             {
                 Username = "jane-doe",
@@ -38,17 +24,18 @@ namespace BlogSystemTest.Users.Login
             };
 
             // Act
-            var response = await _loginHandler.LoginAsync(loginRequest);
+            var response = await loginHandler.LoginAsync(loginRequest);
 
             // Assert
             Assert.NotNull(response);
-            Assert.NotEmpty(response.Token);
+            Assert.NotEmpty(response.AccessToken);
         }
 
         [Fact]
         public async Task Login_InvalidCredentials_ThrowsNotAuthenticatedException()
         {
             // Arrange
+            var loginHandler = CreateLoginHandler();
             var loginRequest = new LoginRequestDTO
             {
                 Username = "jane-doe",
@@ -56,7 +43,7 @@ namespace BlogSystemTest.Users.Login
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<NotAuthenticatedException>(() => _loginHandler.LoginAsync(loginRequest));
+            await Assert.ThrowsAsync<NotAuthenticatedException>(() => loginHandler.LoginAsync(loginRequest));
         }
     }
 }

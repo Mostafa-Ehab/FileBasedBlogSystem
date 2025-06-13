@@ -1,24 +1,21 @@
 using System.Text.Json;
 using BlogSystem.Features.Categories.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Categories.Data
 {
-    public class GetAllCategoriesTest
+    public class GetAllCategoriesTest : UnitTestBase
     {
-        private readonly CategoryRepository categoryRepository;
-
         public GetAllCategoriesTest()
         {
-            categoryRepository = new CategoryRepository(new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            SeedContent();
         }
 
         [Fact]
         public void GetAllCategories_ShouldReturnCategories_WhenCategoriesExist()
         {
             // Arrange
+            var categoryRepository = CreateCategoryRepository();
             var expectedCategory = categoryRepository.GetCategoryBySlug("updates");
 
             // Act

@@ -1,25 +1,22 @@
 using System.Text.Json;
 using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Posts.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Posts.Data
 {
-    public class GetPostsByCategoryTest
+    public class GetPostsByCategoryTest : UnitTestBase
     {
-        private readonly PostRepository postRepository;
-
         public GetPostsByCategoryTest()
         {
-            postRepository = new PostRepository(new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            SeedContent();
         }
 
         [Fact]
         public void GetPostsByCategory_ShouldReturnPosts_WhenCategoryExists()
         {
             // Arrange
+            var postRepository = CreatePostRepository();
             var slug = "updates";
             var expectedPost = postRepository.GetPostById("2025-06-09-second-post");
 
@@ -36,6 +33,7 @@ namespace BlogSystemTest.Posts.Data
         public void GetPostsByCategory_ShouldReturnEmptyArray_WhenCategoryDoesNotExist()
         {
             // Arrange
+            var postRepository = CreatePostRepository();
             var slug = "non-existent-category";
 
             // Act

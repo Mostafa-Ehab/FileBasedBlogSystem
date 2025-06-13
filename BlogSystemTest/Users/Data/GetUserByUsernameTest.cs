@@ -1,23 +1,19 @@
 using BlogSystem.Features.Users.Data;
-using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Users.Data
 {
-    public class GetUserByUsernameTest
+    public class GetUserByUsernameTest : UnitTestBase
     {
-        private readonly IUserRepository userRepository;
         public GetUserByUsernameTest()
         {
-            var jsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            userRepository = new UserRepository(jsonSerializerOptions);
+            SeedContent();
         }
 
         [Fact]
         public void GetUserByUsername_ExistingUsername_ReturnsUser()
         {
+            var userRepository = CreateUserRepository();
             // Arrange
             var user = userRepository.GetUserByUsername("jane-doe")!;
 
@@ -36,6 +32,9 @@ namespace BlogSystemTest.Users.Data
         public void GetUserByUsername_NonExistingUsername_ReturnsNull()
         {
             // Arrange
+            var userRepository = CreateUserRepository();
+
+            // Act
             var user = userRepository.GetUserByUsername("non-existing-user");
 
             // Assert

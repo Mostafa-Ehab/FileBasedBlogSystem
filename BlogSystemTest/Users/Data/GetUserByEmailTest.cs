@@ -1,24 +1,23 @@
 using BlogSystem.Features.Users.Data;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 
 namespace BlogSystemTest.Users.Data
 {
-    public class GetUserByEmailTest
+    public class GetUserByEmailTest : UnitTestBase
     {
-        private readonly IUserRepository userRepository;
         public GetUserByEmailTest()
         {
-            var jsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            userRepository = new UserRepository(jsonSerializerOptions);
+            SeedContent();
         }
 
         [Fact]
         public void GetUserByEmail_ExistingEmail_ReturnsUser()
         {
             // Arrange
+            var userRepository = CreateUserRepository();
+
+            // Act
             var user = userRepository.GetUserByEmail("jane.doe@example.com");
 
             // Assert
@@ -36,6 +35,9 @@ namespace BlogSystemTest.Users.Data
         public void GetUserByEmail_NonExistingEmail_ReturnsNull()
         {
             // Arrange
+            var userRepository = CreateUserRepository();
+
+            // Act
             var user = userRepository.GetUserByEmail("non-existing-user");
 
             // Assert

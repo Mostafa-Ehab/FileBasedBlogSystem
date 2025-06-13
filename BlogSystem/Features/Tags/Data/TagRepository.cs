@@ -6,7 +6,7 @@ namespace BlogSystem.Features.Tags.Data
     public class TagRepository : ITagRepository
     {
         private readonly JsonSerializerOptions _jsonSerializerOptions;
-        
+
         public TagRepository(JsonSerializerOptions jsonSerializerOptions)
         {
             _jsonSerializerOptions = jsonSerializerOptions;
@@ -14,7 +14,7 @@ namespace BlogSystem.Features.Tags.Data
 
         public Tag? GetTagBySlug(string slug)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "tags", $"{slug}.json");
+            var path = Path.Combine("Content", "tags", $"{slug}.json");
             if (!File.Exists(path))
             {
                 return null;
@@ -26,7 +26,7 @@ namespace BlogSystem.Features.Tags.Data
 
         public Tag[] GetAllTags()
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "tags");
+            var path = Path.Combine("Content", "tags");
             if (!Directory.Exists(path))
             {
                 return [];

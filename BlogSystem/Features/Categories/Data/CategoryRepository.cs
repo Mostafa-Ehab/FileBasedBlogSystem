@@ -6,7 +6,7 @@ namespace BlogSystem.Features.Categories.Data
     public class CategoryRepository : ICategoryRepository
     {
         private readonly JsonSerializerOptions _jsonSerializerOptions;
-        
+
         public CategoryRepository(JsonSerializerOptions jsonSerializerOptions)
         {
             _jsonSerializerOptions = jsonSerializerOptions;
@@ -14,7 +14,7 @@ namespace BlogSystem.Features.Categories.Data
 
         public Category? GetCategoryBySlug(string slug)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "categories", $"{slug}.json");
+            var path = Path.Combine("Content", "categories", $"{slug}.json");
             if (!File.Exists(path))
             {
                 return null;
@@ -26,7 +26,7 @@ namespace BlogSystem.Features.Categories.Data
 
         public Category[] GetAllCategories()
         {
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "categories");
+            var path = Path.Combine("Content", "categories");
             if (!Directory.Exists(path))
             {
                 return [];
