@@ -1,25 +1,17 @@
 using System.Text.Json;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Shared.Exceptions.Categories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Categories.Data
 {
-    public class GetCategoryBySlugTest
+    public class GetCategoryBySlugTest : UnitTestBase
     {
-        private readonly CategoryRepository categoryRepository;
-
-        public GetCategoryBySlugTest()
-        {
-            categoryRepository = new CategoryRepository(new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-        }
-
         [Fact]
         public void GetCategoryBySlug_ShouldReturnCategory_WhenCategoryExists()
         {
             // Arrange
+            var categoryRepository = _scope.ServiceProvider.GetRequiredService<ICategoryRepository>();
             var slug = "updates";
             var expectedName = "Updates";
             var expectedDescription = "Latest updates and news from our team.";
@@ -39,6 +31,7 @@ namespace BlogSystemTest.Categories.Data
         public void GetCategoryBySlug_ShouldReturnNull_WhenCategoryDoesNotExist()
         {
             // Arrange
+            var categoryRepository = _scope.ServiceProvider.GetRequiredService<ICategoryRepository>();
             var slug = "non-existent-category";
 
             // Act

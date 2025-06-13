@@ -31,6 +31,8 @@ namespace BlogSystem.Features.Users.Data
             var path = Path.Combine("Content", "users", "users.json");
             if (!File.Exists(path))
             {
+                string data = Directory.GetCurrentDirectory();
+                Console.WriteLine($"Warning: {path} does not exist. User resolver will not function properly.");
                 return;
             }
 

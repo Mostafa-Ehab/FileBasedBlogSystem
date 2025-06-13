@@ -1,24 +1,16 @@
 ﻿using System.Text.Json;
 using BlogSystem.Features.Posts.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Posts.Data
 {
-    public class GetPostByIdTest
-    {        
-        private readonly PostRepository postRepository;
-
-        public GetPostByIdTest()
-        {
-            postRepository = new PostRepository(new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-        }
-
+    public class GetPostByIdTest : UnitTestBase
+    {
         [Fact]
         public void GetPost_ShouldReturnPost_WhenPostExists()
         {
             // Arrange
+            var postRepository = _scope.ServiceProvider.GetRequiredService<IPostRepository>();
             var postId = "2025-06-09-first-post";
 
             var expectedTitle = "First Post";
@@ -43,6 +35,7 @@ namespace BlogSystemTest.Posts.Data
         public void GetPost_ShouldReturnNull_WhenPostDoesNotExist()
         {
             // Arrange
+            var postRepository = _scope.ServiceProvider.GetRequiredService<IPostRepository>();
             var postId = "non-existent-post";
 
             // Act
@@ -56,8 +49,9 @@ namespace BlogSystemTest.Posts.Data
         public void GetPost_ShouldReturnPostContent_WhenPostExists()
         {
             // Arrange
+            var postRepository = _scope.ServiceProvider.GetRequiredService<IPostRepository>();
             var postId = "2025-06-09-first-post";
-            var path = Path.Combine(AppContext.BaseDirectory, "Content", "posts", postId);
+            var path = Path.Combine("Content", "posts", postId);
             var expectedContent = File.ReadAllText(Path.Combine(path, "content.md"));
 
             // Act

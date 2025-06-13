@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e2cfae03-2dbf-4911-838a-c6cf548020c6</UserSecretsId>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,14 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Content\categories\" />
-    <Folder Include="Content\Tags\" />
+    <Content Include="Content/**" CopyToOutputDirectory="Never" />
+    <Content Include="SeedData/**" CopyToOutputDirectory="Never" />
   </ItemGroup>
-
-  <ItemGroup>
-  <None Update="Content\Posts\**\*.md">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </None>
-</ItemGroup>
 
 </Project>
