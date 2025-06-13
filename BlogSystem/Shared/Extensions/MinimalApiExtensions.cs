@@ -10,10 +10,10 @@ namespace BlogSystem.Shared.Extensions
     {
         public static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapGroup("/posts").MapPostEndpoints();
-            app.MapGroup("/categories").MapCategoryEndpoints();
-            app.MapGroup("/tags").MapTagEndpoints();
-            app.MapGroup("/users").MapUserEndpoints();
+            app.MapGroup("/api/posts").MapPostEndpoints();
+            app.MapGroup("/api/categories").MapCategoryEndpoints();
+            app.MapGroup("/api/tags").MapTagEndpoints();
+            app.MapGroup("/api/users").MapUserEndpoints();
 
             return app;
         }

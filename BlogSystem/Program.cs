@@ -60,6 +60,8 @@ if (!Directory.Exists("Content"))
     Directory.CreateDirectory("Content");
 }
 
+app.UseFileServer();
+
 app.UseGlobalExceptionHandler();
 
 //app.UseCors(
