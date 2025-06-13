@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="js/owl-init.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">Blog</div>
+        <div class="search-container">
+            <input type="text" placeholder="Search posts..." class="search-input">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="content">
+        <h1>Welcome to Our Blog</h1>
+        <section class="owl-carousel owl-theme">
+            <article class="slider-post-card">
+                <div class="post-image">
+                    <img src="https://picsum.photos/800/400?random=1" alt="Sample Post 1">
+                </div>
+                <div class="post-content">
+                    <h2><a href="#" class="post-card-title">Sample Post Title 1</a></h2>
+                    <div class="post-card-meta">
+                        By <strong>John Doe</strong> • June 13, 2025 • 5 min read
+                    </div>
+                    <p class="post-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                        tempor
+                        incididunt ut labore et dolore magna aliqua.</p>
+                    <div class="post-card-tags">
+                        <a href="#" class="post-card-tag">Technology</a>
+                        <a href="#" class="post-card-tag">Programming</a>
+                    </div>
+                    <div class="post-card-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="slider-post-card">
+                <div class="post-image">
+                    <img src="https://picsum.photos/800/400?random=2" alt="Sample Post 2">
+                </div>
+                <div class="post-content">
+                    <h2><a href="#" class="post-card-title">Sample Post Title 2</a></h2>
+                    <div class="post-card-meta">
+                        By <strong>Jane Smith</strong> • June 12, 2025 • 4 min read
+                    </div>
+                    <p class="post-excerpt">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                        aliquip ex ea commodo consequat.</p>
+                    <div class="post-card-tags">
+                        <a href="#" class="post-card-tag">Design</a>
+                        <a href="#" class="post-card-tag">UI/UX</a>
+                    </div>
+                    <div class="post-card-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="slider-post-card">
+                <div class="post-image">
+                    <img src="https://picsum.photos/800/400?random=3" alt="Sample Post 3">
+                </div>
+                <div class="post-content">
+                    <h2><a href="#" class="post-card-title">Sample Post Title 3</a></h2>
+                    <div class="post-card-meta">
+                        By <strong>Mike Johnson</strong> • June 11, 2025 • 6 min read
+                    </div>
+                    <p class="post-excerpt">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                        eu fugiat nulla pariatur.</p>
+                    <div class="post-card-tags">
+                        <a href="#" class="post-card-tag">Web Development</a>
+                        <a href="#" class="post-card-tag">JavaScript</a>
+                    </div>
+                    <div class="post-card-footer">
+                        <a href="#" class="read-more">Read More →</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <h2>Latest Posts</h2>
+        <div class="main-content">
+            <section class="posts-section">
+                <!-- Post Card Example -->
+                <article class="post-card">
+                    <img src="https://picsum.photos/800/400?random=4" alt="Post Title" class="post-card-image">
+                    <div class="post-card-content">
+                        <h2><a href="#" class="post-card-title">Sample Blog Post Title</a></h2>
+                        <div class="post-card-meta">
+                            By <strong>John Doe</strong> • June 13, 2025 • 5 min read
+                        </div>
+                        <p class="post-card-description">
+                            This is a sample description of the blog post. It provides a brief overview of what the
+                            article
+                            is about
+                            and entices readers to click and read more.
+                        </p>
+                        <div class="post-card-tags">
+                            <a href="#" class="post-card-tag">Technology</a>
+                            <a href="#" class="post-card-tag">Programming</a>
+                            <a href="#" class="post-card-tag">Web Development</a>
+                        </div>
+                        <div class="post-card-footer">
+                            <a href="#" class="read-more-btn">Read More →</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Second Post Card -->
+                <article class="post-card">
+                    <img src="https://picsum.photos/800/400?random=5" alt="Post Title" class="post-card-image">
+                    <div class="post-card-content">
+                        <h2><a href="#" class="post-card-title">Another Amazing Blog Post</a></h2>
+                        <div class="post-card-meta">
+                            By <strong>Jane Smith</strong> • June 12, 2025 • 3 min read
+                        </div>
+                        <p class="post-card-description">
+                            Here's another interesting article that discusses various topics and provides valuable
+                            insights
+                            for readers
+                            who want to learn more about the subject.
+                        </p>
+                        <div class="post-card-tags">
+                            <a href="#" class="post-card-tag">Design</a>
+                            <a href="#" class="post-card-tag">UI/UX</a>
+                        </div>
+                        <div class="post-card-footer">
+                            <a href="#" class="read-more-btn">Read More →</a>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Categories Widget -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-widget-header">
+                        <h3 class="sidebar-widget-title">Categories</h3>
+                    </div>
+                    <div class="sidebar-widget-content">
+                        <ul class="category-list">
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    Technology
+                                    <span class="category-count">12</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    Programming
+                                    <span class="category-count">8</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    Web Development
+                                    <span class="category-count">15</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    Design
+                                    <span class="category-count">6</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tags Widget -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-widget-header">
+                        <h3 class="sidebar-widget-title">Tags</h3>
+                    </div>
+                    <div class="sidebar-widget-content">
+                        <div class="tags-cloud">
+                            <a href="#" class="tag-pill">AI</a>
+                            <a href="#" class="tag-pill">Healthcare</a>
+                            <a href="#" class="tag-pill">Technology</a>
+                            <a href="#" class="tag-pill">Medical Innovations</a>
+                            <a href="#" class="tag-pill">Future Trends</a>
+                            <a href="#" class="tag-pill">Travel</a>
+                            <a href="#" class="tag-pill">Destinations</a>
+                            <a href="#" class="tag-pill">Tourism</a>
+                            <a href="#" class="tag-pill">2024 Travel</a>
+                            <a href="#" class="tag-pill">Adventure</a>
+                            <a href="#" class="tag-pill">Social Media</a>
+                            <a href="#" class="tag-pill">Communication</a>
+                            <a href="#" class="tag-pill">Digital Age</a>
+                            <a href="#" class="tag-pill">Online Interaction</a>
+                            <a href="#" class="tag-pill">Health</a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Blog. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
