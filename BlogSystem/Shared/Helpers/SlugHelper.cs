@@ -29,5 +29,16 @@ namespace BlogSystem.Shared.Helpers
             }
             return uniqueSlug;
         }
+
+        public static bool ValidateSlug(string slug)
+        {
+            if (string.IsNullOrWhiteSpace(slug))
+                return false;
+
+            if (ValidationHelper.SlugRegex.IsMatch(slug) == false)
+                return false;
+
+            return true;
+        }
     }
 }

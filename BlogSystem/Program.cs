@@ -1,9 +1,13 @@
-using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Shared.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SixLabors.ImageSharp.Web.Caching;
+using SixLabors.ImageSharp.Web.DependencyInjection;
+using SixLabors.ImageSharp.Web.Middleware;
+using SixLabors.ImageSharp.Web.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +37,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Editor", policy => policy.RequireClaim("Role", "Editor"));
 });
 
+// Configure JSON serialization options
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -42,6 +47,24 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
+// Configure ImageSharp
+builder.Services.AddImageSharp()
+    .AddProvider<ContentImageProvider>()
+    .RemoveProvider<PhysicalFileSystemProvider>()
+    .Configure<PhysicalFileSystemCacheOptions>(options =>
+    {
+        options.CacheRootPath = Path.Combine("Content", "cache");
+    })
+    .Configure<ImageSharpMiddlewareOptions>(options =>
+    {
+        options.OnPrepareResponseAsync = context =>
+        {
+            context.Response.Headers.CacheControl = "public, max-age=31536000"; // Cache for 1 year
+            return Task.CompletedTask;
+        };
+    });
+
 
 // Add services to the container.
 builder.Services.AddServices();
@@ -60,18 +83,14 @@ if (!Directory.Exists("Content"))
     Directory.CreateDirectory("Content");
 }
 
+app.UseImageSharp();
 app.UseFileServer();
 
 app.UseGlobalExceptionHandler();
 
-//app.UseCors(
-//    options => options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()
-//);
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapEndpoints();
