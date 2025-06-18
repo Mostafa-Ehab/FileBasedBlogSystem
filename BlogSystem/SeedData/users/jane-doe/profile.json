@@ -4,7 +4,7 @@
     "email": "jane.doe@example.com",
     "fullName": "Jane Doe",
     "bio": "This is Jane's profile. They love blogging about technology and travel.",
-    "profilePicture": "https://example.com/images/jane-doe.jpg",
+    "profilePictureUrl": "https://example.com/images/jane-doe.jpg",
     "hashedPassword": "$2a$10$0bYzBUdwKdUV6E4HYUNs5OkjPQVCAGyqDSJoJUmXukFSYBoh1pzLy",
     "createdAt": "2023-01-01T12:00:00Z",
     "updatedAt": "2023-01-10T12:00:00Z",

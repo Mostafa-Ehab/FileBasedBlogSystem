@@ -14,6 +14,21 @@
             "Id": "john-doe",
             "Username": "john-doe",
             "Email": "john.doe@example.com"
+        },
+        {
+            "Id": "sarah-tech",
+            "Username": "sarah-tech",
+            "Email": "sarah.tech@example.com"
+        },
+        {
+            "Id": "emma-wellness",
+            "Username": "emma-wellness",
+            "Email": "emma.wellness@example.com"
+        },
+        {
+            "Id": "chef-marco",
+            "Username": "chef-marco",
+            "Email": "chef.marco@example.com"
         }
     ]
 }

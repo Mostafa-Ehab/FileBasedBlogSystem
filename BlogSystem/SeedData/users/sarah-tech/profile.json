@@ -1,0 +1,15 @@
+{
+    "id": "sarah-tech",
+    "username": "sarah-tech",
+    "email": "sarah.tech@example.com",
+    "fullName": "Sarah Chen",
+    "bio": "Technology enthusiast and AI researcher with 8+ years in machine learning and software development. Passionate about making complex tech concepts accessible to everyone.",
+    "profilePictureUrl": "https://picsum.photos/200/200?random=10",
+    "hashedPassword": "$2a$10$0bYzBUdwKdUV6E4HYUNs5OkjPQVCAGyqDSJoJUmXukFSYBoh1pzLy",
+    "createdAt": "2024-01-15T09:00:00Z",
+    "updatedAt": "2024-12-15T10:30:00Z",
+    "role": "Author",
+    "posts": [
+        "2024-12-15-artificial-intelligence-revolution"
+    ]
+}

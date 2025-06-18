@@ -1,5 +1,5 @@
 {
-    "name": "blog",
+    "name": "Blog",
     "slug": "blog",
     "description": "Posts related to the blog section, including updates, introductions, and conclusions.",
     "posts": [
