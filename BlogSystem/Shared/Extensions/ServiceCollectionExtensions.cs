@@ -12,6 +12,7 @@ using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.Login.DTOs;
 using BlogSystem.Features.Users.Login.Validators;
+using BlogSystem.Infrastructure.MarkdownService;
 using BlogSystem.Shared.Helpers;
 using FluentValidation;
 
@@ -23,13 +24,16 @@ namespace BlogSystem.Shared.Extensions
         {
             services.AddSingleton(new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                IgnoreReadOnlyProperties = true,
             });
 
             services.AddSingleton<AuthHelper>();
 
             services.AddSingleton<SlugResolver>();
             services.AddSingleton<UserResolver>();
+
+            services.AddSingleton<MarkdownService>();
 
             services.AddValidators();
             services.AddCategoryServices();

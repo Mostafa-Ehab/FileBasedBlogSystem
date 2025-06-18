@@ -6,7 +6,7 @@ namespace BlogSystem.Features.Posts.Get
     {
         public static void MapGetPostEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/{slug}", async (string slug, IGetPostHandler handler) =>
+            app.MapGet("/p/{slug}", async (string slug, IGetPostHandler handler) =>
             {
                 var post = await handler.GetPostAsync(slug);
                 return Results.Ok(post);
