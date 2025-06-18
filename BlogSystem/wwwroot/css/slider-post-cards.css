@@ -49,6 +49,12 @@
     color: var(--text-color);
 }
 
+.slider-post-card h2 a {
+    text-overflow: ellipsis;
+    text-wrap-mode: nowrap;
+    overflow: hidden;
+}
+
 .slider-post-card .post-meta {
     font-size: 0.875rem;
     color: var(--text-color);
@@ -64,8 +70,17 @@
     opacity: 0.8;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    height: calc(1.6em * 3);
+    /* Fixed height for exactly 3 lines */
+    min-height: calc(1.6em * 3);
+}
+
+.slider-post-card .post-card-tags {
+    overflow: hidden;
+    flex-wrap: nowrap;
 }
 
 .slider-post-card .read-more {

@@ -1,4 +1,4 @@
-$(document).ready(function () {
+function initOwlCarousel() {
     $('.owl-carousel').owlCarousel({
         loop: true,
         margin: 20,
@@ -41,4 +41,4 @@ $(document).ready(function () {
         animateOut: 'fadeOut',
         animateIn: 'fadeIn'
     });
-});
+}

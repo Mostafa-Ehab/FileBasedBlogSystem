@@ -1,0 +1,23 @@
+function formatReadableDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+}
+
+function estimateReadingTime(html, wordsPerMinute = 200) {
+    // Create a temporary DOM element to parse HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+
+    // Get the plain text content
+    const text = tempDiv.textContent || tempDiv.innerText || '';
+
+    // Count words
+    const words = text.trim().split(/\s+/).length;
+    const minutes = Math.ceil(words / wordsPerMinute);
+
+    return minutes;
+}
