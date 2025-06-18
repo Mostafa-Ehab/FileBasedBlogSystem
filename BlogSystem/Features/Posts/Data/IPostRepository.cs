@@ -8,5 +8,6 @@ namespace BlogSystem.Features.Posts.Data
         public Post? GetPostBySlug(string slug);
         public Post[] GetPostsByCategory(string categorySlug);
         public Post[] GetPostsByTag(string tagSlug);
+        public Post[] GetAllPosts(int page = 1, int pageSize = 10);
     }
 }

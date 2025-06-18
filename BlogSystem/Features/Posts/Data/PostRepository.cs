@@ -80,5 +80,31 @@ namespace BlogSystem.Features.Posts.Data
                 .Where(post => post != null)
                 .ToArray()!;
         }
+
+        public Post[] GetAllPosts(int page = 1, int pageSize = 10)
+        {
+            var path = Path.Combine("Content", "posts");
+            if (!Directory.Exists(path))
+            {
+                return [];
+            }
+
+            var postFiles = Directory.GetDirectories(path)
+                .Select(dir => Path.Combine(dir, "meta.json"))
+                .Where(File.Exists)
+                .OrderByDescending(File.GetLastWriteTime);
+
+            return postFiles
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(file => JsonSerializer.Deserialize<Post>(File.ReadAllText(file), _jsonSerializerOptions))
+                .Where(post => post != null)
+                .Select(post =>
+                {
+                    post!.Content = File.ReadAllText(Path.Combine(path, post.Id, "content.md"));
+                    return post;
+                })
+                .ToArray()!;
+        }
     }
 }
