@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using BlogSystem.Common.Mappings;
 using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Shared.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configure AutoMapper
+builder.Services.AddAutoMapper(typeof(PostMappingProfile));
 
 // Register Authentication Service
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
@@ -52,6 +56,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 builder.Services.AddImageSharp()
     .AddProvider<ContentImageProvider>()
     .RemoveProvider<PhysicalFileSystemProvider>()
+    .AddProvider<PhysicalFileSystemProvider>()
     .Configure<PhysicalFileSystemCacheOptions>(options =>
     {
         options.CacheRootPath = Path.Combine("Content", "cache");
