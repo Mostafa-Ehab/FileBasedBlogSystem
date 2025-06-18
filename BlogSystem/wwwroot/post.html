@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Title - Blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script src="/js/utils.js" defer></script>
+    <script src="/js/post-script.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">Blog</a>
+        </div>
+        <div class="search-container">
+            <input type="text" placeholder="Search posts..." class="search-input">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="content">
+        <div class="main-content">
+            <article class="post-article" id="post-article">
+                <!-- Post Header -->
+                <header class="post-header" id="post-header">
+                </header>
+
+                <!-- Post Content -->
+                <div class="post-content" id="post-content">
+                </div>
+
+                <!-- Post Footer -->
+                <footer class="post-footer">
+                    <div class="post-share">
+                        <h4>Share this post</h4>
+                        <div class="share-buttons">
+                            <a href="#" class="share-btn twitter" title="Share on Twitter"
+                                onclick="window.open('https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(document.title), '_blank'); return false;">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="share-btn facebook" title="Share on Facebook"
+                                onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank'); return false;">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="share-btn linkedin" title="Share on LinkedIn"
+                                onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(window.location.href) + '&title=' + encodeURIComponent(document.title), '_blank'); return false;">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="share-btn copy-link" title="Copy Link"
+                                onclick="navigator.clipboard.writeText(window.location.href); alert('Link copied!'); return false;">
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- <div class="post-navigation">
+                        <a href="#" class="nav-link prev-post">
+                            <span class="nav-label">Previous Post</span>
+                            <span class="nav-title">Mindful Living in the Digital Age</span>
+                        </a>
+                        <a href="#" class="nav-link next-post">
+                            <span class="nav-label">Next Post</span>
+                            <span class="nav-title">Plant-Based Mediterranean Fusion</span>
+                        </a>
+                    </div> -->
+                </footer>
+
+                <!-- Related Posts -->
+                <!-- <section class="related-posts">
+                    <h3>Related Posts</h3>
+                    <div class="related-posts-grid">
+                        <article class="related-post-card">
+                            <img src="https://picsum.photos/300/200?random=2" alt="Related Post"
+                                class="related-post-image">
+                            <div class="related-post-content">
+                                <h4><a href="#" class="related-post-title">Machine Learning Fundamentals</a></h4>
+                                <p class="related-post-excerpt">Understanding the basics of machine learning and its
+                                    applications...</p>
+                                <div class="related-post-meta">
+                                    <span class="related-post-date">Dec 10, 2024</span>
+                                    <span class="related-post-read-time">5 min read</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="related-post-card">
+                            <img src="https://picsum.photos/300/200?random=3" alt="Related Post"
+                                class="related-post-image">
+                            <div class="related-post-content">
+                                <h4><a href="#" class="related-post-title">Future of Technology</a></h4>
+                                <p class="related-post-excerpt">Exploring emerging technologies that will shape our
+                                    future...</p>
+                                <div class="related-post-meta">
+                                    <span class="related-post-date">Dec 5, 2024</span>
+                                    <span class="related-post-read-time">7 min read</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="related-post-card">
+                            <img src="https://picsum.photos/300/200?random=4" alt="Related Post"
+                                class="related-post-image">
+                            <div class="related-post-content">
+                                <h4><a href="#" class="related-post-title">AI Ethics and Society</a></h4>
+                                <p class="related-post-excerpt">Examining the ethical implications of artificial
+                                    intelligence...</p>
+                                <div class="related-post-meta">
+                                    <span class="related-post-date">Nov 28, 2024</span>
+                                    <span class="related-post-read-time">6 min read</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section> -->
+            </article>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Author Bio -->
+                <div class="sidebar-widget" id="author-info">
+                </div>
+
+                <!-- Categories Widget -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-widget-header">
+                        <h3 class="sidebar-widget-title">Categories</h3>
+                    </div>
+                    <div class="sidebar-widget-content">
+                        <ul class="category-list">
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    Technology
+                                    <span class="category-count">12</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    Lifestyle
+                                    <span class="category-count">8</span>
+                                </a>
+                            </li>
+                            <li class="category-item">
+                                <a href="#" class="category-link">
+                                    Food
+                                    <span class="category-count">6</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tags Widget -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-widget-header">
+                        <h3 class="sidebar-widget-title">Popular Tags</h3>
+                    </div>
+                    <div class="sidebar-widget-content">
+                        <div class="tags-cloud">
+                            <a href="#" class="tag-pill">AI</a>
+                            <a href="#" class="tag-pill">Technology</a>
+                            <a href="#" class="tag-pill">Machine Learning</a>
+                            <a href="#" class="tag-pill">Digital Wellness</a>
+                            <a href="#" class="tag-pill">Mindfulness</a>
+                            <a href="#" class="tag-pill">Plant Based</a>
+                            <a href="#" class="tag-pill">Recipes</a>
+                            <a href="#" class="tag-pill">Health</a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Blog. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
