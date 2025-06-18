@@ -21,6 +21,7 @@ namespace BlogSystem.Shared.Extensions
         private static IEndpointRouteBuilder MapPostEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapGetPostEndpoint();
+            app.MapGetAllPostsEndpoint();
 
             return app;
         }

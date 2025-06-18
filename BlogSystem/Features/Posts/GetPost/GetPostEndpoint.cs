@@ -16,5 +16,17 @@ namespace BlogSystem.Features.Posts.Get
             .Produces<Post>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
         }
+
+        public static void MapGetAllPostsEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/all", async (IGetPostHandler handler, int pageNumber = 1, int pageSize = 10) =>
+            {
+                var posts = await handler.GetAllPostsAsync(pageNumber, pageSize);
+                return Results.Ok(posts);
+            })
+            .WithName("GetAllPosts")
+            .WithTags("Posts")
+            .Produces<Post[]>(StatusCodes.Status200OK);
+        }
     }
 }
