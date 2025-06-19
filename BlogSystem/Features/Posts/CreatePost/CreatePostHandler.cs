@@ -37,12 +37,12 @@ namespace BlogSystem.Features.Posts.CreatePost
             var postId = SlugHelper.GenerateUniqueSlug(request.Title, _postRepository.PostExists);
 
             // Validate the request
-            if (!string.IsNullOrEmpty(request.Slug) && _postRepository.PostExists(request.Slug))
+            if (!string.IsNullOrWhiteSpace(request.Slug) && _postRepository.PostExists(request.Slug))
             {
                 throw new PostSlugAlreadyExistException(request.Slug);
             }
 
-            if (!string.IsNullOrEmpty(request.Category) && _categoryRepository.CategoryExists(request.Category) == false)
+            if (!string.IsNullOrWhiteSpace(request.Category) && _categoryRepository.CategoryExists(request.Category) == false)
             {
                 throw new CategoryNotFoundException(request.Category);
             }
@@ -89,7 +89,7 @@ namespace BlogSystem.Features.Posts.CreatePost
                 AuthorId = user.FindFirstValue("Id")!,
                 Category = request.Category ?? string.Empty,
                 ImageUrl = imagePath,
-                Slug = string.IsNullOrEmpty(request.Slug) ? postId : request.Slug,
+                Slug = string.IsNullOrWhiteSpace(request.Slug) ? postId : request.Slug,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 Tags = (request.Tags ?? []).ToList(),
