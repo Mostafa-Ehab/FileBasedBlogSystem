@@ -11,5 +11,6 @@ namespace BlogSystem.Features.Posts.Data
         public Post[] GetAllPosts(int page = 1, int pageSize = 10);
         public bool PostExists(string id);
         string CreatePost(Post post, string Content);
+        string UpdatePost(Post post, string content);
     }
 }

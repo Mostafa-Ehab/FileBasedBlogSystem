@@ -40,6 +40,17 @@ namespace BlogSystem.Features.Posts.Data
             SaveSlugs();
         }
 
+        public void UpdateSlug(string oldSlug, string newSlug, string id)
+        {
+            if (string.IsNullOrWhiteSpace(oldSlug) || string.IsNullOrWhiteSpace(newSlug) || string.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentException("Old slug, new slug, and id cannot be null or empty.");
+            }
+
+            RemoveSlug(oldSlug);
+            AddSlug(newSlug, id);
+        }
+
         public bool SlugExists(string slug)
         {
             return slugCache.ContainsKey(slug.ToLowerInvariant());

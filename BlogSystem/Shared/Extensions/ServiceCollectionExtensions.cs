@@ -2,8 +2,12 @@ using System.Text.Json;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Posts.CreatePost;
+using BlogSystem.Features.Posts.CreatePost.DTOs;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.Get;
+using BlogSystem.Features.Posts.UpdatePost;
+using BlogSystem.Features.Posts.UpdatePost.DTOs;
+using BlogSystem.Features.Posts.UpdatePost.Validators;
 using BlogSystem.Features.Tags.Data;
 using BlogSystem.Features.Tags.GetTag;
 using BlogSystem.Features.Users.CreateUser;
@@ -51,6 +55,7 @@ namespace BlogSystem.Shared.Extensions
         {
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
             services.AddScoped<IValidator<CreateUserRequestDTO>, CreateUserRequestValidator>();
+            services.AddScoped<IValidator<UpdatePostRequestDTO>, UpdatePostRequestValidator>();
             return services;
         }
 
@@ -59,6 +64,7 @@ namespace BlogSystem.Shared.Extensions
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IGetPostHandler, GetPostHandler>();
             services.AddScoped<ICreatePostHandler, CreatePostHandler>();
+            services.AddScoped<IUpdatePostHandler, UpdatePostHandler>();
             return services;
         }
 

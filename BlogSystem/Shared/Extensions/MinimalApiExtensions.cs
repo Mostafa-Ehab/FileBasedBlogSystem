@@ -4,6 +4,7 @@ using BlogSystem.Features.Tags.GetTag;
 using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.CreateUser;
 using BlogSystem.Features.Posts.Create;
+using BlogSystem.Features.Posts.UpdatePost;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -24,6 +25,7 @@ namespace BlogSystem.Shared.Extensions
             app.MapGetPostEndpoint();
             app.MapGetAllPostsEndpoint();
             app.MapCreatePostEndpoint();
+            app.MapUpdatePostEndpoint();
 
             return app;
         }
