@@ -54,7 +54,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 
 // Configure ImageSharp
 builder.Services.AddImageSharp()
-    .AddProvider<ContentImageProvider>()
+    .AddProvider<PostImageProvider>()
     .RemoveProvider<PhysicalFileSystemProvider>()
     .AddProvider<PhysicalFileSystemProvider>()
     .Configure<PhysicalFileSystemCacheOptions>(options =>

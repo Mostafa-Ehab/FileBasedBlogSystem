@@ -5,13 +5,13 @@ using Microsoft.Extensions.FileProviders;
 
 namespace BlogSystem.Infrastructure.ImageService
 {
-    public class ContentImageProvider : IImageProvider
+    public class PostImageProvider : IImageProvider
     {
         private readonly IFileProvider _fileProvider;
         private const string PostImagesPrefix = "/images/posts/";
         private const int ExpectedSegmentCount = 4;
 
-        public ContentImageProvider()
+        public PostImageProvider()
         {
             _fileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
         }

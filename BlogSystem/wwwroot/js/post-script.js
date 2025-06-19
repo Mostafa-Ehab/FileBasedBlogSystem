@@ -14,6 +14,7 @@ async function loadPost() {
         setArticleHeader(post);
         setArticleMainContent(post);
         setAuthorInfo(post.author);
+        setRelatedPosts(post.slug, post.category);
     } catch (error) {
         console.error(error);
     }
@@ -36,7 +37,11 @@ function setArticleHeader(post) {
                 </div>
             </div>
             <div class="post-tags">
-                ${post.tags.map(tag => `<a href="#" class="post-tag">${tag}</a>`).join('')}
+                ${post.tags.map(tag => `
+                    <a href="/tag.html?tag=${encodeURIComponent(tag)}" class="post-tag">
+                        ${tag}
+                    </a>
+                `).join('')}
             </div>
         </div>
     `;
@@ -62,15 +67,44 @@ function setAuthorInfo(author) {
                     ${author.bio || 'This author has not provided a bio yet.'}
                 </p>
                 <div class="author-social">
-                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    ${Object.entries(author.socialLinks).map(([platform, link]) => `
+                        <a href="${link}" class="social-link" target="_blank">
+                            <i class="${getIconClass(platform)}"></i>
+                        </a>
+                    `).join('')}
                 </div>
             </div>
         </div>
-    `
+    `;
+}
+
+async function setRelatedPosts(postSlug, category) {
+    const relatedPostsContainer = document.getElementById('related-posts');
+
+    let response = await fetch(`/api/categories/${category}/posts`)
+    let posts = await response.json();
+
+    if (posts.length <= 1) {
+        relatedPostsContainer.innerHTML = '<p>No related posts found.</p>';
+        return;
+    }
+
+    posts = posts.filter(p => p.slug !== postSlug).slice(0, 3);
+
+    relatedPostsContainer.innerHTML = posts.map(post => `
+        <article class="related-post">
+            <img src="${post.imageUrl}" alt="${post.title}" class="related-post-image">
+            <div class="related-post-content">
+                <h4><a href="/post.html?id=${post.id}" class="related-post-title">${post.title}</a></h4>
+                <div class="related-post-meta">
+                    <span class="related-post-date">${formatReadableDate(post.createdAt)}</span>
+                </div>
+            </div>
+        </article>
+    `).join('');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     loadPost();
+    loadAllCategories();
 });

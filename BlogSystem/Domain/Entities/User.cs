@@ -14,5 +14,6 @@
         public DateTime LastLogin { get; set; }
         public string Role { get; set; } = string.Empty; // e.g., Admin, Editor, Viewer
         public string[] Posts { get; set; } = []; // List of post IDs authored by the user
+        public Dictionary<string, string> SocialLinks { get; set; } = [];
     }
 }

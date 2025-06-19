@@ -7,5 +7,6 @@ namespace BlogSystem.Features.Posts.GetPost.DTOs
         public string Email { get; set; } = string.Empty;
         public string ProfilePictureUrl { get; set; } = string.Empty;
         public string Bio { get; set; } = string.Empty;
+        public Dictionary<string, string> SocialLinks { get; set; } = [];
     }
 }

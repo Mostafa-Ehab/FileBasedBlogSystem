@@ -21,3 +21,20 @@ function estimateReadingTime(html, wordsPerMinute = 200) {
 
     return minutes;
 }
+
+function getIconClass(platform) {
+    switch (platform) {
+        case 'twitter':
+            return 'fab fa-twitter';
+        case 'linkedin':
+            return 'fab fa-linkedin';
+        case 'github':
+            return 'fab fa-github';
+        case 'facebook':
+            return 'fab fa-facebook';
+        case 'instagram':
+            return 'fab fa-instagram';
+        default:
+            return 'fa-solid fa-globe';
+    }
+}
