@@ -2,6 +2,8 @@ using BlogSystem.Shared.Helpers;
 using SixLabors.ImageSharp.Web.Providers;
 using SixLabors.ImageSharp.Web.Resolvers;
 using Microsoft.Extensions.FileProviders;
+using BlogSystem.Shared.Exceptions;
+using SixLabors.ImageSharp;
 
 namespace BlogSystem.Infrastructure.ImageService
 {
@@ -45,6 +47,51 @@ namespace BlogSystem.Infrastructure.ImageService
         {
             return TryExtractImageInfo(context.Request.Path.Value, out var postSlug, out _) &&
                    SlugHelper.ValidateSlug(postSlug);
+        }
+
+        public async Task<string> SaveImageAsync(IFormFile imageFile, string postSlug)
+        {
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+            var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                throw new ValidationErrorException("Invalid image file type. Allowed types are: " + string.Join(", ", allowedExtensions));
+            }
+
+            var randomName = $"{Path.GetRandomFileName()}{fileExtension}";
+            var postDirectory = Path.Combine("Content", "posts", postSlug, "assets");
+            var fullPath = Path.Combine(postDirectory, randomName);
+
+            if (!Directory.Exists(postDirectory))
+            {
+                Directory.CreateDirectory(postDirectory);
+            }
+
+            while (File.Exists(fullPath))
+            {
+                fullPath = Path.Combine(postDirectory, $"{Path.GetRandomFileName()}{fileExtension}");
+            }
+
+            using var stream = new FileStream(fullPath, FileMode.Create);
+            await imageFile.CopyToAsync(stream);
+
+            return randomName;
+        }
+
+        public bool IsValidImage(IFormFile file)
+        {
+            try
+            {
+                using (Image newImage = Image.Load(file.OpenReadStream()))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private static bool TryExtractImageInfo(string? path, out string postSlug, out string imageName)

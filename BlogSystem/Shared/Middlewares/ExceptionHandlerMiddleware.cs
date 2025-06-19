@@ -67,6 +67,7 @@ namespace BlogSystem.Shared.Middlewares
             {
                 KeyNotFoundException => (HttpStatusCode.NotFound, "Resource not found."),
                 UnauthorizedAccessException => (HttpStatusCode.Unauthorized, "Access denied."),
+                BadHttpRequestException => (HttpStatusCode.BadRequest, "Invalid request."),
                 ArgumentException => (HttpStatusCode.BadRequest, exception.Message),
                 _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
             };

@@ -1,6 +1,7 @@
 using System.Text.Json;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Categories.GetCategory;
+using BlogSystem.Features.Posts.CreatePost;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.Get;
 using BlogSystem.Features.Tags.Data;
@@ -12,6 +13,7 @@ using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.Login.DTOs;
 using BlogSystem.Features.Users.Login.Validators;
+using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Infrastructure.MarkdownService;
 using BlogSystem.Shared.Helpers;
 using FluentValidation;
@@ -34,6 +36,7 @@ namespace BlogSystem.Shared.Extensions
             services.AddSingleton<UserResolver>();
 
             services.AddSingleton<MarkdownService>();
+            services.AddSingleton<PostImageProvider>();
 
             services.AddValidators();
             services.AddCategoryServices();
@@ -55,6 +58,7 @@ namespace BlogSystem.Shared.Extensions
         {
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IGetPostHandler, GetPostHandler>();
+            services.AddScoped<ICreatePostHandler, CreatePostHandler>();
             return services;
         }
 

@@ -106,5 +106,70 @@ namespace BlogSystem.Features.Posts.Data
                 })
                 .ToArray()!;
         }
+
+        public string CreatePost(Post post, string Content)
+        {
+            var postPath = Path.Combine("Content", "posts", post.Id);
+            if (!Directory.Exists(postPath))
+            {
+                Directory.CreateDirectory(postPath);
+            }
+
+            File.WriteAllText(Path.Combine(postPath, "meta.json"), JsonSerializer.Serialize(post, _jsonSerializerOptions));
+            File.WriteAllText(Path.Combine(postPath, "content.md"), Content);
+
+            _slugResolver.AddSlug(post.Slug, post.Id);
+
+            UpdateCategoryFile(post);
+            UpdateTagFile(post);
+
+            return post.Id;
+        }
+
+        public bool PostExists(string id)
+        {
+            var path = Path.Combine("Content", "posts", id);
+            return Directory.Exists(path) && File.Exists(Path.Combine(path, "meta.json"));
+        }
+
+        private void UpdateCategoryFile(Post post)
+        {
+            if (string.IsNullOrWhiteSpace(post.Category))
+            {
+                return;
+            }
+
+            var categoryPath = Path.Combine("Content", "categories", $"{post.Category}.json");
+            string json = File.ReadAllText(categoryPath);
+            Category category = JsonSerializer.Deserialize<Category>(json, _jsonSerializerOptions)!;
+
+            if (!category.Posts.Contains(post.Id))
+            {
+                category.Posts.Add(post.Id);
+                File.WriteAllText(categoryPath, JsonSerializer.Serialize(category, _jsonSerializerOptions));
+            }
+        }
+
+        private void UpdateTagFile(Post post)
+        {
+            if (post.Tags == null || post.Tags.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var tag in post.Tags)
+            {
+                var tagPath = Path.Combine("Content", "tags", $"{tag}.json");
+                string json = File.ReadAllText(tagPath);
+                Tag existingTag = JsonSerializer.Deserialize<Tag>(json, _jsonSerializerOptions)!;
+
+                if (!existingTag.Posts.Contains(post.Id))
+                {
+                    existingTag.Posts.Add(post.Id);
+                }
+
+                File.WriteAllText(tagPath, JsonSerializer.Serialize(existingTag, _jsonSerializerOptions));
+            }
+        }
     }
 }
