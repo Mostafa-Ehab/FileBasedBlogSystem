@@ -35,5 +35,11 @@ namespace BlogSystem.Features.Tags.Data
             var files = Directory.GetFiles(path, "*.json");
             return files.Select(file => JsonSerializer.Deserialize<Tag>(File.ReadAllText(file), _jsonSerializerOptions)).Where(tag => tag != null).ToArray()!;
         }
+
+        public bool TagExists(string slug)
+        {
+            var path = Path.Combine("Content", "tags", $"{slug}.json");
+            return File.Exists(path);
+        }
     }
 }

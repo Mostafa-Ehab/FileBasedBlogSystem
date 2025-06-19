@@ -6,5 +6,6 @@ namespace BlogSystem.Features.Categories.Data
     {
         Category? GetCategoryBySlug(string slug);
         Category[] GetAllCategories();
+        bool CategoryExists(string slug);
     }
 }

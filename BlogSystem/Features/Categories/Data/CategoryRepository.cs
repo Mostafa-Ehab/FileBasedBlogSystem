@@ -40,5 +40,11 @@ namespace BlogSystem.Features.Categories.Data
                 .Where(category => category != null)
                 .ToArray()!;
         }
+
+        public bool CategoryExists(string slug)
+        {
+            var path = Path.Combine("Content", "categories", $"{slug}.json");
+            return File.Exists(path);
+        }
     }
 }
