@@ -9,7 +9,7 @@
         "welcome",
         "blog"
     ],
-    "category": "Announcements",
+    "category": "announcements",
     "imageUrl": "/images/posts/2025-06-09-first-post/first-post.jpg",
     "slug": "first-post"
 }

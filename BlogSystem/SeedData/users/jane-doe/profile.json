@@ -4,12 +4,18 @@
     "email": "jane.doe@example.com",
     "fullName": "Jane Doe",
     "bio": "This is Jane's profile. They love blogging about technology and travel.",
-    "profilePictureUrl": "https://example.com/images/jane-doe.jpg",
+    "profilePictureUrl": "https://picsum.photos/200/200?random=12",
     "hashedPassword": "$2a$10$0bYzBUdwKdUV6E4HYUNs5OkjPQVCAGyqDSJoJUmXukFSYBoh1pzLy",
     "createdAt": "2023-01-01T12:00:00Z",
     "updatedAt": "2023-01-10T12:00:00Z",
     "role": "Author",
     "posts": [
         "2025-06-09-first-post"
-    ]
+    ],
+    "socialLinks": {
+        "website": "https://janedoe.com",
+        "twitter": "https://twitter.com/jane_doe",
+        "instagram": "https://instagram.com/jane_doe",
+        "facebook": "https://facebook.com/jane.doe"
+    }
 }

@@ -11,5 +11,11 @@
     "role": "Author",
     "posts": [
         "2024-12-15-artificial-intelligence-revolution"
-    ]
+    ],
+    "socialLinks": {
+        "website": "https://sarahchen.com",
+        "twitter": "https://twitter.com/sarah_tech",
+        "instagram": "https://instagram.com/sarah_tech",
+        "facebook": "https://facebook.com/sarah.chen"
+    }
 }

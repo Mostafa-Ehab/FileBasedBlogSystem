@@ -11,5 +11,11 @@
     "role": "Author",
     "posts": [
         "2024-12-08-plant-based-mediterranean-fusion"
-    ]
+    ],
+    "socialLinks": {
+        "website": "https://chefmarco.com",
+        "twitter": "https://twitter.com/chefmarco",
+        "instagram": "https://instagram.com/chefmarco",
+        "facebook": "https://facebook.com/chefmarco"
+    }
 }
