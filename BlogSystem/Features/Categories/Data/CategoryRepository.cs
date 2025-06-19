@@ -41,6 +41,19 @@ namespace BlogSystem.Features.Categories.Data
                 .ToArray()!;
         }
 
+        public Category CreateCategory(Category category)
+        {
+            var path = Path.Combine("Content", "categories", $"{category.Slug}.json");
+            if (File.Exists(path))
+            {
+                throw new InvalidOperationException($"Category with slug '{category.Slug}' already exists.");
+            }
+
+            string json = JsonSerializer.Serialize(category, _jsonSerializerOptions);
+            File.WriteAllText(path, json);
+            return category;
+        }
+
         public bool CategoryExists(string slug)
         {
             var path = Path.Combine("Content", "categories", $"{slug}.json");
