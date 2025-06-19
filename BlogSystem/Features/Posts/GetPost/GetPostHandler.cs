@@ -26,6 +26,10 @@ namespace BlogSystem.Features.Posts.Get
         public Task<GetPostDTO> GetPostAsync(string postSlug)
         {
             var post = _postRepository.GetPostBySlug(postSlug) ?? throw new PostNotFoundException(postSlug);
+            if (!post.IsPublished)
+            {
+                throw new PostNotFoundException(postSlug);
+            }
             post.Content = _markdownService.RenderMarkdown(post.Content);
 
             var author = _userRepository.GetUserById(post.AuthorId);
@@ -38,7 +42,8 @@ namespace BlogSystem.Features.Posts.Get
 
         public Task<GetPostDTO[]> GetAllPostsAsync(int pageNumber, int pageSize)
         {
-            var posts = _postRepository.GetAllPosts(pageNumber, pageSize);
+            var posts = _postRepository.GetAllPosts(pageNumber, pageSize)
+                .Where(p => p.IsPublished);
             foreach (var post in posts)
             {
                 post.Content = _markdownService.RenderMarkdown(post.Content);

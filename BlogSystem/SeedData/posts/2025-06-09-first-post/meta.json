@@ -4,6 +4,7 @@
     "description": "This is the first post in our new blog system.",
     "authorId": "jane-doe",
     "createdAt": "2025-06-09T10:00:00Z",
+    "isPublished": true,
     "tags": [
         "introduction",
         "welcome",
