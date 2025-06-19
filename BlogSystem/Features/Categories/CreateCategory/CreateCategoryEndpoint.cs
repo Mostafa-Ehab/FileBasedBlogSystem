@@ -1,6 +1,5 @@
 using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Categories.CreateCategory.DTOs;
-using BlogSystem.Shared.Exceptions;
 
 namespace BlogSystem.Features.Categories.CreateCategory
 {
