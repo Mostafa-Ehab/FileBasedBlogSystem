@@ -5,6 +5,9 @@ using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.CreateUser;
 using BlogSystem.Features.Posts.Create;
 using BlogSystem.Features.Posts.UpdatePost;
+using BlogSystem.Features.Categories.CreateCategory;
+using BlogSystem.Features.Tags.CreateTag;
+using BlogSystem.Features.Posts.RSS;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -16,6 +19,7 @@ namespace BlogSystem.Shared.Extensions
             app.MapGroup("/api/categories").MapCategoryEndpoints();
             app.MapGroup("/api/tags").MapTagEndpoints();
             app.MapGroup("/api/users").MapUserEndpoints();
+            app.MapRSSEndpoint();
 
             return app;
         }
@@ -35,6 +39,7 @@ namespace BlogSystem.Shared.Extensions
             app.MapGetAllCategoriesEndpoint();
             app.MapGetCategoryEndpoint();
             app.MapGetPostsByCategoryEndpoint();
+            app.MapCreateCategoryEndpoint();
 
             return app;
         }
@@ -44,6 +49,7 @@ namespace BlogSystem.Shared.Extensions
             app.MapGetAllTagsEndpoint();
             app.MapGetTagEndpoint();
             app.MapGetPostsByTagEndpoint();
+            app.MapCreateTagEndpoint();
 
             return app;
         }

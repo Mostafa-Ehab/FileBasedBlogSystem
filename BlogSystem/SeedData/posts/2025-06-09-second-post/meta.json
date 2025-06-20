@@ -4,6 +4,7 @@
     "description": "This is the second post in our new blog system, continuing our journey.",
     "authorId": "john-smith",
     "createdAt": "2025-06-09T12:00:00Z",
+    "updatedAt": "2025-06-09T12:00:00Z",
     "isPublished": true,
     "tags": [
         "update",

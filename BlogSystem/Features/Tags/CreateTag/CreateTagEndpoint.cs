@@ -7,7 +7,7 @@ namespace BlogSystem.Features.Tags.CreateTag
     {
         public static void MapCreateTagEndpoint(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost("/", async (CreateTagRequestDTO request, ICreateTagHandler handler) =>
+            endpoints.MapPost("/", async (ICreateTagHandler handler, CreateTagRequestDTO request) =>
             {
                 var tag = await handler.CreateTagAsync(request);
                 return Results.Created($"/api/tags/{tag.Slug}", tag);

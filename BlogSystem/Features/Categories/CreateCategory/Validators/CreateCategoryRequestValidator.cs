@@ -6,7 +6,7 @@ namespace BlogSystem.Features.Categories.CreateCategory.Validators
 {
     public class CreateCategoryRequestValidator : AbstractValidator<CreateCategoryRequestDTO>
     {
-        public CreateCategoryRequestValidator(ICategoryRepository categoryRepository)
+        public CreateCategoryRequestValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()

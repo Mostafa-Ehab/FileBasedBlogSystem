@@ -4,15 +4,16 @@ using BlogSystem.Features.Tags.CreateTag.Validators;
 using BlogSystem.Features.Tags.Data;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Helpers;
+using FluentValidation;
 
 namespace BlogSystem.Features.Tags.CreateTag
 {
     public class CreateTagHandler : ICreateTagHandler
     {
         private readonly ITagRepository _tagRepository;
-        private readonly CreateTagRequestValidator _validator;
+        private readonly IValidator<CreateTagRequestDTO> _validator;
 
-        public CreateTagHandler(ITagRepository tagRepository, CreateTagRequestValidator validator)
+        public CreateTagHandler(ITagRepository tagRepository, IValidator<CreateTagRequestDTO> validator)
         {
             _validator = validator;
             _tagRepository = tagRepository;

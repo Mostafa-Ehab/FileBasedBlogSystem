@@ -7,7 +7,7 @@ namespace BlogSystem.Features.Categories.CreateCategory
     {
         public static void MapCreateCategoryEndpoint(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost("/", async (CreateCategoryRequestDTO request, ICreateCategoryHandler handler) =>
+            endpoints.MapPost("/", async (ICreateCategoryHandler handler, CreateCategoryRequestDTO request) =>
             {
                 var category = await handler.CreateCategoryAsync(request);
                 return Results.Created($"/api/categories/{category.Slug}", category);

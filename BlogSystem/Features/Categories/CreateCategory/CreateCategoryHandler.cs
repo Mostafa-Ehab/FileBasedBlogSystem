@@ -4,15 +4,15 @@ using BlogSystem.Features.Categories.CreateCategory.Validators;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Helpers;
+using FluentValidation;
 
 namespace BlogSystem.Features.Categories.CreateCategory
 {
     public class CreateCategoryHandler : ICreateCategoryHandler
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly CreateCategoryRequestValidator _validator;
-
-        public CreateCategoryHandler(ICategoryRepository categoryRepository, CreateCategoryRequestValidator validator)
+        private readonly IValidator<CreateCategoryRequestDTO> _validator;
+        public CreateCategoryHandler(ICategoryRepository categoryRepository, IValidator<CreateCategoryRequestDTO> validator)
         {
             _validator = validator;
             _categoryRepository = categoryRepository;

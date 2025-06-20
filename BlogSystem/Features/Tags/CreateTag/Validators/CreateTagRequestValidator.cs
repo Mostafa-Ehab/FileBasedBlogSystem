@@ -6,7 +6,7 @@ namespace BlogSystem.Features.Tags.CreateTag.Validators
 {
     public class CreateTagRequestValidator : AbstractValidator<CreateTagRequestDTO>
     {
-        public CreateTagRequestValidator(ITagRepository tagRepository)
+        public CreateTagRequestValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
