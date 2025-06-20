@@ -30,7 +30,7 @@ namespace BlogSystem.Features.Posts.Get
             {
                 throw new PostNotFoundException(postSlug);
             }
-            post.Content = _markdownService.RenderMarkdown(post.Content);
+            post.Content = _markdownService.RenderMarkdown(post.Content!);
 
             var author = _userRepository.GetUserById(post.AuthorId);
 
@@ -46,7 +46,7 @@ namespace BlogSystem.Features.Posts.Get
                 .Where(p => p.IsPublished);
             foreach (var post in posts)
             {
-                post.Content = _markdownService.RenderMarkdown(post.Content);
+                post.Content = _markdownService.RenderMarkdown(post.Content!);
             }
             return Task.FromResult(_mapper.Map<GetPostDTO[]>(posts));
         }

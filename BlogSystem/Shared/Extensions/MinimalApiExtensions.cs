@@ -8,6 +8,7 @@ using BlogSystem.Features.Posts.UpdatePost;
 using BlogSystem.Features.Categories.CreateCategory;
 using BlogSystem.Features.Tags.CreateTag;
 using BlogSystem.Features.Posts.RSS;
+using BlogSystem.Features.Posts.SchedulePost;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -30,6 +31,7 @@ namespace BlogSystem.Shared.Extensions
             app.MapGetAllPostsEndpoint();
             app.MapCreatePostEndpoint();
             app.MapUpdatePostEndpoint();
+            app.MapSchedulePostEndpoints();
 
             return app;
         }

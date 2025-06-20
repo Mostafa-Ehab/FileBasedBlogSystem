@@ -99,6 +99,7 @@ namespace BlogSystem.Features.Posts.CreatePost
             _postRepository.CreatePost(post, request.Content ?? string.Empty);
             return new CreatePostResponseDTO
             {
+                Id = post.Id,
                 Slug = post.Slug,
             };
         }

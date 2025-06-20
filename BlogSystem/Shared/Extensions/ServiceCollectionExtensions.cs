@@ -1,4 +1,7 @@
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using BlogSystem.Shared.Mappings;
 using BlogSystem.Features.Categories.CreateCategory;
 using BlogSystem.Features.Categories.CreateCategory.DTOs;
 using BlogSystem.Features.Categories.CreateCategory.Validators;
@@ -9,6 +12,7 @@ using BlogSystem.Features.Posts.CreatePost.DTOs;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.Get;
 using BlogSystem.Features.Posts.RSS;
+using BlogSystem.Features.Posts.SchedulePost;
 using BlogSystem.Features.Posts.UpdatePost;
 using BlogSystem.Features.Posts.UpdatePost.DTOs;
 using BlogSystem.Features.Posts.UpdatePost.Validators;
@@ -146,6 +150,8 @@ namespace BlogSystem.Shared.Extensions
             services.AddScoped<ICreatePostHandler, CreatePostHandler>();
             services.AddScoped<IUpdatePostHandler, UpdatePostHandler>();
             services.AddScoped<IRSSHandler, RSSHandler>();
+            services.AddScoped<ISchedulePostHandler, SchedulePostHandler>();
+            services.AddScoped<PublishPostService>();
             return services;
         }
 
