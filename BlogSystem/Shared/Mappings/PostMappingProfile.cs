@@ -2,7 +2,7 @@ using AutoMapper;
 using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Posts.GetPost.DTOs;
 
-namespace BlogSystem.Common.Mappings
+namespace BlogSystem.Shared.Mappings
 {
     public class PostMappingProfile : Profile
     {
