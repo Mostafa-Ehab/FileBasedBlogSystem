@@ -28,5 +28,17 @@ namespace BlogSystem.Features.Posts.Get
             .WithTags("Posts")
             .Produces<Post[]>(StatusCodes.Status200OK);
         }
+
+        public static void MapSearchPostsEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/search", async (IGetPostHandler handler, string query) =>
+            {
+                var posts = await handler.SearchPostsAsync(query);
+                return Results.Ok(posts);
+            })
+            .WithName("SearchPosts")
+            .WithTags("Posts")
+            .Produces<Post[]>(StatusCodes.Status200OK);
+        }
     }
 }

@@ -50,5 +50,27 @@ namespace BlogSystem.Features.Posts.Get
             }
             return Task.FromResult(_mapper.Map<GetPostDTO[]>(posts));
         }
+
+        public Task<GetPostDTO[]> SearchPostsAsync(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return GetAllPostsAsync(1, 10); // Default to first page with 10 posts
+            }
+
+            var posts = _postRepository.GetAllPosts(1, 100) // Get all posts for search
+                .Where(p => p.IsPublished)
+                .Where(p => p.Content!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                       p.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                       p.Tags.Any(t => t.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                       p.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                    );
+
+            foreach (var post in posts)
+            {
+                post.Content = _markdownService.RenderMarkdown(post.Content!);
+            }
+            return Task.FromResult(_mapper.Map<GetPostDTO[]>(posts));
+        }
     }
 }

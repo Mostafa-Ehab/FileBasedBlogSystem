@@ -7,5 +7,6 @@ namespace BlogSystem.Features.Posts.Get
     {
         Task<GetPostDTO> GetPostAsync(string slug);
         Task<GetPostDTO[]> GetAllPostsAsync(int pageNumber, int pageSize);
+        Task<GetPostDTO[]> SearchPostsAsync(string searchTerm);
     }
 }
