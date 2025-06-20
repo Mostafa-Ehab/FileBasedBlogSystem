@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="/js/owl-init.js" defer></script>
+    <script src="/js/main-script.js" defer></script>
+    <script src="/js/slider.js" defer></script>
+    <script src="/js/utils.js" defer></script>
+    <script src="/js/common.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">Blog</a>
+        </div>
+        <div class="search-container">
+            <input type="text" placeholder="Search posts..." class="search-input">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="content">
+        <h1>Welcome to Our Blog</h1>
+        <section class="owl-carousel owl-theme" id="post-slider">
+
+        </section>
+
+        <h2>Latest Posts</h2>
+        <div class="main-content">
+            <section class="posts-section" id="posts-section">
+
+            </section>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Categories Widget -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-widget-header">
+                        <h3 class="sidebar-widget-title">Categories</h3>
+                    </div>
+                    <div class="sidebar-widget-content">
+                        <ul class="category-list" id="category-list">
+
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tags Widget -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-widget-header">
+                        <h3 class="sidebar-widget-title">Tags</h3>
+                    </div>
+                    <div class="sidebar-widget-content">
+                        <div class="tags-cloud" id="tags-cloud">
+
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Blog. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

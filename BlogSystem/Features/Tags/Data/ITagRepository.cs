@@ -6,5 +6,7 @@ namespace BlogSystem.Features.Tags.Data
     {
         Tag? GetTagBySlug(string slug);
         Tag[] GetAllTags();
+        bool TagExists(string slug);
+        Tag CreateTag(Tag tag);
     }
 }

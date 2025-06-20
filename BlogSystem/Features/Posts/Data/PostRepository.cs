@@ -80,5 +80,201 @@ namespace BlogSystem.Features.Posts.Data
                 .Where(post => post != null)
                 .ToArray()!;
         }
+
+        public Post[] GetAllPosts(int page = 1, int pageSize = 10)
+        {
+            var path = Path.Combine("Content", "posts");
+            if (!Directory.Exists(path))
+            {
+                return [];
+            }
+
+            var postFiles = Directory.GetDirectories(path)
+                .Select(dir => Path.Combine(dir, "meta.json"))
+                .Where(File.Exists)
+                .OrderByDescending(File.GetLastWriteTime);
+
+            return postFiles
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(file => JsonSerializer.Deserialize<Post>(File.ReadAllText(file), _jsonSerializerOptions))
+                .Where(post => post != null)
+                .Select(post =>
+                {
+                    post!.Content = File.ReadAllText(Path.Combine(path, post.Id, "content.md"));
+                    return post;
+                })
+                .ToArray()!;
+        }
+
+        public string CreatePost(Post post, string Content)
+        {
+            var postPath = Path.Combine("Content", "posts", post.Id);
+            if (!Directory.Exists(postPath))
+            {
+                Directory.CreateDirectory(postPath);
+            }
+
+            File.WriteAllText(Path.Combine(postPath, "meta.json"), JsonSerializer.Serialize(post, _jsonSerializerOptions));
+            File.WriteAllText(Path.Combine(postPath, "content.md"), Content);
+
+            _slugResolver.AddSlug(post.Slug, post.Id);
+
+            UpdateCategoryFile(post);
+            UpdateTagFile(post);
+
+            return post.Id;
+        }
+
+        public string UpdatePost(Post post, string content)
+        {
+            var existingPost = GetPostById(post.Id);
+            if (existingPost == null)
+            {
+                throw new FileNotFoundException($"Post with ID '{post.Id}' does not exist.");
+            }
+
+            var postPath = Path.Combine("Content", "posts", post.Id);
+            if (!Directory.Exists(postPath))
+            {
+                throw new DirectoryNotFoundException($"Post directory '{postPath}' does not exist.");
+            }
+
+            File.WriteAllText(Path.Combine(postPath, "meta.json"), JsonSerializer.Serialize(post, _jsonSerializerOptions));
+            File.WriteAllText(Path.Combine(postPath, "content.md"), content);
+
+            _slugResolver.UpdateSlug(existingPost.Slug, post.Slug, post.Id);
+
+            UpdateCategoryFile(existingPost, post);
+            UpdateTagFile(existingPost, post);
+
+            return post.Id;
+        }
+
+        public bool PostExists(string id)
+        {
+            var path = Path.Combine("Content", "posts", id);
+            return Directory.Exists(path) && File.Exists(Path.Combine(path, "meta.json"));
+        }
+
+        private void UpdateCategoryFile(Post post)
+        {
+            if (string.IsNullOrWhiteSpace(post.Category))
+            {
+                return;
+            }
+
+            var categoryPath = Path.Combine("Content", "categories", $"{post.Category}.json");
+            string json = File.ReadAllText(categoryPath);
+            Category category = JsonSerializer.Deserialize<Category>(json, _jsonSerializerOptions)!;
+
+            if (!category.Posts.Contains(post.Id))
+            {
+                category.Posts.Add(post.Id);
+                File.WriteAllText(categoryPath, JsonSerializer.Serialize(category, _jsonSerializerOptions));
+            }
+        }
+
+        private void UpdateCategoryFile(Post oldPost, Post newPost)
+        {
+            if (oldPost.Category == newPost.Category)
+            {
+                return;
+            }
+
+            // Remove from old category
+            if (!string.IsNullOrWhiteSpace(oldPost.Category))
+            {
+                var oldCategoryPath = Path.Combine("Content", "categories", $"{oldPost.Category}.json");
+                string oldJson = File.ReadAllText(oldCategoryPath);
+                Category oldCategory = JsonSerializer.Deserialize<Category>(oldJson, _jsonSerializerOptions)!;
+
+                if (oldCategory.Posts.Contains(oldPost.Id))
+                {
+                    oldCategory.Posts.Remove(oldPost.Id);
+                    File.WriteAllText(oldCategoryPath, JsonSerializer.Serialize(oldCategory, _jsonSerializerOptions));
+                }
+            }
+
+            // Add to new category
+            if (!string.IsNullOrWhiteSpace(newPost.Category))
+            {
+                var newCategoryPath = Path.Combine("Content", "categories", $"{newPost.Category}.json");
+                string newJson = File.ReadAllText(newCategoryPath);
+                Category newCategory = JsonSerializer.Deserialize<Category>(newJson, _jsonSerializerOptions)!;
+
+                if (!newCategory.Posts.Contains(newPost.Id))
+                {
+                    newCategory.Posts.Add(newPost.Id);
+                    File.WriteAllText(newCategoryPath, JsonSerializer.Serialize(newCategory, _jsonSerializerOptions));
+                }
+            }
+        }
+
+        private void UpdateTagFile(Post post)
+        {
+            if (post.Tags == null || post.Tags.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var tag in post.Tags)
+            {
+                var tagPath = Path.Combine("Content", "tags", $"{tag}.json");
+                string json = File.ReadAllText(tagPath);
+                Tag existingTag = JsonSerializer.Deserialize<Tag>(json, _jsonSerializerOptions)!;
+
+                if (!existingTag.Posts.Contains(post.Id))
+                {
+                    existingTag.Posts.Add(post.Id);
+                }
+
+                File.WriteAllText(tagPath, JsonSerializer.Serialize(existingTag, _jsonSerializerOptions));
+            }
+        }
+
+        private void UpdateTagFile(Post oldPost, Post newPost)
+        {
+            if (oldPost.Tags == null || oldPost.Tags.Count == 0)
+            {
+                return;
+            }
+
+            // Remove from old tags
+            foreach (var tag in oldPost.Tags)
+            {
+                var tagPath = Path.Combine("Content", "tags", $"{tag}.json");
+                if (!File.Exists(tagPath))
+                {
+                    continue;
+                }
+
+                string json = File.ReadAllText(tagPath);
+                Tag existingTag = JsonSerializer.Deserialize<Tag>(json, _jsonSerializerOptions)!;
+
+                if (existingTag.Posts.Contains(oldPost.Id))
+                {
+                    existingTag.Posts.Remove(oldPost.Id);
+                    File.WriteAllText(tagPath, JsonSerializer.Serialize(existingTag, _jsonSerializerOptions));
+                }
+            }
+
+            // Add to new tags
+            if (newPost.Tags != null && newPost.Tags.Count > 0)
+            {
+                foreach (var tag in newPost.Tags)
+                {
+                    var tagPath = Path.Combine("Content", "tags", $"{tag}.json");
+                    string json = File.ReadAllText(tagPath);
+                    Tag existingTag = JsonSerializer.Deserialize<Tag>(json, _jsonSerializerOptions)!;
+
+                    if (!existingTag.Posts.Contains(newPost.Id))
+                    {
+                        existingTag.Posts.Add(newPost.Id);
+                        File.WriteAllText(tagPath, JsonSerializer.Serialize(existingTag, _jsonSerializerOptions));
+                    }
+                }
+            }
+        }
     }
 }

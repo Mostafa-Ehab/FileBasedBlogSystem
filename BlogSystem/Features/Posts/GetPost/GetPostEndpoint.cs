@@ -6,7 +6,7 @@ namespace BlogSystem.Features.Posts.Get
     {
         public static void MapGetPostEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/{slug}", async (string slug, IGetPostHandler handler) =>
+            app.MapGet("/p/{slug}", async (string slug, IGetPostHandler handler) =>
             {
                 var post = await handler.GetPostAsync(slug);
                 return Results.Ok(post);
@@ -15,6 +15,30 @@ namespace BlogSystem.Features.Posts.Get
             .WithTags("Posts")
             .Produces<Post>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
+        }
+
+        public static void MapGetAllPostsEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/all", async (IGetPostHandler handler, int pageNumber = 1, int pageSize = 10) =>
+            {
+                var posts = await handler.GetAllPostsAsync(pageNumber, pageSize);
+                return Results.Ok(posts);
+            })
+            .WithName("GetAllPosts")
+            .WithTags("Posts")
+            .Produces<Post[]>(StatusCodes.Status200OK);
+        }
+
+        public static void MapSearchPostsEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/search", async (IGetPostHandler handler, string query) =>
+            {
+                var posts = await handler.SearchPostsAsync(query);
+                return Results.Ok(posts);
+            })
+            .WithName("SearchPosts")
+            .WithTags("Posts")
+            .Produces<Post[]>(StatusCodes.Status200OK);
         }
     }
 }

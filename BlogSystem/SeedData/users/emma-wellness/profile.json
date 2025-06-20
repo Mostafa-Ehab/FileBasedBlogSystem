@@ -1,0 +1,21 @@
+{
+    "id": "emma-wellness",
+    "username": "emma-wellness",
+    "email": "emma.wellness@example.com",
+    "fullName": "Emma Rodriguez",
+    "bio": "Mindfulness coach and digital wellness advocate. Helping people find balance in our connected world through practical self-care strategies and mindful living practices.",
+    "profilePictureUrl": "https://picsum.photos/200/200?random=11",
+    "hashedPassword": "$2a$10$0bYzBUdwKdUV6E4HYUNs5OkjPQVCAGyqDSJoJUmXukFSYBoh1pzLy",
+    "createdAt": "2024-02-01T11:00:00Z",
+    "updatedAt": "2024-12-10T14:00:00Z",
+    "role": "Author",
+    "posts": [
+        "2024-12-10-mindful-living-digital-age"
+    ],
+    "socialLinks": {
+        "website": "https://emmarodriguez.com",
+        "twitter": "https://twitter.com/emma_wellness",
+        "instagram": "https://instagram.com/emma_wellness",
+        "facebook": "https://facebook.com/emma.wellness"
+    }
+}

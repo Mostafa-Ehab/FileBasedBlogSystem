@@ -1,4 +1,4 @@
-﻿# Welcome to the Blog!
+﻿# Welcome to the Blog
 
 Welcome to the very first post on our blog! We're excited to start this journey and share valuable content with you.
 

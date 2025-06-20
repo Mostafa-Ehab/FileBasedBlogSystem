@@ -2,14 +2,16 @@
     "id": "2025-06-09-third-post",
     "title": "Third Post",
     "description": "This is the third post in our new blog system, wrapping up our initial series.",
-    "author": "john-smith",
-    "date": "2025-06-09T14:00:00Z",
+    "authorId": "john-smith",
+    "createdAt": "2025-06-09T14:00:00Z",
+    "updatedAt": "2025-06-09T14:00:00Z",
+    "isPublished": true,
     "tags": [
         "conclusion",
         "blog",
         "series"
     ],
-    "category": "Final Thoughts",
-    "image": "/images/posts/third-post.jpg",
+    "category": "final-thoughts",
+    "imageUrl": "/images/posts/2025-06-09-third-post/third-post.jpg",
     "slug": "third-post"
 }

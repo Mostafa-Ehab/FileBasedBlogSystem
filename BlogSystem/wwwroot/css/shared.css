@@ -1,0 +1,68 @@
+/* Shared Card Styles */
+.card {
+    background: var(--background-color, white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+/* Shared Button Styles */
+.btn-link {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+}
+
+.btn-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Shared Meta Text */
+.meta-text {
+    font-size: 0.875rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* Shared Tag Styles */
+.tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tag-default {
+    background: var(--accent-color);
+    color: var(--text-color);
+}
+
+.tag-default:hover {
+    background: var(--accent-hover-color);
+}
+
+.tag-pill {
+    background: var(--background-light);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-pill);
+    padding: 0.5rem 1rem;
+}
+
+.tag-pill:hover {
+    background: var(--accent-color);
+    color: var(--text-color);
+    border-color: var(--text-muted);
+    transform: translateY(-1px);
+}

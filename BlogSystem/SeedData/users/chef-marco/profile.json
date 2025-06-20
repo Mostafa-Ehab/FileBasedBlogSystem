@@ -1,0 +1,21 @@
+{
+    "id": "chef-marco",
+    "username": "chef-marco",
+    "email": "chef.marco@example.com",
+    "fullName": "Marco Santini",
+    "bio": "Professional chef specializing in plant-based Mediterranean cuisine. 15+ years of culinary experience combining traditional techniques with modern health-conscious cooking.",
+    "profilePictureUrl": "https://picsum.photos/200/200?random=12",
+    "hashedPassword": "$2a$10$0bYzBUdwKdUV6E4HYUNs5OkjPQVCAGyqDSJoJUmXukFSYBoh1pzLy",
+    "createdAt": "2024-01-20T08:30:00Z",
+    "updatedAt": "2024-12-08T16:45:00Z",
+    "role": "Author",
+    "posts": [
+        "2024-12-08-plant-based-mediterranean-fusion"
+    ],
+    "socialLinks": {
+        "website": "https://chefmarco.com",
+        "twitter": "https://twitter.com/chefmarco",
+        "instagram": "https://instagram.com/chefmarco",
+        "facebook": "https://facebook.com/chefmarco"
+    }
+}

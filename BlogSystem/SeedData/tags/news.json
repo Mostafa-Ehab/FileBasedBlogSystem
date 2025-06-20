@@ -1,5 +1,5 @@
 {
-    "name": "news",
+    "name": "News",
     "slug": "news",
     "description": "Posts that cover news updates, announcements, and important information related to the blog system.",
     "posts": [

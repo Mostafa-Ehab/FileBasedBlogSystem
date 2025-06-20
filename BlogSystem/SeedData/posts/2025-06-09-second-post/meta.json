@@ -2,14 +2,16 @@
     "id": "2025-06-09-second-post",
     "title": "Second Post",
     "description": "This is the second post in our new blog system, continuing our journey.",
-    "author": "john-smith",
-    "date": "2025-06-09T12:00:00Z",
+    "authorId": "john-smith",
+    "createdAt": "2025-06-09T12:00:00Z",
+    "updatedAt": "2025-06-09T12:00:00Z",
+    "isPublished": true,
     "tags": [
         "update",
         "blog",
         "news"
     ],
-    "category": "Updates",
-    "image": "/images/posts/second-post.jpg",
+    "category": "updates",
+    "imageUrl": "/images/posts/2025-06-09-second-post/second-post.jpg",
     "slug": "second-post"
 }
