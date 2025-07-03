@@ -60,7 +60,10 @@ namespace BlogSystem.Shared.Extensions
             });
 
             // Configure AutoMapper
-            services.AddAutoMapper(typeof(PostMappingProfile));
+            services.AddAutoMapper(config =>
+            {
+                config.AddProfile<PostMappingProfile>();
+            });
 
             // Register Authentication Service
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
