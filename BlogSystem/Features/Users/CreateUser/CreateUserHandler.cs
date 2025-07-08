@@ -32,11 +32,11 @@ namespace BlogSystem.Features.Users.CreateUser
                 throw new EmailAlreadyExistException(requestDTO.Email);
             }
 
-            if (requestDTO.Username != null && _userRepository.UserExistsByUsername(requestDTO.Username))
+            if (!string.IsNullOrWhiteSpace(requestDTO.Username) && _userRepository.UserExistsByUsername(requestDTO.Username))
             {
                 throw new UsernameAlreadyExistException(requestDTO.Username);
             }
-            else if (requestDTO.Username == null)
+            else if (string.IsNullOrEmpty(requestDTO.Username))
             {
                 requestDTO.Username = SlugHelper.GenerateUniqueSlug(requestDTO.Email.Split('@')[0], _userRepository.UserExistsByUsername);
             }
@@ -48,15 +48,25 @@ namespace BlogSystem.Features.Users.CreateUser
                 Email = requestDTO.Email,
                 FullName = requestDTO.FullName,
                 HashedPassword = _authHelper.HashPassword(requestDTO.Password),
-                Role = (requestDTO.Role ?? UserRole.Author).ToString()
+                Role = requestDTO.Role ?? UserRole.Author,
+                Bio = requestDTO.Bio ?? string.Empty,
+                ProfilePictureUrl = string.IsNullOrWhiteSpace(requestDTO.ProfilePictureUrl) ?
+                                ImageHelper.GetRandomProfilePictureUrl() : requestDTO.ProfilePictureUrl,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
             var createdUser = _userRepository.CreateUser(user);
 
             return Task.FromResult(new CreateUserResponseDTO
             {
+                Id = createdUser.Id,
                 Username = createdUser.Username,
                 Email = createdUser.Email,
-                FullName = createdUser.FullName
+                FullName = createdUser.FullName,
+                Bio = createdUser.Bio,
+                Role = createdUser.Role,
+                ProfilePictureUrl = createdUser.ProfilePictureUrl,
+                CreatedAt = createdUser.CreatedAt,
             });
         }
     }

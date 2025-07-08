@@ -1,4 +1,6 @@
-﻿namespace BlogSystem.Domain.Entities
+﻿using BlogSystem.Domain.Enums;
+
+namespace BlogSystem.Domain.Entities
 {
     public class User
     {
@@ -12,7 +14,7 @@
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime LastLogin { get; set; }
-        public string Role { get; set; } = string.Empty; // e.g., Admin, Editor, Viewer
+        public UserRole Role { get; set; } = UserRole.Author; // e.g., Admin, Editor, Author
         public string[] Posts { get; set; } = []; // List of post IDs authored by the user
         public Dictionary<string, string> SocialLinks { get; set; } = [];
     }

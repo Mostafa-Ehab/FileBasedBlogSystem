@@ -45,7 +45,7 @@ namespace BlogSystem.Features.Users.CreateUser.Validators
 
             RuleFor(x => x.Role)
                 .IsInEnum()
-                .WithMessage("Role must be one of the predefined user roles (Admin, Editor, or Viewer).")
+                .WithMessage("Role must be one of the predefined user roles (Admin, Editor, or Author).")
                 .When(x => x.Role.HasValue, ApplyConditionTo.CurrentValidator);
         }
     }
