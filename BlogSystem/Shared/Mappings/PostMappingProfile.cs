@@ -2,14 +2,13 @@ using AutoMapper;
 using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Posts.GetPost.DTOs;
 
-namespace BlogSystem.Shared.Mappings
+namespace BlogSystem.Shared.Mappings;
+
+public class PostMappingProfile : Profile
 {
-    public class PostMappingProfile : Profile
+    public PostMappingProfile()
     {
-        public PostMappingProfile()
-        {
-            CreateMap<Post, GetPostDTO>();
-            CreateMap<User, PostAuthorDTO>();
-        }
+        CreateMap<Post, GetPostDTO>();
+        CreateMap<User, PostAuthorDTO>();
     }
 }

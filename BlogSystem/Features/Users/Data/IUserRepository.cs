@@ -7,6 +7,7 @@ namespace BlogSystem.Features.Users.Data
         User? GetUserById(string id);
         User? GetUserByUsername(string username);
         User? GetUserByEmail(string email);
+        List<User> GetAllUsers();
         User CreateUser(User user);
         void UpdateUser(User user);
         void DeleteUser(User user);

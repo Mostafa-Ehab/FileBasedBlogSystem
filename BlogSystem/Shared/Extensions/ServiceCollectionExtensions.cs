@@ -41,6 +41,7 @@ using SixLabors.ImageSharp.Web.Caching;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using SixLabors.ImageSharp.Web.Middleware;
 using SixLabors.ImageSharp.Web.Providers;
+using BlogSystem.Features.Users.GetUser;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -63,6 +64,7 @@ namespace BlogSystem.Shared.Extensions
             services.AddAutoMapper(config =>
             {
                 config.AddProfile<PostMappingProfile>();
+                config.AddProfile<UserMappingProfile>();
             });
 
             // Register Authentication Service
@@ -116,6 +118,10 @@ namespace BlogSystem.Shared.Extensions
             {
                 PropertyNameCaseInsensitive = true,
                 IgnoreReadOnlyProperties = true,
+                Converters =
+                {
+                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+                }
             });
 
             services.AddSingleton<AuthHelper>();
@@ -179,6 +185,7 @@ namespace BlogSystem.Shared.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILoginHandler, LoginHandler>();
             services.AddScoped<ICreateUserHandler, CreateUserHandler>();
+            services.AddScoped<IGetUserHandler, GetUserHandler>();
             return services;
         }
     }

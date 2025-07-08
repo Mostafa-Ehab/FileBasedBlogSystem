@@ -62,6 +62,24 @@ namespace BlogSystem.Features.Users.Data
             return JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions);
         }
 
+        public List<User> GetAllUsers()
+        {
+            var users = new List<User>();
+            var path = Path.Combine("Content", "users");
+            if (Directory.Exists(path))
+            {
+                foreach (var id in Directory.GetDirectories(path))
+                {
+                    string json = File.ReadAllText(
+                        Path.Combine(id, "profile.json")
+                        );
+                    var user = JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions);
+                    users.Add(user!);
+                }
+            }
+            return users;
+        }
+
         public User CreateUser(User user)
         {
             var path = Path.Combine("Content", "users", user.Id, "profile.json");

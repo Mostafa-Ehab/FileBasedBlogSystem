@@ -9,6 +9,7 @@ using BlogSystem.Features.Categories.CreateCategory;
 using BlogSystem.Features.Tags.CreateTag;
 using BlogSystem.Features.Posts.RSS;
 using BlogSystem.Features.Posts.SchedulePost;
+using BlogSystem.Features.Users.GetUser;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -60,6 +61,7 @@ namespace BlogSystem.Shared.Extensions
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapLoginEndpoint();
+            app.MapGetUserEndpoint();
             app.MapCreateUserEndpoint();
 
             return app;
