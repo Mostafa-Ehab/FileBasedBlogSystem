@@ -38,3 +38,81 @@ function getIconClass(platform) {
             return 'fa-solid fa-globe';
     }
 }
+
+function getRequest(url, params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const token = getToken();
+    return fetch(`${url}?${queryString}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
+function postRequest(url, data = {}, params = {}) {
+    const token = getToken();
+    const queryString = new URLSearchParams(params).toString();
+    return fetch(`${url}?${queryString}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    }).then(async response => {
+        if (!response.ok) {
+            throw new RequestError(await response.json());
+        }
+        return response.json();
+    });
+}
+
+function putRequest(url, data = {}, params = {}) {
+    const token = getToken();
+    const queryString = new URLSearchParams(params).toString();
+    return fetch(`${url}?${queryString}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
+function deleteRequest(url, params = {}) {
+    const token = getToken();
+    const queryString = new URLSearchParams(params).toString();
+    return fetch(`${url}?${queryString}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    });
+}
+
+function setToken(token) {
+    localStorage.setItem('token', token);
+}
+
+function getToken() {
+    return localStorage.getItem('token');
+}
