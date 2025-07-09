@@ -26,6 +26,13 @@ namespace BlogSystem.Shared.Helpers
             return BC.EnhancedHashPassword(password, _hashWorkFactor);
         }
 
+        public static string HashPassword(string password, int workFactor = 10)
+        {
+            return BC.EnhancedHashPassword(password, workFactor);
+        }
+
+        
+
         public bool ValidatePassword(string password, string hashedPassword)
         {
             return BC.EnhancedVerify(password, hashedPassword);

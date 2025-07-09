@@ -44,20 +44,8 @@ namespace DevTools
 
         private static void HashPassword(string password)
         {
-            var builder = new ConfigurationBuilder()
-                .AddUserSecrets<Program>();
-            var configuration = builder.Build();
-
-            try
-            {
-                AuthHelper authHelper = new AuthHelper(configuration);
-                var hashedPassword = authHelper.HashPassword(password);
-                Console.WriteLine($"Hashed password: {hashedPassword}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
+            var hashedPassword = AuthHelper.HashPassword(password);
+            Console.WriteLine($"Hashed password: {hashedPassword}");
         }
 
         private static void SeedContent()
