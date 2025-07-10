@@ -1,0 +1,49 @@
+/* Message Styles */
+.error-message,
+.success-message {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: slideInRight 0.3s ease;
+}
+
+.error-message {
+    background: #dc3545;
+    border: 1px solid #c82333;
+}
+
+.success-message {
+    background: #28a745;
+    border: 1px solid #1e7e34;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+
+    .error-message,
+    .success-message {
+        right: 1rem;
+        left: 1rem;
+        top: 1rem;
+    }
+}

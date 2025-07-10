@@ -33,10 +33,16 @@ namespace BlogSystem.Features.Users.Login
 
             return Task.FromResult(new LoginResponseDTO
             {
+                UserId = user.Id.ToString(),
+                Username = user.Username,
+                Email = user.Email,
+                FullName = user.FullName,
+                ProfilePictureUrl = user.ProfilePictureUrl,
                 AccessToken = _authHelper.GenerateJWTToken([
                     new Claim("Id", user.Id.ToString()),
                     new Claim("Role", user.Role.ToString())
                 ]),
+                Role = user.Role
             });
         }
     }
