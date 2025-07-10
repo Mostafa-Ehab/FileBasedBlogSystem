@@ -1,7 +1,9 @@
 using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Categories.Data;
+using BlogSystem.Features.Categories.GetCategory.DTOs;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Shared.Exceptions.Categories;
+using BlogSystem.Shared.Mappings;
 
 namespace BlogSystem.Features.Categories.GetCategory
 {
@@ -36,10 +38,12 @@ namespace BlogSystem.Features.Categories.GetCategory
             return Task.FromResult(posts);
         }
 
-        public Task<Category[]> GetAllCategoriesAsync()
+        public Task<CategoryDTO[]> GetAllCategoriesAsync()
         {
             Category[] categories = _categoryRepository.GetAllCategories();
-            return Task.FromResult(categories);
+            return Task.FromResult(
+                categories.Select(c => c.MapToCategoryDTO()).ToArray()
+            );
         }
     }
 }

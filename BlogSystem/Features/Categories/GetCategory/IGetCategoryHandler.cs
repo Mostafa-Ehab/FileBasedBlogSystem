@@ -1,4 +1,5 @@
 using BlogSystem.Domain.Entities;
+using BlogSystem.Features.Categories.GetCategory.DTOs;
 
 namespace BlogSystem.Features.Categories.GetCategory
 {
@@ -6,6 +7,6 @@ namespace BlogSystem.Features.Categories.GetCategory
     {
         Task<Category> GetCategoryAsync(string slug);
         Task<Post[]> GetPostsByCategoryAsync(string categorySlug);
-        Task<Category[]> GetAllCategoriesAsync();
+        Task<CategoryDTO[]> GetAllCategoriesAsync();
     }
 }
