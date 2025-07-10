@@ -124,6 +124,10 @@ namespace BlogSystem.Shared.Extensions
                 }
             });
 
+#if DEBUG
+            services.AddSassCompiler();
+#endif
+
             services.AddSingleton<AuthHelper>();
 
             services.AddSingleton<SlugResolver>();
