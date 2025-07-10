@@ -33,7 +33,7 @@ namespace BlogSystem.Features.Users.Login
 
             return Task.FromResult(new LoginResponseDTO
             {
-                UserId = user.Id.ToString(),
+                Id = user.Id.ToString(),
                 Username = user.Username,
                 Email = user.Email,
                 FullName = user.FullName,
