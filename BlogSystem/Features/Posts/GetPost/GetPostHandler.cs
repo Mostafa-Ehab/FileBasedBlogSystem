@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using BlogSystem.Domain.Entities;
+﻿using BlogSystem.Domain.Entities;
+using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.GetPost.DTOs;
 using BlogSystem.Features.Users.Data;
@@ -30,57 +30,46 @@ namespace BlogSystem.Features.Posts.Get
             return Task.FromResult(postDto);
         }
 
-        public Task<PublicPostDTO[]> GetPublicPostsAsync()
+        public Task<PublicPostDTO[]> GetPublicPostsAsync(string? query)
         {
             var posts = _postRepository.GetPublicPosts();
-            var postsDto = posts.Select(
-                p => p.MapToPublicPostDTO(_userRepository)
-            ).Select(
-                p =>
-                {
-                    p.Content = _markdownService.RenderMarkdown(p.Content ?? string.Empty);
-                    return p;
-                }
-            ).ToArray();
-            return Task.FromResult(postsDto);
-        }
 
-        public Task<PublicPostDTO[]> SearchPostsAsync(string searchTerm)
-        {
-            if (string.IsNullOrWhiteSpace(searchTerm))
+            if (!string.IsNullOrWhiteSpace(query))
             {
-                return GetPublicPostsAsync(); // Default to first page with 10 posts
+                posts = posts.Where(p => p.Content!.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                       p.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                       p.Tags.Any(t => t.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
+                       p.Description.Contains(query, StringComparison.OrdinalIgnoreCase)
+                    ).ToArray();
             }
 
-            var posts = _postRepository.GetAllPosts()
-                .Where(p => p.Content!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                       p.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                       p.Tags.Any(t => t.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                       p.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
-                    );
-
             return Task.FromResult(
-                posts.Select(p => p.MapToPublicPostDTO(_userRepository))
-                    .Select(p =>
+                posts.Select(
+                    p => p.MapToPublicPostDTO(_userRepository)
+                ).Select(
+                    p =>
                     {
                         p.Content = _markdownService.RenderMarkdown(p.Content ?? string.Empty);
                         return p;
-                    })
-                    .ToArray()
+                    }
+                ).ToArray()
             );
         }
 
-        public Task<ManagedPostDTO[]> GetEditorPostsAsync()
+        public Task<ManagedPostDTO[]> GetManagedPostsAsync(string userId)
         {
-            var posts = _postRepository.GetAllPosts();
-            return Task.FromResult(
-                posts.Select(p => p.MapToManagedPostDTO(_userRepository)).ToArray()
-            );
-        }
+            var user = _userRepository.GetUserById(userId)!;
 
-        public Task<ManagedPostDTO[]> GetAuthorPostsAsync(string authorId)
-        {
-            var posts = _postRepository.GetAuthorPosts(authorId);
+            var posts = new List<Post>();
+            if (user.Role != UserRole.Editor && user.Role != UserRole.Admin)
+            {
+                posts = user.Posts.Select(_postRepository.GetPostById).ToList()!;
+            }
+            else
+            {
+                posts = _postRepository.GetAllPosts().ToList();
+            }
+
             return Task.FromResult(
                 posts.Select(p => p.MapToManagedPostDTO(_userRepository)).ToArray()
             );

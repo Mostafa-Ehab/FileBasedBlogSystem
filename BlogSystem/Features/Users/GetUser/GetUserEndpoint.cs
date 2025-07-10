@@ -6,7 +6,7 @@ public static class GetUserEndpoint
 {
     public static void MapGetUserEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/all", async (IGetUserHandler getUserHandler) =>
+        app.MapGet("/", async (IGetUserHandler getUserHandler) =>
         {
             var response = await getUserHandler.GetAllUsers();
             return Results.Ok(response);

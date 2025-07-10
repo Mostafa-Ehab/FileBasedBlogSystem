@@ -19,6 +19,7 @@ namespace BlogSystem.Shared.Extensions
             app.MapGroup("/api/categories").MapCategoryEndpoints();
             app.MapGroup("/api/tags").MapTagEndpoints();
             app.MapGroup("/api/users").MapUserEndpoints();
+            app.MapGroup("/api/auth").MapAuthEndpoints();
             app.MapRSSEndpoint();
 
             return app;
@@ -27,12 +28,8 @@ namespace BlogSystem.Shared.Extensions
         private static IEndpointRouteBuilder MapPostEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapGetPostEndpoint();
-            app.MapGetPublicPostsEndpoint();
             app.MapPostManagementEndpoints();
-            app.MapSearchPostsEndpoint();
-
-            app.MapGetEditorPostsEndpoint();
-            app.MapGetAuthorPostsEndpoint();
+            app.MapGetAllPostsEndpoint();
 
             return app;
         }
@@ -62,6 +59,13 @@ namespace BlogSystem.Shared.Extensions
             app.MapLoginEndpoint();
             app.MapGetUserEndpoint();
             app.MapCreateUserEndpoint();
+
+            return app;
+        }
+
+        public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
+        {
+            app.MapLoginEndpoint();
 
             return app;
         }

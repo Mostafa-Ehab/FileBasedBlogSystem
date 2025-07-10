@@ -12,7 +12,7 @@ public static class LoginEndpoint
             return Results.Ok(response);
         })
         .WithName("Login")
-        .WithTags("Users")
+        .WithTags("Authentication")
         .Produces<LoginResponseDTO>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status401Unauthorized);
     }

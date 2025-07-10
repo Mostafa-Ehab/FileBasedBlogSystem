@@ -6,11 +6,9 @@ namespace BlogSystem.Features.Posts.Get
     {
         // Public Routes
         Task<PublicPostDTO> GetPostAsync(string slug);
-        Task<PublicPostDTO[]> GetPublicPostsAsync();
-        Task<PublicPostDTO[]> SearchPostsAsync(string searchTerm);
+        Task<PublicPostDTO[]> GetPublicPostsAsync(string? query = null);
 
         // Editor Routes
-        Task<ManagedPostDTO[]> GetEditorPostsAsync();
-        Task<ManagedPostDTO[]> GetAuthorPostsAsync(string authorId);
+        Task<ManagedPostDTO[]> GetManagedPostsAsync(string userId);
     }
 }
