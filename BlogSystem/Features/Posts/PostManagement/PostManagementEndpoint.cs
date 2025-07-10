@@ -17,7 +17,7 @@ public static class PostManagementEndpoint
         .RequireAuthorization()
         .DisableAntiforgery()
         .WithTags("Posts")
-        .WithSummary("Create or update a post based on the provided request.");
+        .WithSummary("Create a new post.");
     }
 
     public static void MapUpdatePostEndpoint(this IEndpointRouteBuilder app)
@@ -31,6 +31,6 @@ public static class PostManagementEndpoint
         .RequireAuthorization()
         .DisableAntiforgery()
         .WithTags("Posts")
-        .WithSummary("Update an existing post by its slug.");
+        .WithSummary("Update an existing post by its id.");
     }
 }

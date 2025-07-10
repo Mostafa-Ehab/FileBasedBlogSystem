@@ -30,6 +30,7 @@ namespace BlogSystem.Shared.Extensions
             app.MapGetPostEndpoint();
             app.MapPostManagementEndpoints();
             app.MapGetAllPostsEndpoint();
+            app.MapUpdatePostEndpoint();
 
             return app;
         }
@@ -56,7 +57,6 @@ namespace BlogSystem.Shared.Extensions
 
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapLoginEndpoint();
             app.MapGetUserEndpoint();
             app.MapCreateUserEndpoint();
 

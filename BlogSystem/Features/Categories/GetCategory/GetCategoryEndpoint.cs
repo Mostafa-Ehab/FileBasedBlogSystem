@@ -6,7 +6,7 @@ namespace BlogSystem.Features.Categories.GetCategory
     {
         public static void MapGetAllCategoriesEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/all", async (IGetCategoryHandler handler) =>
+            app.MapGet("/", async (IGetCategoryHandler handler) =>
             {
                 var categories = await handler.GetAllCategoriesAsync();
                 return Results.Ok(categories);
@@ -18,7 +18,7 @@ namespace BlogSystem.Features.Categories.GetCategory
 
         public static void MapGetCategoryEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/c/{slug}", async (string slug, IGetCategoryHandler handler) =>
+            app.MapGet("/{slug}", async (string slug, IGetCategoryHandler handler) =>
             {
                 var category = await handler.GetCategoryAsync(slug);
                 return Results.Ok(category);
@@ -31,7 +31,7 @@ namespace BlogSystem.Features.Categories.GetCategory
 
         public static void MapGetPostsByCategoryEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/c/{slug}/posts", async (string slug, IGetCategoryHandler handler) =>
+            app.MapGet("/{slug}/posts", async (string slug, IGetCategoryHandler handler) =>
             {
                 var posts = await handler.GetPostsByCategoryAsync(slug);
                 return Results.Ok(posts);
