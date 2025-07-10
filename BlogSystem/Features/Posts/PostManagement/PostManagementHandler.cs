@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using BlogSystem.Domain.Entities;
 using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Posts.Data;
@@ -36,7 +35,7 @@ public class PostManagementHandler : IPostManagementHandler
         _publishedState = publishedState;
     }
 
-    public async Task<PostResponseDTO> CreatePostAsync(CreatePostRequestDTO request, ClaimsPrincipal user)
+    public async Task<PostResponseDTO> CreatePostAsync(CreatePostRequestDTO request, string userId)
     {
         // Validate the request
         if (string.IsNullOrWhiteSpace(request.Title))
@@ -57,7 +56,7 @@ public class PostManagementHandler : IPostManagementHandler
             Title = request.Title,
             Description = request.Description ?? string.Empty,
             Content = request.Content ?? string.Empty,
-            AuthorId = user.FindFirstValue("Id")!,
+            AuthorId = userId,
             Category = request.Category ?? string.Empty,
             Slug = string.IsNullOrWhiteSpace(request.Slug) ? postId : request.Slug,
             CreatedAt = DateTime.UtcNow,
@@ -82,6 +81,77 @@ public class PostManagementHandler : IPostManagementHandler
         else if (post.Status == PostStatus.Published)
         {
             await _publishedState.ValidateAndCreatePost(post, request.Image);
+        }
+
+        return post.MapToPostResponseDTO(_userRepository);
+    }
+
+    public async Task<PostResponseDTO> UpdatePostAsync(string postId, UpdatePostRequestDTO request, string userId)
+    {
+        // Validate the user permissions
+
+        // Fetch the existing post
+        var post = _postRepository.GetPostById(postId);
+        if (post == null)
+        {
+            throw new PostNotFoundException(postId);
+        }
+
+        // Validate the request
+        if (string.IsNullOrWhiteSpace(request.Title))
+        {
+            throw new ValidationErrorException("Title cannot be null or empty.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Slug))
+        {
+            throw new ValidationErrorException("Slug cannot be null or empty.");
+        }
+
+        if (post.Slug != request.Slug && _postRepository.PostSlugExists(request.Slug, postId))
+        {
+            throw new PostSlugAlreadyExistException(request.Slug);
+        }
+
+        var previousStatus = post.Status;
+        var previousScheduledAt = post.ScheduledAt;
+
+        // Update the post data
+        post.Title = request.Title;
+        post.Description = request.Description ?? string.Empty;
+        post.Content = request.Content ?? string.Empty;
+        post.Category = request.Category ?? string.Empty;
+        post.Slug = request.Slug;
+        post.UpdatedAt = DateTime.UtcNow;
+        post.Status = request.Status;
+        post.ScheduledAt = request.ScheduledAt;
+
+        // Update tags
+        post.Tags = (request.Tags ?? []).Where(tag => !string.IsNullOrWhiteSpace(tag))
+            .Select(tag => tag.Trim())
+            .ToList();
+
+        // Validate the updated post based on its status
+        if (post.Status == PostStatus.Draft)
+        {
+            if (previousStatus == PostStatus.Scheduled)
+                _scheduledState.UnschedulePost(post);
+
+            await _draftState.ValidateAndUpdatePost(post, request.Image);
+        }
+        else if (post.Status == PostStatus.Scheduled)
+        {
+            if (previousStatus == PostStatus.Scheduled && previousScheduledAt != post.ScheduledAt)
+                _scheduledState.UnschedulePost(post);
+
+            await _scheduledState.ValidateAndUpdatePost(post, request.Image);
+        }
+        else if (post.Status == PostStatus.Published)
+        {
+            if (previousStatus == PostStatus.Scheduled)
+                _scheduledState.UnschedulePost(post);
+
+            await _publishedState.ValidateAndUpdatePost(post, previousStatus, request.Image);
         }
 
         return post.MapToPostResponseDTO(_userRepository);

@@ -210,6 +210,12 @@ namespace BlogSystem.Features.Posts.Data
             return Directory.Exists(path) && File.Exists(Path.Combine(path, "meta.json"));
         }
 
+        public bool PostSlugExists(string slug, string postId)
+        {
+            var existingPost = GetPostBySlug(slug);
+            return existingPost != null && existingPost.Id != postId;
+        }
+
         private void UpdateCategoryFile(Post post)
         {
             if (string.IsNullOrWhiteSpace(post.Category))

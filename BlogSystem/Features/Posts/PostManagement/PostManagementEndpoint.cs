@@ -10,12 +10,27 @@ public static class PostManagementEndpoint
     {
         app.MapPost("/", async (IPostManagementHandler handler, ClaimsPrincipal user, [FromForm] CreatePostRequestDTO request) =>
         {
-            var result = await handler.CreatePostAsync(request, user);
+            var userId = user.FindFirstValue("Id")!;
+            var result = await handler.CreatePostAsync(request, userId);
             return Results.Ok(result);
         })
         .RequireAuthorization()
         .DisableAntiforgery()
         .WithTags("Posts")
         .WithSummary("Create or update a post based on the provided request.");
+    }
+
+    public static void MapUpdatePostEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapPut("/{postId}", async (IPostManagementHandler handler, ClaimsPrincipal user, string postId, [FromForm] UpdatePostRequestDTO request) =>
+        {
+            var userId = user.FindFirstValue("Id")!;
+            var result = await handler.UpdatePostAsync(postId, request, userId);
+            return Results.Ok(result);
+        })
+        .RequireAuthorization()
+        .DisableAntiforgery()
+        .WithTags("Posts")
+        .WithSummary("Update an existing post by its slug.");
     }
 }

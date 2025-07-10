@@ -1,4 +1,5 @@
 using BlogSystem.Domain.Entities;
+using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Tags.Data;
@@ -6,6 +7,7 @@ using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Infrastructure.Scheduling;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Categories;
+using BlogSystem.Shared.Exceptions.Posts;
 using BlogSystem.Shared.Exceptions.Tags;
 
 namespace BlogSystem.Features.Posts.PostManagement.States;
@@ -35,6 +37,31 @@ public class ScheduledState
 
     public async Task ValidateAndCreatePost(Post post, IFormFile? image)
     {
+        ValidatePostData(post);
+        ValidateScheduling(post);
+        await ValidateAndSaveImage(image, post);
+        SchedulePost(post);
+        _postRepository.CreatePost(post);
+    }
+
+    public async Task ValidateAndUpdatePost(Post post, IFormFile? image)
+    {
+        ValidatePostData(post);
+        ValidateScheduling(post);
+        await ValidateAndSaveImage(image, post);
+        SchedulePost(post);
+        _postRepository.UpdatePost(post);
+    }
+
+    public void UnschedulePost(Post post)
+    {
+        _postScheduler.CancelJob(post.ScheduleToken!);
+        post.ScheduledAt = null;
+        post.ScheduleToken = null;
+    }
+
+    private void ValidatePostData(Post post)
+    {
         if (string.IsNullOrWhiteSpace(post.Description) || string.IsNullOrWhiteSpace(post.Content))
         {
             throw new ValidationErrorException("Post description and content cannot be empty.");
@@ -49,47 +76,48 @@ public class ScheduledState
         {
             throw new ValidationErrorException("Post must have at least one tag.");
         }
-        foreach (var tag in post.Tags)
+        post.Tags.ForEach(tag =>
         {
-            if (!_tagRepository.TagExists(tag))
-            {
-                throw new TagNotFoundException(tag);
-            }
-        }
+            if (!_tagRepository.TagExists(tag)) throw new TagNotFoundException(tag);
+        });
+    }
 
+    private void ValidateScheduling(Post post)
+    {
         if (post.ScheduledAt == null || post.ScheduledAt <= DateTimeOffset.UtcNow)
         {
             throw new ValidationErrorException("Scheduled time must be in the future.");
         }
+    }
 
-        if (image == null || image.Length == 0)
+    private async Task ValidateAndSaveImage(IFormFile? image, Post post)
+    {
+        if ((image == null || image.Length == 0) && string.IsNullOrWhiteSpace(post.ImageUrl))
         {
             throw new ValidationErrorException("Image cannot be null or empty.");
         }
-        post.ImageUrl = await SavePostImageAsync(image, post.Id);
 
-        post.ScheduleToken = _postScheduler.ScheduleJob<PublishPostService>(
-            service => service.RunTask(post.Id),
-            post.ScheduledAt.Value
-        );
-        post.ScheduledAt = post.ScheduledAt.Value;
-        _postRepository.CreatePost(post);
+        post.ImageUrl = string.IsNullOrWhiteSpace(post.ImageUrl) ?
+            await SavePostImageAsync(image!, post.Id) : post.ImageUrl;
     }
 
-    private async Task<string> SavePostImageAsync(IFormFile? image, string postId)
+    private void SchedulePost(Post post)
     {
-        var imagePath = string.Empty;
-        if (image != null && image.Length > 0)
-        {
-            if (_imageProvider.IsValidImage(image) == false)
-            {
-                throw new ValidationErrorException("Invalid image format. Only JPEG, PNG, and GIF are allowed.");
-            }
+        post.ScheduleToken = _postScheduler.ScheduleJob<PublishPostService>(
+                service => service.RunTask(post.Id),
+                post.ScheduledAt!.Value
+            );
+        post.ScheduledAt = post.ScheduledAt.Value;
+    }
 
-            var imageUrl = await _imageProvider.SaveImageAsync(image, postId);
-            imagePath = $"/images/posts/{postId}/{imageUrl}";
+    private async Task<string> SavePostImageAsync(IFormFile image, string postId)
+    {
+        if (_imageProvider.IsValidImage(image) == false)
+        {
+            throw new ValidationErrorException("Invalid image format. Only JPEG, PNG, and GIF are allowed.");
         }
 
-        return imagePath;
+        var imageUrl = await _imageProvider.SaveImageAsync(image, postId);
+        return $"/images/posts/{postId}/{imageUrl}";
     }
 }

@@ -12,6 +12,7 @@ namespace BlogSystem.Features.Posts.Data
         public Post[] GetPublicPosts();
         public Post[] GetAuthorPosts(string authorId);
         public bool PostExists(string id);
+        public bool PostSlugExists(string slug, string postId);
         string CreatePost(Post post);
         string UpdatePost(Post post);
     }
