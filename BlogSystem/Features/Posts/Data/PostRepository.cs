@@ -82,7 +82,7 @@ namespace BlogSystem.Features.Posts.Data
                 .ToArray()!;
         }
 
-        public Post[] GetAllPosts(int page = 1, int pageSize = 10)
+        public Post[] GetAllPosts()
         {
             var path = Path.Combine("Content", "posts");
             if (!Directory.Exists(path))
@@ -96,8 +96,6 @@ namespace BlogSystem.Features.Posts.Data
                 .OrderByDescending(File.GetLastWriteTime);
 
             return postFiles
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .Select(file => JsonSerializer.Deserialize<Post>(File.ReadAllText(file), _jsonSerializerOptions))
                 .Where(post => post != null)
                 .Select(post =>
@@ -108,7 +106,7 @@ namespace BlogSystem.Features.Posts.Data
                 .ToArray();
         }
 
-        public Post[] GetPublicPosts(int page = 1, int pageSize = 10)
+        public Post[] GetPublicPosts()
         {
             var path = Path.Combine("Content", "posts");
             if (!Directory.Exists(path))
@@ -129,12 +127,10 @@ namespace BlogSystem.Features.Posts.Data
                     post!.Content = File.ReadAllText(Path.Combine(path, post.Id, "content.md"));
                     return post;
                 })
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToArray();
         }
 
-        public Post[] GetAuthorPosts(string authorId, int page = 1, int pageSize = 10)
+        public Post[] GetAuthorPosts(string authorId)
         {
             var path = Path.Combine("Content", "users", authorId, "profile.json");
             if (!File.Exists(path))
@@ -152,8 +148,7 @@ namespace BlogSystem.Features.Posts.Data
             return user.Posts
                 .Select(GetPostById)
                 .Where(post => post != null)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .OrderByDescending(post => post!.UpdatedAt)
                 .ToArray()!;
         }
 

@@ -8,9 +8,9 @@ namespace BlogSystem.Features.Posts.Data
         public Post? GetPostBySlug(string slug);
         public Post[] GetPostsByCategory(string categorySlug);
         public Post[] GetPostsByTag(string tagSlug);
-        public Post[] GetAllPosts(int page = 1, int pageSize = 10);
-        public Post[] GetPublicPosts(int page = 1, int pageSize = 10);
-        public Post[] GetAuthorPosts(string authorId, int page = 1, int pageSize = 10);
+        public Post[] GetAllPosts();
+        public Post[] GetPublicPosts();
+        public Post[] GetAuthorPosts(string authorId);
         public bool PostExists(string id);
         string CreatePost(Post post);
         string UpdatePost(Post post);

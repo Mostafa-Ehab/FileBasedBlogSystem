@@ -7,7 +7,6 @@ using BlogSystem.Infrastructure.Scheduling;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Categories;
 using BlogSystem.Shared.Exceptions.Tags;
-using System.Threading.Tasks;
 
 namespace BlogSystem.Features.Posts.PostManagement.States;
 
@@ -57,9 +56,6 @@ public class ScheduledState
                 throw new TagNotFoundException(tag);
             }
         }
-
-        Console.WriteLine($"ScheduledAt: {post.ScheduledAt}");
-        Console.WriteLine($"Current Time: {DateTimeOffset.UtcNow}");
 
         if (post.ScheduledAt == null || post.ScheduledAt <= DateTimeOffset.UtcNow)
         {

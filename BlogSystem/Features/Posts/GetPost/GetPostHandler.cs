@@ -30,9 +30,9 @@ namespace BlogSystem.Features.Posts.Get
             return Task.FromResult(postDto);
         }
 
-        public Task<PublicPostDTO[]> GetPublicPostsAsync(int pageNumber, int pageSize)
+        public Task<PublicPostDTO[]> GetPublicPostsAsync()
         {
-            var posts = _postRepository.GetPublicPosts(pageNumber, pageSize);
+            var posts = _postRepository.GetPublicPosts();
             var postsDto = posts.Select(
                 p => p.MapToPublicPostDTO(_userRepository)
             ).Select(
@@ -49,10 +49,10 @@ namespace BlogSystem.Features.Posts.Get
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                return GetPublicPostsAsync(1, 10); // Default to first page with 10 posts
+                return GetPublicPostsAsync(); // Default to first page with 10 posts
             }
 
-            var posts = _postRepository.GetAllPosts(1, 100)
+            var posts = _postRepository.GetAllPosts()
                 .Where(p => p.Content!.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                        p.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                        p.Tags.Any(t => t.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
@@ -70,17 +70,17 @@ namespace BlogSystem.Features.Posts.Get
             );
         }
 
-        public Task<ManagedPostDTO[]> GetEditorPostsAsync(int pageNumber, int pageSize)
+        public Task<ManagedPostDTO[]> GetEditorPostsAsync()
         {
-            var posts = _postRepository.GetAllPosts(pageNumber, pageSize);
+            var posts = _postRepository.GetAllPosts();
             return Task.FromResult(
                 posts.Select(p => p.MapToManagedPostDTO(_userRepository)).ToArray()
             );
         }
 
-        public Task<ManagedPostDTO[]> GetAuthorPostsAsync(string authorId, int pageNumber, int pageSize)
+        public Task<ManagedPostDTO[]> GetAuthorPostsAsync(string authorId)
         {
-            var posts = _postRepository.GetAuthorPosts(authorId, pageNumber, pageSize);
+            var posts = _postRepository.GetAuthorPosts(authorId);
             return Task.FromResult(
                 posts.Select(p => p.MapToManagedPostDTO(_userRepository)).ToArray()
             );
