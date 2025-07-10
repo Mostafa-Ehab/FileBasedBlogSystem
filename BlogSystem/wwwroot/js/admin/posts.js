@@ -187,8 +187,12 @@ class AdminPostsManager {
             this.renderTable();
             this.updateStats();
         } catch (error) {
-            console.error('Error loading data:', error);
-            this.showNotification('Error loading posts', 'error');
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error loading data');
+            } else {
+                console.error('Error loading data:', error);
+                showError('Error loading data');
+            }
         } finally {
             this.hideLoading();
         }
@@ -591,18 +595,18 @@ class AdminPostsManager {
 
         this.showLoading();
         try {
-            await this.delay(500);
+            await deleteRequest(`/api/posts/${this.deletingPostId}`);
 
             this.posts = this.posts.filter(p => p.id !== this.deletingPostId);
             this.filteredPosts = [...this.posts];
-            this.renderTable();
-            this.updateStats();
             this.hideDeleteModal();
             showSuccess('Post deleted successfully');
         } catch (error) {
             console.error('Error deleting post:', error);
             showError('Error deleting post');
         } finally {
+            this.renderTable();
+            this.updateStats();
             this.hideLoading();
         }
     }

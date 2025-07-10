@@ -31,6 +31,7 @@ namespace BlogSystem.Shared.Extensions
             app.MapPostManagementEndpoints();
             app.MapGetAllPostsEndpoint();
             app.MapUpdatePostEndpoint();
+            app.MapDeletePostEndpoint();
 
             return app;
         }

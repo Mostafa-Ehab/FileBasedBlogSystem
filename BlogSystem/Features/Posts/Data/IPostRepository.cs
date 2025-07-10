@@ -15,5 +15,6 @@ namespace BlogSystem.Features.Posts.Data
         public bool PostSlugExists(string slug, string postId);
         string CreatePost(Post post);
         string UpdatePost(Post post);
+        void DeletePost(Post post);
     }
 }

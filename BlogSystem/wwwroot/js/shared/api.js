@@ -64,7 +64,7 @@ function deleteRequest(url, params = {}) {
         if (!response.ok) {
             throw new RequestError(await response.json());
         }
-        return response.json();
+        return;
     });
 }
 

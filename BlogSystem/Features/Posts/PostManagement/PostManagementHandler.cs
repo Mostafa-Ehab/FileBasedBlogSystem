@@ -88,13 +88,18 @@ public class PostManagementHandler : IPostManagementHandler
 
     public async Task<PostResponseDTO> UpdatePostAsync(string postId, UpdatePostRequestDTO request, string userId)
     {
-        // Validate the user permissions
-
         // Fetch the existing post
         var post = _postRepository.GetPostById(postId);
         if (post == null)
         {
             throw new PostNotFoundException(postId);
+        }
+
+        // Validate the user permissions
+        var user = _userRepository.GetUserById(userId)!;
+        if (user.Role == UserRole.Author && !user.Posts.Contains(post.Id))
+        {
+            throw new UnauthorizedAccessException("You do not have permission to edit this post.");
         }
 
         // Validate the request
@@ -155,5 +160,31 @@ public class PostManagementHandler : IPostManagementHandler
         }
 
         return post.MapToPostResponseDTO(_userRepository);
+    }
+
+    public async Task DeletePostAsync(string postId, string userId)
+    {
+        // Fetch the existing post
+        var post = _postRepository.GetPostById(postId);
+        if (post == null)
+        {
+            throw new PostNotFoundException(postId);
+        }
+
+        // Validate the user permissions
+        var user = _userRepository.GetUserById(userId)!;
+        if (user.Role == UserRole.Author && !user.Posts.Contains(post.Id))
+        {
+            throw new UnauthorizedAccessException("You do not have permission to delete this post.");
+        }
+
+        // Validate the user's ownership of the post
+        if (post.AuthorId != userId)
+        {
+            throw new UnauthorizedAccessException("You do not have permission to delete this post.");
+        }
+
+        // Delete the post
+        _postRepository.DeletePost(post);
     }
 }

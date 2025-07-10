@@ -170,24 +170,15 @@ namespace BlogSystem.Features.Posts.Data
 
             UpdateCategoryFile(post);
             UpdateTagFile(post);
-            UpdateUserFile(post.AuthorId, post.Id);
+            AddPostToUser(post.AuthorId, post.Id);
 
             return post.Id;
         }
 
         public string UpdatePost(Post post)
         {
-            var existingPost = GetPostById(post.Id);
-            if (existingPost == null)
-            {
-                throw new FileNotFoundException($"Post with ID '{post.Id}' does not exist.");
-            }
-
-            var postPath = Path.Combine("Content", "posts", post.Id);
-            if (!Directory.Exists(postPath))
-            {
-                throw new DirectoryNotFoundException($"Post directory '{postPath}' does not exist.");
-            }
+            var existingPost = GetPostById(post.Id)!;
+            var postPath = Path.Combine("Content", "posts", post.Id)!;
 
             var content = post.Content;
             post.Content = null!;
@@ -202,6 +193,19 @@ namespace BlogSystem.Features.Posts.Data
             UpdateTagFile(existingPost, post);
 
             return post.Id;
+        }
+
+        public void DeletePost(Post post)
+        {
+            var existingPost = GetPostById(post.Id)!;
+            var postPath = Path.Combine("Content", "posts", post.Id)!;
+
+            UpdateCategoryFile(existingPost, new Post { Id = post.Id });
+            UpdateTagFile(existingPost, new Post { Id = post.Id });
+            RemovePostFromUser(existingPost?.AuthorId ?? string.Empty, post.Id);
+
+            Directory.Delete(postPath, true);
+            _slugResolver.RemoveSlug(post.Slug);
         }
 
         public bool PostExists(string id)
@@ -336,7 +340,7 @@ namespace BlogSystem.Features.Posts.Data
             }
         }
 
-        private void UpdateUserFile(string userId, string postId)
+        private void AddPostToUser(string userId, string postId)
         {
             var userPath = Path.Combine("Content", "users", userId, "profile.json");
             if (!File.Exists(userPath))
@@ -350,6 +354,24 @@ namespace BlogSystem.Features.Posts.Data
             if (!user.Posts.Contains(postId))
             {
                 user.Posts = [.. user.Posts, postId];
+                File.WriteAllText(userPath, JsonSerializer.Serialize(user, _jsonSerializerOptions));
+            }
+        }
+
+        private void RemovePostFromUser(string userId, string postId)
+        {
+            var userPath = Path.Combine("Content", "users", userId, "profile.json");
+            if (!File.Exists(userPath))
+            {
+                return;
+            }
+
+            string json = File.ReadAllText(userPath);
+            User user = JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions)!;
+
+            if (user.Posts.Contains(postId))
+            {
+                user.Posts = user.Posts.Where(id => id != postId).ToArray();
                 File.WriteAllText(userPath, JsonSerializer.Serialize(user, _jsonSerializerOptions));
             }
         }

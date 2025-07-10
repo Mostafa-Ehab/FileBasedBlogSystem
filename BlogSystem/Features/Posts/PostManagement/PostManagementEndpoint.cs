@@ -33,4 +33,17 @@ public static class PostManagementEndpoint
         .WithTags("Posts")
         .WithSummary("Update an existing post by its id.");
     }
+
+    public static void MapDeletePostEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapDelete("/{postId}", async (IPostManagementHandler handler, ClaimsPrincipal user, string postId) =>
+        {
+            var userId = user.FindFirstValue("Id")!;
+            await handler.DeletePostAsync(postId, userId);
+            return Results.NoContent();
+        })
+        .RequireAuthorization()
+        .WithTags("Posts")
+        .WithSummary("Delete a post by its id.");
+    }
 }
