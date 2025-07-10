@@ -1,3 +1,5 @@
 @use "base";
-@use "shared";
-@use "login";
+@use "shared/error";
+@use "admin/navbar";
+@use "admin/login";
+@use "admin/logout";

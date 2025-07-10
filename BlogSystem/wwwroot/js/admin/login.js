@@ -42,7 +42,7 @@ class AdminLogin {
         const password = formData.get('password');
 
         if (!username || !password) {
-            this.showError('Please fill in all fields');
+            showError('Please fill in all fields');
             return;
         }
 
@@ -63,18 +63,18 @@ class AdminLogin {
                     role: result.user.role
                 });
 
-                this.showSuccess('Login successful! Redirecting...');
+                showSuccess('Login successful! Redirecting...');
 
                 // Redirect to dashboard after success message
                 setTimeout(() => {
                     window.location.href = '/admin/index.html';
                 }, 1500);
             } else {
-                this.showError(result.message || 'Invalid credentials');
+                showError(result.message || 'Invalid credentials');
             }
         } catch (error) {
             console.error('Login error:', error);
-            this.showError('An error occurred during login. Please try again.');
+            showError('An error occurred during login. Please try again.');
         } finally {
             this.setLoading(false);
         }
@@ -132,39 +132,6 @@ class AdminLogin {
             btnText.textContent = 'Sign In';
             spinner.style.display = 'none';
         }
-    }
-
-    showError(message) {
-        this.hideMessages();
-        const errorDiv = document.getElementById('error-message');
-        const errorText = document.getElementById('error-text');
-
-        errorText.textContent = message;
-        errorDiv.style.display = 'flex';
-
-        // Auto-hide after 5 seconds
-        setTimeout(() => {
-            errorDiv.style.display = 'none';
-        }, 5000);
-    }
-
-    showSuccess(message) {
-        this.hideMessages();
-        const successDiv = document.getElementById('success-message');
-        const successText = document.getElementById('success-text');
-
-        successText.textContent = message;
-        successDiv.style.display = 'flex';
-
-        // Auto-hide after 3 seconds
-        setTimeout(() => {
-            successDiv.style.display = 'none';
-        }, 3000);
-    }
-
-    hideMessages() {
-        document.getElementById('error-message').style.display = 'none';
-        document.getElementById('success-message').style.display = 'none';
     }
 }
 

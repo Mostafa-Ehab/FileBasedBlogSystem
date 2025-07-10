@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logging Out - Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="/js/shared/api.js" defer></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="logout-container">
+        <div class="logout-card">
+            <i class="fas fa-spinner logout-icon"></i>
+            <h1 class="logout-title">Logging Out</h1>
+            <p class="logout-message">Please wait while we sign you out...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setUser(null);
+            setTimeout(() => {
+                window.location.href = '/admin/login.html';
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

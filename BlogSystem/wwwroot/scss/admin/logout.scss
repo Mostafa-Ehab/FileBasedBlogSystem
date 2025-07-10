@@ -1,0 +1,54 @@
+.logout-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.logout-card {
+    text-align: center;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color-light, #f1f3f4);
+    max-width: 400px;
+    width: 100%;
+}
+
+.logout-icon {
+    font-size: 4rem;
+    color: var(--secondary-color);
+    margin-bottom: 2rem;
+    animation: spin 1s linear infinite;
+
+    .logout-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 1rem;
+    }
+
+    .logout-message {
+        color: var(--text-muted);
+        font-size: 1rem;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 480px) {
+    .logout-card {
+        padding: 2rem;
+        margin: 1rem;
+    }
+}
