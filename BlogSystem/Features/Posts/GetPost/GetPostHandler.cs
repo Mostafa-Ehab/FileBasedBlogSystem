@@ -63,7 +63,10 @@ namespace BlogSystem.Features.Posts.Get
             var posts = new List<Post>();
             if (user.Role != UserRole.Editor && user.Role != UserRole.Admin)
             {
-                posts = user.Posts.Select(_postRepository.GetPostById).ToList()!;
+                posts = user.Posts
+                    .Select(_postRepository.GetPostById)
+                    .OrderByDescending(p => p!.UpdatedAt)
+                    .ToList()!;
             }
             else
             {

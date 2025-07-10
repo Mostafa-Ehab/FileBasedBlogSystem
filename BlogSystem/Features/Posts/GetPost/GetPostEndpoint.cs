@@ -21,7 +21,7 @@ namespace BlogSystem.Features.Posts.Get
 
         public static void MapGetAllPostsEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/", async (IGetPostHandler handler, ClaimsPrincipal user, [FromQuery] string query) =>
+            app.MapGet("/", async (IGetPostHandler handler, ClaimsPrincipal user, [FromQuery] string? query) =>
             {
                 var userId = user.FindFirstValue("Id");
                 if (string.IsNullOrWhiteSpace(userId))

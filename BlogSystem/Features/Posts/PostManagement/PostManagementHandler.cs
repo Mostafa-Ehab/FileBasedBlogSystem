@@ -124,7 +124,6 @@ public class PostManagementHandler : IPostManagementHandler
         post.Slug = request.Slug;
         post.UpdatedAt = DateTime.UtcNow;
         post.Status = request.Status;
-        post.ScheduledAt = request.ScheduledAt;
 
         // Update tags
         post.Tags = (request.Tags ?? []).Where(tag => !string.IsNullOrWhiteSpace(tag))
@@ -144,6 +143,7 @@ public class PostManagementHandler : IPostManagementHandler
             if (previousStatus == PostStatus.Scheduled && previousScheduledAt != post.ScheduledAt)
                 _scheduledState.UnschedulePost(post);
 
+            post.ScheduledAt = request.ScheduledAt;
             await _scheduledState.ValidateAndUpdatePost(post, request.Image);
         }
         else if (post.Status == PostStatus.Published)

@@ -81,7 +81,7 @@ class AdminLogin {
     }
 
     async authenticateUser(username, password) {
-        return await postRequest('/api/users/login', {
+        return await postRequest('/api/auth/login', {
             username, password
         }).then(response => {
             return {

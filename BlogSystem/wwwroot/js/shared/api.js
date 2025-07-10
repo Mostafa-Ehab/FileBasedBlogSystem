@@ -18,8 +18,6 @@ function getRequest(url, params = {}) {
 function postRequest(url, data = {}, params = {}) {
     const token = getUser()?.token;
     const queryString = new URLSearchParams(params).toString();
-    // headers
-    // const headers = {
     return fetch(`${url}?${queryString}`, {
         method: 'POST',
         headers: {
@@ -36,25 +34,25 @@ function postRequest(url, data = {}, params = {}) {
 }
 
 function putRequest(url, data = {}, params = {}) {
-    const token = getToken();
+    const token = getUser()?.token;
     const queryString = new URLSearchParams(params).toString();
     return fetch(`${url}?${queryString}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            ...(data instanceof FormData ? {} : { 'Content-Type': 'application/json' })
         },
-        body: JSON.stringify(data)
-    }).then(response => {
+        body: data instanceof FormData ? data : JSON.stringify(data)
+    }).then(async response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new RequestError(await response.json());
         }
         return response.json();
     });
 }
 
 function deleteRequest(url, params = {}) {
-    const token = getToken();
+    const token = getUser()?.token;
     const queryString = new URLSearchParams(params).toString();
     return fetch(`${url}?${queryString}`, {
         method: 'DELETE',
@@ -62,9 +60,9 @@ function deleteRequest(url, params = {}) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
-    }).then(response => {
+    }).then(async response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new RequestError(await response.json());
         }
         return response.json();
     });

@@ -79,7 +79,12 @@ class AdminPostsManager {
                 document.getElementById('post-category').required = true;
                 document.getElementById('post-tags').required = true;
                 document.getElementById('post-content').required = true;
-                document.getElementById('post-image').required = true;
+
+                // Show/hide image upload based on status
+                const preview = document.getElementById('image-preview');
+                if (preview.style.display === 'none') {
+                    document.getElementById('post-image').required = true;
+                }
             }
 
             // Update save button text based on status
@@ -125,6 +130,22 @@ class AdminPostsManager {
             this.exportPosts();
         });
 
+        // Pagination
+        document.getElementById('prev-page')?.addEventListener('click', () => {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.renderTable();
+            }
+        });
+
+        document.getElementById('next-page')?.addEventListener('click', () => {
+            const totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
+            if (this.currentPage < totalPages) {
+                this.currentPage++;
+                this.renderTable();
+            }
+        });
+
         // Image upload and preview
         document.getElementById('post-image')?.addEventListener('change', (e) => {
             this.handleImageUpload(e);
@@ -138,12 +159,10 @@ class AdminPostsManager {
     async loadData() {
         this.showLoading();
         try {
-            const posts = await getRequest(
-                `/api/posts/${getUser().role == 'Author' ? 'author' : 'editor'}`
-            );
+            const posts = await getRequest("/api/posts");
             this.posts = posts || [];
 
-            const categories = await getRequest('/api/categories/all');
+            const categories = await getRequest('/api/categories');
             this.categories = categories || [];
 
             if (getUser().role === 'Author') {
@@ -156,7 +175,7 @@ class AdminPostsManager {
                 ]
             } else {
                 // For editors and admins, load all authors
-                const authors = await getRequest('/api/users/all');
+                const authors = await getRequest('/api/users');
                 this.authors = authors.map(author => ({
                     id: author.id,
                     name: author.fullName
@@ -295,6 +314,35 @@ class AdminPostsManager {
 
         if (prevBtn) prevBtn.disabled = this.currentPage <= 1;
         if (nextBtn) nextBtn.disabled = this.currentPage >= totalPages;
+
+        // Update pagination numbers
+        const numbersContainer = document.getElementById('pagination-numbers');
+        if (numbersContainer) {
+            const numbers = [];
+            const maxVisible = 5;
+            let start = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
+            let end = Math.min(totalPages, start + maxVisible - 1);
+
+            if (end - start < maxVisible - 1) {
+                start = Math.max(1, end - maxVisible + 1);
+            }
+
+            for (let i = start; i <= end; i++) {
+                numbers.push(`
+                    <button class="pagination-number ${i === this.currentPage ? 'active' : ''}"
+                            onclick="adminPosts.goToPage(${i})">
+                        ${i}
+                    </button>
+                `);
+            }
+
+            numbersContainer.innerHTML = numbers.join('');
+        }
+    }
+
+    goToPage(page) {
+        this.currentPage = page;
+        this.renderTable();
     }
 
     updateStats() {
@@ -327,13 +375,16 @@ class AdminPostsManager {
             document.getElementById('post-category').value = post.category.toLowerCase();
             document.getElementById('post-tags').value = post.tags.join(', ');
             document.getElementById('post-content').value = post.content || '';
-            document.getElementById('post-image').value = post.image || '';
             document.getElementById('post-status').value = post.status;
 
+            if (post.scheduledAt && post.status === 'Scheduled') {
+                document.getElementById('post-scheduled-date').value = post.scheduledAt;
+            }
+
             // Handle existing image
-            if (post.image) {
+            if (post.imageUrl) {
                 const previewImg = document.getElementById('preview-img');
-                previewImg.src = post.image;
+                previewImg.src = post.imageUrl;
                 preview.style.display = 'flex';
             } else {
                 preview.style.display = 'none';
@@ -479,12 +530,11 @@ class AdminPostsManager {
             if (this.editingPostId) {
                 // Update existing post
                 const postIndex = this.posts.findIndex(p => p.id === this.editingPostId);
+                const response = await putRequest(`/api/posts/${this.editingPostId}`, formData);
                 if (postIndex !== -1) {
                     this.posts[postIndex] = {
-                        ...this.posts[postIndex],
-                        ...postData,
-                        image: imageUrl || this.posts[postIndex].image,
-                        authorName: this.authors.find(a => a.id === postData.author)?.name || 'Unknown'
+                        ...response,
+                        content: postData.content,
                     };
                 }
                 showSuccess('Post updated successfully');
