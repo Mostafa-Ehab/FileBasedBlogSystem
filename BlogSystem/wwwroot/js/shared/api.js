@@ -18,13 +18,15 @@ function getRequest(url, params = {}) {
 function postRequest(url, data = {}, params = {}) {
     const token = getUser()?.token;
     const queryString = new URLSearchParams(params).toString();
+    // headers
+    // const headers = {
     return fetch(`${url}?${queryString}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            ...(data instanceof FormData ? {} : { 'Content-Type': 'application/json' })
         },
-        body: JSON.stringify(data)
+        body: data instanceof FormData ? data : JSON.stringify(data)
     }).then(async response => {
         if (!response.ok) {
             throw new RequestError(await response.json());

@@ -19,18 +19,21 @@ public class PostManagementHandler : IPostManagementHandler
     private readonly IUserRepository _userRepository;
     private readonly DraftState _draftState;
     private readonly ScheduledState _scheduledState;
+    private readonly PublishedState _publishedState;
 
     public PostManagementHandler(
         IPostRepository postRepository,
         IUserRepository userRepository,
         DraftState draftState,
-        ScheduledState scheduledState
+        ScheduledState scheduledState,
+        PublishedState publishedState
     )
     {
         _postRepository = postRepository;
         _userRepository = userRepository;
         _draftState = draftState;
         _scheduledState = scheduledState;
+        _publishedState = publishedState;
     }
 
     public async Task<PostResponseDTO> CreatePostAsync(CreatePostRequestDTO request, ClaimsPrincipal user)
@@ -78,7 +81,7 @@ public class PostManagementHandler : IPostManagementHandler
         }
         else if (post.Status == PostStatus.Published)
         {
-            throw new NotImplementedException("Published state validation is not implemented yet.");
+            await _publishedState.ValidateAndCreatePost(post, request.Image);
         }
 
         return post.MapToPostResponseDTO(_userRepository);

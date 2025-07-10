@@ -55,17 +55,11 @@ class AdminPostsManager {
             this.filterPosts();
         });
 
-        // Save as draft
-        document.getElementById('save-draft')?.addEventListener('click', () => {
-            this.savePost('draft');
-        });
-
-        // Status change for scheduled posts and save as draft visibility
+        // Status change handling
         document.getElementById('post-status')?.addEventListener('change', (e) => {
+            // Show/hide scheduled date input based on status
             const scheduledGroup = document.getElementById('scheduled-date-group');
-            const saveDraftBtn = document.getElementById('save-draft');
-
-            if (e.target.value === 'scheduled') {
+            if (e.target.value === 'Scheduled') {
                 scheduledGroup.style.display = 'block';
                 document.getElementById('post-scheduled-date').required = true;
             } else {
@@ -73,22 +67,36 @@ class AdminPostsManager {
                 document.getElementById('post-scheduled-date').required = false;
             }
 
-            // Show "Save as Draft" button only for scheduled and draft posts
-            if (saveDraftBtn) {
-                if (e.target.value === 'scheduled' || e.target.value === 'draft') {
-                    saveDraftBtn.style.display = 'inline-flex';
-                } else {
-                    saveDraftBtn.style.display = 'none';
-                }
+            // Add/remove required attributes
+            if (e.target.value === 'Draft') {
+                document.getElementById('post-description').required = false;
+                document.getElementById('post-category').required = false;
+                document.getElementById('post-tags').required = false;
+                document.getElementById('post-content').required = false;
+                document.getElementById('post-image').required = false;
+            } else {
+                document.getElementById('post-description').required = true;
+                document.getElementById('post-category').required = true;
+                document.getElementById('post-tags').required = true;
+                document.getElementById('post-content').required = true;
+                document.getElementById('post-image').required = true;
+            }
+
+            // Update save button text based on status
+            const savePostBtn = document.getElementById('save-post');
+            if (e.target.value == 'Scheduled') {
+                savePostBtn.innerText = 'Schedule Post';
+            } else if (e.target.value == 'Published') {
+                savePostBtn.innerText = 'Publish Post';
+            } else if (e.target.value == 'Draft') {
+                savePostBtn.innerText = 'Save Draft';
             }
         });
 
         // Title to slug generation
         document.getElementById('post-title')?.addEventListener('input', (e) => {
             const slugField = document.getElementById('post-slug');
-            if (slugField && !slugField.value) {
-                slugField.value = this.generateSlug(e.target.value);
-            }
+            slugField.value = this.generateSlug(e.target.value);
         });
 
         // Editor toolbar
@@ -116,77 +124,44 @@ class AdminPostsManager {
         document.getElementById('export-posts-btn')?.addEventListener('click', () => {
             this.exportPosts();
         });
+
+        // Image upload and preview
+        document.getElementById('post-image')?.addEventListener('change', (e) => {
+            this.handleImageUpload(e);
+        });
+
+        document.getElementById('remove-image')?.addEventListener('click', () => {
+            this.removeImage();
+        });
     }
 
     async loadData() {
         this.showLoading();
         try {
-            // await this.delay(500);
+            const posts = await getRequest(
+                `/api/posts/${getUser().role == 'Author' ? 'author' : 'editor'}`
+            );
+            this.posts = posts || [];
 
-            const response = await getRequest('/api/posts/all');
-            this.posts = response || [];
-            // console.log('Loaded posts:', response);
+            const categories = await getRequest('/api/categories/all');
+            this.categories = categories || [];
 
-            // Mock data - replace with actual API calls
-            // this.posts = [
-            //     {
-            //         id: '2025-06-09-first-post',
-            //         title: 'First Post',
-            //         slug: 'first-post',
-            //         description: 'This is the first post in our new blog system.',
-            //         author: 'jane-doe',
-            //         authorName: 'Jane Doe',
-            //         category: 'Announcements',
-            //         status: 'published',
-            //         date: '2025-06-09T10:00:00Z',
-            //         views: 1250,
-            //         tags: ['introduction', 'welcome', 'blog'],
-            //         image: '/images/posts/first-post.jpg'
-            //     },
-            //     {
-            //         id: '2024-12-15-artificial-intelligence-revolution',
-            //         title: 'The AI Revolution: How Artificial Intelligence is Transforming Our World',
-            //         slug: 'artificial-intelligence-revolution',
-            //         description: 'Explore how artificial intelligence is revolutionizing industries from healthcare to finance.',
-            //         author: 'sarah-tech',
-            //         authorName: 'Sarah Chen',
-            //         category: 'Technology',
-            //         status: 'published',
-            //         date: '2024-12-15T10:30:00Z',
-            //         views: 2840,
-            //         tags: ['artificial-intelligence', 'technology', 'machine-learning'],
-            //         image: '/images/posts/ai-revolution.jpg'
-            //     },
-            //     {
-            //         id: '2024-12-10-mindful-living-digital-age',
-            //         title: 'Mindful Living in the Digital Age: Finding Balance in a Connected World',
-            //         slug: 'mindful-living-digital-age',
-            //         description: 'Discover practical strategies for maintaining mental wellness in our digital world.',
-            //         author: 'emma-wellness',
-            //         authorName: 'Emma Rodriguez',
-            //         category: 'Lifestyle',
-            //         status: 'published',
-            //         date: '2024-12-10T14:00:00Z',
-            //         views: 1876,
-            //         tags: ['mindfulness', 'digital-wellness', 'mental-health'],
-            //         image: '/images/posts/mindful-living.jpg'
-            //     }
-            // ];
-
-            this.categories = [
-                { slug: 'technology', name: 'Technology' },
-                { slug: 'lifestyle', name: 'Lifestyle' },
-                { slug: 'food', name: 'Food' },
-                { slug: 'announcements', name: 'Announcements' }
-            ];
-
-            this.authors = [
-                { id: 'jane-doe', name: 'Jane Doe' },
-                { id: 'john-smith', name: 'John Smith' },
-                { id: 'sarah-tech', name: 'Sarah Chen' },
-                { id: 'emma-wellness', name: 'Emma Rodriguez' },
-                { id: 'chef-marco', name: 'Marco Santini' }
-            ];
+            if (getUser().role === 'Author') {
+                const userData = getUser();
+                this.authors = [
+                    {
+                        id: userData.userId,
+                        name: userData.fullName
+                    }
+                ]
+            } else {
+                // For editors and admins, load all authors
+                const authors = await getRequest('/api/users/all');
+                this.authors = authors.map(author => ({
+                    id: author.id,
+                    name: author.fullName
+                }))
+            }
 
             this.filteredPosts = [...this.posts];
             this.populateDropdowns();
@@ -241,11 +216,11 @@ class AdminPostsManager {
         this.filteredPosts = this.posts.filter(post => {
             const matchesSearch = post.title.toLowerCase().includes(searchTerm) ||
                 post.description.toLowerCase().includes(searchTerm) ||
-                post.authorName.toLowerCase().includes(searchTerm);
+                post.author.fullName.toLowerCase().includes(searchTerm);
 
             const matchesStatus = !statusFilter || post.status === statusFilter;
             const matchesCategory = !categoryFilter || post.category.toLowerCase() === categoryFilter;
-            const matchesAuthor = !authorFilter || post.author === authorFilter;
+            const matchesAuthor = !authorFilter || post.author.id === authorFilter;
 
             return matchesSearch && matchesStatus && matchesCategory && matchesAuthor;
         });
@@ -283,7 +258,7 @@ class AdminPostsManager {
                 </td>
                 <td>${post.category}</td>
                 <td>
-                    <span class="status-badge ${post.status}">${post.status}</span>
+                    <span class="status-badge ${post.status.toLowerCase()}">${post.status}</span>
                 </td>
                 <td>${new Date(post.createdAt).toLocaleDateString()}</td>
                 <td>
@@ -324,9 +299,9 @@ class AdminPostsManager {
 
     updateStats() {
         const totalPosts = this.posts.length;
-        const publishedPosts = this.posts.filter(p => p.status === 'published').length;
-        const draftPosts = this.posts.filter(p => p.status === 'draft').length;
-        const scheduledPosts = this.posts.filter(p => p.status === 'scheduled').length;
+        const publishedPosts = this.posts.filter(p => p.status === 'Published').length;
+        const draftPosts = this.posts.filter(p => p.status === 'Draft').length;
+        const scheduledPosts = this.posts.filter(p => p.status === 'Scheduled').length;
 
         document.getElementById('total-posts').textContent = totalPosts;
         document.getElementById('published-posts').textContent = publishedPosts;
@@ -339,7 +314,7 @@ class AdminPostsManager {
         const modal = document.getElementById('post-modal');
         const title = document.getElementById('modal-title');
         const form = document.getElementById('post-form');
-        const saveDraftBtn = document.getElementById('save-draft');
+        const preview = document.getElementById('image-preview');
 
         if (title) {
             title.textContent = post ? 'Edit Post' : 'Create New Post';
@@ -350,24 +325,27 @@ class AdminPostsManager {
             document.getElementById('post-slug').value = post.slug;
             document.getElementById('post-description').value = post.description;
             document.getElementById('post-category').value = post.category.toLowerCase();
-            document.getElementById('post-author').value = post.author;
             document.getElementById('post-tags').value = post.tags.join(', ');
             document.getElementById('post-content').value = post.content || '';
             document.getElementById('post-image').value = post.image || '';
             document.getElementById('post-status').value = post.status;
 
-            // Trigger status change event to show/hide elements
-            const statusSelect = document.getElementById('post-status');
-            if (statusSelect) {
-                statusSelect.dispatchEvent(new Event('change'));
+            // Handle existing image
+            if (post.image) {
+                const previewImg = document.getElementById('preview-img');
+                previewImg.src = post.image;
+                preview.style.display = 'flex';
+            } else {
+                preview.style.display = 'none';
             }
         } else if (form) {
             form.reset();
-            // Show save as draft button for new posts (default is draft)
-            if (saveDraftBtn) {
-                saveDraftBtn.style.display = 'inline-flex';
-            }
+            preview.style.display = 'none';
         }
+
+        // Trigger status change event to show/hide elements
+        const statusSelect = document.getElementById('post-status');
+        statusSelect.dispatchEvent(new Event('change'));
 
         modal?.classList.add('active');
     }
@@ -448,6 +426,40 @@ class AdminPostsManager {
         container.innerHTML = html;
     }
 
+    handleImageUpload(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('image-preview');
+        const previewImg = document.getElementById('preview-img');
+
+        if (file) {
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                showError('Please select a valid image file (JPG, PNG, GIF, WebP)');
+                event.target.value = '';
+                return;
+            }
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                preview.style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+
+    removeImage() {
+        const fileInput = document.getElementById('post-image');
+        const preview = document.getElementById('image-preview');
+
+        fileInput.value = '';
+        preview.style.display = 'none';
+    }
+
     async savePost(forceStatus = null) {
         const formData = new FormData(document.getElementById('post-form'));
         const postData = Object.fromEntries(formData.entries());
@@ -458,11 +470,12 @@ class AdminPostsManager {
 
         // Convert tags string to array
         postData.tags = postData.tags ? postData.tags.split(',').map(tag => tag.trim()) : [];
+        formData.delete("tags");
+        postData.tags.forEach(
+            tag => formData.append('tags', tag)
+        );
 
-        this.showLoading();
         try {
-            await this.delay(1000);
-
             if (this.editingPostId) {
                 // Update existing post
                 const postIndex = this.posts.findIndex(p => p.id === this.editingPostId);
@@ -470,31 +483,34 @@ class AdminPostsManager {
                     this.posts[postIndex] = {
                         ...this.posts[postIndex],
                         ...postData,
+                        image: imageUrl || this.posts[postIndex].image,
                         authorName: this.authors.find(a => a.id === postData.author)?.name || 'Unknown'
                     };
                 }
-                this.showNotification('Post updated successfully', 'success');
+                showSuccess('Post updated successfully');
             } else {
                 // Create new post
+                const response = await postRequest('/api/posts', formData);
                 const newPost = {
-                    id: `${new Date().toISOString().split('T')[0]}-${postData.slug}`,
-                    ...postData,
-                    date: new Date().toISOString(),
-                    views: 0,
-                    authorName: this.authors.find(a => a.id === postData.author)?.name || 'Unknown'
+                    ...response,
+                    content: postData.content
                 };
                 this.posts.unshift(newPost);
-                this.showNotification('Post created successfully', 'success');
+                showSuccess('Post created successfully');
             }
 
             this.filteredPosts = [...this.posts];
-            this.renderTable();
-            this.updateStats();
             this.hidePostModal();
         } catch (error) {
-            console.error('Error saving post:', error);
-            this.showNotification('Error saving post', 'error');
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error saving post');
+            } else {
+                console.error('Error saving post:', error);
+                showError('Error saving post');
+            }
         } finally {
+            this.renderTable();
+            this.updateStats();
             this.hideLoading();
         }
     }
@@ -532,10 +548,10 @@ class AdminPostsManager {
             this.renderTable();
             this.updateStats();
             this.hideDeleteModal();
-            this.showNotification('Post deleted successfully', 'success');
+            showSuccess('Post deleted successfully');
         } catch (error) {
             console.error('Error deleting post:', error);
-            this.showNotification('Error deleting post', 'error');
+            showError('Error deleting post');
         } finally {
             this.hideLoading();
         }
@@ -553,7 +569,7 @@ class AdminPostsManager {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
 
-        this.showNotification('Posts exported successfully', 'success');
+        showSuccess('Posts exported successfully');
     }
 
     generateCSV() {
@@ -580,29 +596,6 @@ class AdminPostsManager {
 
     hideLoading() {
         document.getElementById('loading-overlay')?.classList.remove('active');
-    }
-
-    showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007bff'};
-            color: white;
-            border-radius: 4px;
-            z-index: 10000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        `;
-        notification.textContent = message;
-
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
     }
 
     delay(ms) {

@@ -45,3 +45,13 @@ body {
     color: var(--text-color);
     background-color: var(--background-color);
 }
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: var(--link-hover-color);
+    }
+}

@@ -154,6 +154,7 @@ namespace BlogSystem.Shared.Extensions
 
             services.AddScoped<DraftState>();
             services.AddScoped<ScheduledState>();
+            services.AddScoped<PublishedState>();
             return services;
         }
 
