@@ -25,7 +25,10 @@ namespace BlogSystem.Shared.Helpers
             while (isTaken(uniqueSlug))
             {
                 uniqueSlug = $"{baseSlug}{counter++}";
-                if (uniqueSlug.Length > maxLength) uniqueSlug = uniqueSlug[..maxLength];
+                if (uniqueSlug.Length > maxLength)
+                {
+                    uniqueSlug = $"{uniqueSlug[..(maxLength - 1)]}{counter}";
+                }
             }
             return uniqueSlug;
         }
