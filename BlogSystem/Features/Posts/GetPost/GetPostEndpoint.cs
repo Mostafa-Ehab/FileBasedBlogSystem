@@ -1,4 +1,5 @@
-﻿using BlogSystem.Domain.Entities;
+﻿using System.Security.Claims;
+using BlogSystem.Domain.Entities;
 
 namespace BlogSystem.Features.Posts.Get
 {
@@ -17,11 +18,11 @@ namespace BlogSystem.Features.Posts.Get
             .Produces(StatusCodes.Status404NotFound);
         }
 
-        public static void MapGetAllPostsEndpoint(this IEndpointRouteBuilder app)
+        public static void MapGetPublicPostsEndpoint(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/all", async (IGetPostHandler handler, int pageNumber = 1, int pageSize = 10) =>
+            app.MapGet("/public", async (IGetPostHandler handler, int pageNumber = 1, int pageSize = 10) =>
             {
-                var posts = await handler.GetAllPostsAsync(pageNumber, pageSize);
+                var posts = await handler.GetPublicPostsAsync(pageNumber, pageSize);
                 return Results.Ok(posts);
             })
             .WithName("GetAllPosts")
@@ -37,6 +38,33 @@ namespace BlogSystem.Features.Posts.Get
                 return Results.Ok(posts);
             })
             .WithName("SearchPosts")
+            .WithTags("Posts")
+            .Produces<Post[]>(StatusCodes.Status200OK);
+        }
+
+        public static void MapGetEditorPostsEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/editor", async (IGetPostHandler handler, int pageNumber = 1, int pageSize = 10) =>
+            {
+                var posts = await handler.GetEditorPostsAsync(pageNumber, pageSize);
+                return Results.Ok(posts);
+            })
+            .RequireAuthorization("Editor")
+            .WithName("GetEditorPosts")
+            .WithTags("Posts")
+            .Produces<Post[]>(StatusCodes.Status200OK);
+        }
+
+        public static void MapGetAuthorPostsEndpoint(this IEndpointRouteBuilder app)
+        {
+            app.MapGet("/author", async (IGetPostHandler handler, ClaimsPrincipal user, int pageNumber = 1, int pageSize = 10) =>
+            {
+                var authorId = user.FindFirstValue("Id")!;
+                var posts = await handler.GetAuthorPostsAsync(authorId, pageNumber, pageSize);
+                return Results.Ok(posts);
+            })
+            .RequireAuthorization("Author")
+            .WithName("GetAuthorPosts")
             .WithTags("Posts")
             .Produces<Post[]>(StatusCodes.Status200OK);
         }

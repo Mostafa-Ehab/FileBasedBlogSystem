@@ -1,5 +1,6 @@
 using System.ServiceModel.Syndication;
 using System.Xml;
+using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Posts.Data;
 
 namespace BlogSystem.Features.Posts.RSS
@@ -16,7 +17,7 @@ namespace BlogSystem.Features.Posts.RSS
         public Task<string> GenerateRSSFeedAsync()
         {
             var posts = _postRepository.GetAllPosts()
-                .Where(p => p.IsPublished)
+                .Where(p => p.Status == PostStatus.Published)
                 .OrderByDescending(p => p.UpdatedAt)
                 .Take(20);
 

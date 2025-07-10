@@ -1,7 +1,8 @@
+using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Infrastructure.Scheduling;
 
-namespace BlogSystem.Features.Posts.SchedulePost
+namespace BlogSystem.Features.Posts.PostManagement
 {
     public class PublishPostService : IScheduleService<string>
     {
@@ -22,10 +23,9 @@ namespace BlogSystem.Features.Posts.SchedulePost
                 return;
             }
 
-            var content = post.Content;
-            post.IsPublished = true;
-            post.Content = null;
-            _postRepository.UpdatePost(post, content!);
+            post.Status = PostStatus.Published;
+            post.PublishedAt = DateTime.UtcNow;
+            _postRepository.UpdatePost(post);
         }
 
         public async Task RunTaskAsync(string postId)

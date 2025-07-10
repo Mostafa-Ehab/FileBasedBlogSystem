@@ -7,15 +7,9 @@ using BlogSystem.Features.Categories.CreateCategory.DTOs;
 using BlogSystem.Features.Categories.CreateCategory.Validators;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Categories.GetCategory;
-using BlogSystem.Features.Posts.CreatePost;
-using BlogSystem.Features.Posts.CreatePost.DTOs;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.Get;
 using BlogSystem.Features.Posts.RSS;
-using BlogSystem.Features.Posts.SchedulePost;
-using BlogSystem.Features.Posts.UpdatePost;
-using BlogSystem.Features.Posts.UpdatePost.DTOs;
-using BlogSystem.Features.Posts.UpdatePost.Validators;
 using BlogSystem.Features.Tags.CreateTag;
 using BlogSystem.Features.Tags.CreateTag.DTOs;
 using BlogSystem.Features.Tags.CreateTag.Validators;
@@ -42,6 +36,9 @@ using SixLabors.ImageSharp.Web.DependencyInjection;
 using SixLabors.ImageSharp.Web.Middleware;
 using SixLabors.ImageSharp.Web.Providers;
 using BlogSystem.Features.Users.GetUser;
+using BlogSystem.Features.Posts.PostManagement.DTOs;
+using BlogSystem.Features.Posts.PostManagement;
+using BlogSystem.Features.Posts.PostManagement.States;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -63,7 +60,6 @@ namespace BlogSystem.Shared.Extensions
             // Configure AutoMapper
             services.AddAutoMapper(config =>
             {
-                config.AddProfile<PostMappingProfile>();
                 config.AddProfile<UserMappingProfile>();
             });
 
@@ -86,7 +82,10 @@ namespace BlogSystem.Shared.Extensions
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
-                options.AddPolicy("Editor", policy => policy.RequireClaim("Role", "Editor"));
+                options.AddPolicy("Editor", policy => policy.RequireAssertion(context =>
+                    context.User.HasClaim(c => c.Type == "Role" && (c.Value == "Admin" || c.Value == "Editor"))));
+                options.AddPolicy("Author", policy => policy.RequireAssertion(context =>
+                    context.User.HasClaim(c => c.Type == "Role" && (c.Value == "Admin" || c.Value == "Editor" || c.Value == "Author"))));
             });
 
             // Register ImageSharp services
@@ -137,7 +136,6 @@ namespace BlogSystem.Shared.Extensions
             services.AddSingleton<PostImageProvider>();
             services.AddSingleton<IScheduler, HangfireScheduler>();
 
-            services.AddValidators();
             services.AddCategoryServices();
             services.AddPostServices();
             services.AddTagServices();
@@ -146,30 +144,23 @@ namespace BlogSystem.Shared.Extensions
             return services;
         }
 
-        private static IServiceCollection AddValidators(this IServiceCollection services)
-        {
-            services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
-            services.AddScoped<IValidator<CreateUserRequestDTO>, CreateUserRequestValidator>();
-            services.AddScoped<IValidator<UpdatePostRequestDTO>, UpdatePostRequestValidator>();
-            services.AddScoped<IValidator<CreateCategoryRequestDTO>, CreateCategoryRequestValidator>();
-            services.AddScoped<IValidator<CreateTagRequestDTO>, CreateTagRequestValidator>();
-            return services;
-        }
-
         private static IServiceCollection AddPostServices(this IServiceCollection services)
         {
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IGetPostHandler, GetPostHandler>();
-            services.AddScoped<ICreatePostHandler, CreatePostHandler>();
-            services.AddScoped<IUpdatePostHandler, UpdatePostHandler>();
+            services.AddScoped<IPostManagementHandler, PostManagementHandler>();
             services.AddScoped<IRSSHandler, RSSHandler>();
-            services.AddScoped<ISchedulePostHandler, SchedulePostHandler>();
             services.AddScoped<PublishPostService>();
+
+            services.AddScoped<DraftState>();
+            services.AddScoped<ScheduledState>();
             return services;
         }
 
         private static IServiceCollection AddCategoryServices(this IServiceCollection services)
         {
+            services.AddScoped<IValidator<CreateCategoryRequestDTO>, CreateCategoryRequestValidator>();
+
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IGetCategoryHandler, GetCategoryHandler>();
             services.AddScoped<ICreateCategoryHandler, CreateCategoryHandler>();
@@ -178,6 +169,8 @@ namespace BlogSystem.Shared.Extensions
 
         private static IServiceCollection AddTagServices(this IServiceCollection services)
         {
+            services.AddScoped<IValidator<CreateTagRequestDTO>, CreateTagRequestValidator>();
+
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<IGetTagHandler, GetTagHandler>();
             services.AddScoped<ICreateTagHandler, CreateTagHandler>();
@@ -186,6 +179,9 @@ namespace BlogSystem.Shared.Extensions
 
         private static IServiceCollection AddUserServices(this IServiceCollection services)
         {
+            services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
+            services.AddScoped<IValidator<CreateUserRequestDTO>, CreateUserRequestValidator>();
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILoginHandler, LoginHandler>();
             services.AddScoped<ICreateUserHandler, CreateUserHandler>();

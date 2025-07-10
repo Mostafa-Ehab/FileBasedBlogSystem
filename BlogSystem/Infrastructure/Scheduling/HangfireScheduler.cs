@@ -12,7 +12,7 @@ namespace BlogSystem.Infrastructure.Scheduling
             _serviceProvider = serviceProvider;
             _backgroundJobClient = backgroundJobClient;
         }
-        public string ScheduleJob<T>(Expression<Action<T>> job, DateTime runAt) where T : class
+        public string ScheduleJob<T>(Expression<Action<T>> job, DateTimeOffset runAt) where T : class
         {
             using (var scope = _serviceProvider.CreateScope())
             {

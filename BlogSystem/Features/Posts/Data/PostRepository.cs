@@ -1,4 +1,5 @@
 ﻿using BlogSystem.Domain.Entities;
+using BlogSystem.Domain.Enums;
 using System.Text.Json;
 
 namespace BlogSystem.Features.Posts.Data
@@ -104,10 +105,59 @@ namespace BlogSystem.Features.Posts.Data
                     post!.Content = File.ReadAllText(Path.Combine(path, post.Id, "content.md"));
                     return post;
                 })
+                .ToArray();
+        }
+
+        public Post[] GetPublicPosts(int page = 1, int pageSize = 10)
+        {
+            var path = Path.Combine("Content", "posts");
+            if (!Directory.Exists(path))
+            {
+                return [];
+            }
+
+            var postFiles = Directory.GetDirectories(path)
+                .Select(dir => Path.Combine(dir, "meta.json"))
+                .Where(File.Exists)
+                .OrderByDescending(File.GetLastWriteTime);
+
+            return postFiles
+                .Select(file => JsonSerializer.Deserialize<Post>(File.ReadAllText(file), _jsonSerializerOptions))
+                .Where(post => post != null && post.Status == PostStatus.Published)
+                .Select(post =>
+                {
+                    post!.Content = File.ReadAllText(Path.Combine(path, post.Id, "content.md"));
+                    return post;
+                })
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToArray();
+        }
+
+        public Post[] GetAuthorPosts(string authorId, int page = 1, int pageSize = 10)
+        {
+            var path = Path.Combine("Content", "users", authorId, "profile.json");
+            if (!File.Exists(path))
+            {
+                return [];
+            }
+
+            string json = File.ReadAllText(path);
+            User? user = JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions);
+            if (user == null || user.Posts == null || user.Posts.Length == 0)
+            {
+                return [];
+            }
+
+            return user.Posts
+                .Select(GetPostById)
+                .Where(post => post != null)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToArray()!;
         }
 
-        public string CreatePost(Post post, string Content)
+        public string CreatePost(Post post)
         {
             var postPath = Path.Combine("Content", "posts", post.Id);
             if (!Directory.Exists(postPath))
@@ -115,18 +165,22 @@ namespace BlogSystem.Features.Posts.Data
                 Directory.CreateDirectory(postPath);
             }
 
+            var content = post.Content;
+            post.Content = null!;
+
             File.WriteAllText(Path.Combine(postPath, "meta.json"), JsonSerializer.Serialize(post, _jsonSerializerOptions));
-            File.WriteAllText(Path.Combine(postPath, "content.md"), Content);
+            File.WriteAllText(Path.Combine(postPath, "content.md"), content);
 
             _slugResolver.AddSlug(post.Slug, post.Id);
 
             UpdateCategoryFile(post);
             UpdateTagFile(post);
+            UpdateUserFile(post.AuthorId, post.Id);
 
             return post.Id;
         }
 
-        public string UpdatePost(Post post, string content)
+        public string UpdatePost(Post post)
         {
             var existingPost = GetPostById(post.Id);
             if (existingPost == null)
@@ -139,6 +193,10 @@ namespace BlogSystem.Features.Posts.Data
             {
                 throw new DirectoryNotFoundException($"Post directory '{postPath}' does not exist.");
             }
+
+            var content = post.Content;
+            post.Content = null!;
+            post.UpdatedAt = DateTime.UtcNow;
 
             File.WriteAllText(Path.Combine(postPath, "meta.json"), JsonSerializer.Serialize(post, _jsonSerializerOptions));
             File.WriteAllText(Path.Combine(postPath, "content.md"), content);
@@ -274,6 +332,24 @@ namespace BlogSystem.Features.Posts.Data
                         File.WriteAllText(tagPath, JsonSerializer.Serialize(existingTag, _jsonSerializerOptions));
                     }
                 }
+            }
+        }
+
+        private void UpdateUserFile(string userId, string postId)
+        {
+            var userPath = Path.Combine("Content", "users", userId, "profile.json");
+            if (!File.Exists(userPath))
+            {
+                return;
+            }
+
+            string json = File.ReadAllText(userPath);
+            User user = JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions)!;
+
+            if (!user.Posts.Contains(postId))
+            {
+                user.Posts = [.. user.Posts, postId];
+                File.WriteAllText(userPath, JsonSerializer.Serialize(user, _jsonSerializerOptions));
             }
         }
     }

@@ -1,6 +1,6 @@
 namespace BlogSystem.Features.Posts.GetPost.DTOs
 {
-    public class GetPostDTO
+    public class PublicPostDTO
     {
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
@@ -11,7 +11,7 @@ namespace BlogSystem.Features.Posts.GetPost.DTOs
         public string Category { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
         public string Slug { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
+        public DateTime PublishedAt { get; set; }
         public List<string> Tags { get; set; } = [];
     }
 }

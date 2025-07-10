@@ -3,13 +3,11 @@ using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Tags.GetTag;
 using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.CreateUser;
-using BlogSystem.Features.Posts.Create;
-using BlogSystem.Features.Posts.UpdatePost;
 using BlogSystem.Features.Categories.CreateCategory;
 using BlogSystem.Features.Tags.CreateTag;
 using BlogSystem.Features.Posts.RSS;
-using BlogSystem.Features.Posts.SchedulePost;
 using BlogSystem.Features.Users.GetUser;
+using BlogSystem.Features.Posts.PostManagement;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -29,11 +27,12 @@ namespace BlogSystem.Shared.Extensions
         private static IEndpointRouteBuilder MapPostEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapGetPostEndpoint();
-            app.MapGetAllPostsEndpoint();
-            app.MapCreatePostEndpoint();
-            app.MapUpdatePostEndpoint();
+            app.MapGetPublicPostsEndpoint();
+            app.MapPostManagementEndpoints();
             app.MapSearchPostsEndpoint();
-            app.MapSchedulePostEndpoints();
+
+            app.MapGetEditorPostsEndpoint();
+            app.MapGetAuthorPostsEndpoint();
 
             return app;
         }
