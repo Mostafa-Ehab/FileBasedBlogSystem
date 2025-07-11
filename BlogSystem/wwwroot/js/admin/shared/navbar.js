@@ -1,23 +1,17 @@
 class AdminNavbarController {
     constructor() {
         this.navConfig = {
-            'dashboard': {
-                href: '/admin/dashboard.html',
-                icon: 'fas fa-tachometer-alt',
-                text: 'Dashboard',
+            'posts': {
+                href: '/admin/posts.html',
+                icon: 'fas fa-file-alt',
+                text: 'Posts',
                 roles: ['Admin', 'Editor', 'Author']
             },
             'users': {
                 href: '/admin/users.html',
                 icon: 'fas fa-users',
                 text: 'Users',
-                roles: ['Admin']
-            },
-            'posts': {
-                href: '/admin/posts.html',
-                icon: 'fas fa-file-alt',
-                text: 'Posts',
-                roles: ['Admin', 'Editor', 'Author']
+                roles: ['Admin'] // Only admins can access users
             },
             'categories': {
                 href: '/admin/categories.html',
@@ -33,6 +27,7 @@ class AdminNavbarController {
             }
         };
 
+        this.mobileMenuOpen = false;
         this.init();
     }
 
@@ -49,6 +44,30 @@ class AdminNavbarController {
             return;
         }
 
+        this.createMobileMenuToggle();
+        this.renderDesktopNav(user);
+        this.renderMobileNav(user);
+        this.updateUserInfo();
+    }
+
+    createMobileMenuToggle() {
+        const navbar = document.querySelector('.admin-navbar');
+        if (!navbar) return;
+
+        // Check if toggle already exists
+        if (navbar.querySelector('.mobile-menu-toggle')) return;
+
+        const toggle = document.createElement('button');
+        toggle.className = 'mobile-menu-toggle';
+        toggle.innerHTML = '<i class="fas fa-bars"></i>';
+        toggle.setAttribute('aria-label', 'Toggle navigation menu');
+
+        // Insert before user menu
+        const userMenu = navbar.querySelector('.admin-user-menu');
+        navbar.insertBefore(toggle, userMenu);
+    }
+
+    renderDesktopNav(user) {
         const navLinksContainer = document.querySelector('.admin-nav-links');
         if (!navLinksContainer) return;
 
@@ -62,9 +81,58 @@ class AdminNavbarController {
                 navLinksContainer.appendChild(link);
             }
         });
+    }
 
-        // Update user info
-        this.updateUserInfo();
+    renderMobileNav(user) {
+        // Remove existing mobile nav
+        const existingMobileNav = document.querySelector('.mobile-nav-dropdown');
+        if (existingMobileNav) {
+            existingMobileNav.remove();
+        }
+
+        const navbar = document.querySelector('.admin-navbar');
+        if (!navbar) return;
+
+        const mobileNav = document.createElement('div');
+        mobileNav.className = 'mobile-nav-dropdown';
+        mobileNav.innerHTML = `
+            <div class="mobile-nav-content">
+                <div class="mobile-nav-section">
+                    <div class="mobile-nav-title">Navigation</div>
+                    <ul class="mobile-nav-links" id="mobile-nav-links">
+                        ${this.generateMobileNavLinks(user)}
+                    </ul>
+                </div>
+                <div class="mobile-nav-section mobile-user-section">
+                    <div class="mobile-user-info">
+                        <img src="${user.profilePictureUrl || 'https://picsum.photos/40/40?random=admin'}" alt="${user.fullName}" class="admin-avatar">
+                        <div class="user-details">
+                            <p class="user-name">${user.fullName || 'Admin User'}</p>
+                            <p class="user-role">${user.role}</p>
+                        </div>
+                    </div>
+                    <a href="/admin/logout.html" class="mobile-logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        `;
+
+        navbar.appendChild(mobileNav);
+    }
+
+    generateMobileNavLinks(user) {
+        return Object.entries(this.navConfig)
+            .filter(([key, config]) => config.roles.includes(user.role))
+            .map(([key, config]) => `
+                <li class="mobile-nav-item">
+                    <a href="${config.href}" class="mobile-nav-link" data-nav-key="${key}">
+                        <i class="${config.icon}"></i>
+                        ${config.text}
+                    </a>
+                </li>
+            `).join('');
     }
 
     createNavLink(key, config) {
@@ -83,7 +151,7 @@ class AdminNavbarController {
 
     setActiveLink() {
         const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.admin-nav-link');
+        const navLinks = document.querySelectorAll('.admin-nav-link, .mobile-nav-link');
 
         navLinks.forEach(link => {
             link.classList.remove('active');
@@ -103,34 +171,113 @@ class AdminNavbarController {
         }
 
         // Update avatar
-        const avatarElement = document.querySelector('.admin-avatar');
-        if (avatarElement && user.profilePictureUrl) {
-            avatarElement.src = user.profilePictureUrl;
-            avatarElement.alt = user.fullName || 'User';
-        }
+        const avatarElements = document.querySelectorAll('.admin-avatar');
+        avatarElements.forEach(avatar => {
+            if (user.profilePictureUrl) {
+                avatar.src = user.profilePictureUrl;
+                avatar.alt = user.fullName || 'User';
+            }
+        });
     }
 
     setupEventListeners() {
-        // Handle logout
-        const logoutBtn = document.querySelector('.admin-logout-btn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.handleLogout();
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.mobile-menu-toggle');
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleMobileMenu();
             });
         }
 
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const mobileNav = document.querySelector('.mobile-nav-dropdown');
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+
+            if (this.mobileMenuOpen &&
+                !mobileNav?.contains(e.target) &&
+                !mobileToggle?.contains(e.target)) {
+                this.closeMobileMenu();
+            }
+        });
+
+        // Close mobile menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.mobileMenuOpen) {
+                this.closeMobileMenu();
+            }
+        });
+
         // Handle navigation clicks with role validation
         document.addEventListener('click', (e) => {
-            const navLink = e.target.closest('.admin-nav-link');
+            const navLink = e.target.closest('.admin-nav-link, .mobile-nav-link');
             if (navLink) {
                 const navKey = navLink.dataset.navKey;
                 if (navKey && !this.canAccessRoute(navKey)) {
                     e.preventDefault();
                     showError('You do not have permission to access this page');
+                    return;
+                }
+
+                // Close mobile menu on navigation
+                if (navLink.classList.contains('mobile-nav-link')) {
+                    this.closeMobileMenu();
                 }
             }
         });
+
+        // Handle logout clicks
+        document.addEventListener('click', (e) => {
+            const logoutBtn = e.target.closest('.admin-logout-btn, .mobile-logout-btn');
+            if (logoutBtn) {
+                e.preventDefault();
+                this.handleLogout();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && this.mobileMenuOpen) {
+                this.closeMobileMenu();
+            }
+        });
+    }
+
+    toggleMobileMenu() {
+        if (this.mobileMenuOpen) {
+            this.closeMobileMenu();
+        } else {
+            this.openMobileMenu();
+        }
+    }
+
+    openMobileMenu() {
+        const mobileNav = document.querySelector('.mobile-nav-dropdown');
+        const mobileToggle = document.querySelector('.mobile-menu-toggle');
+
+        if (mobileNav && mobileToggle) {
+            mobileNav.classList.add('active');
+            mobileToggle.querySelector('i').className = 'fas fa-times';
+            this.mobileMenuOpen = true;
+
+            // Prevent body scroll on mobile
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    closeMobileMenu() {
+        const mobileNav = document.querySelector('.mobile-nav-dropdown');
+        const mobileToggle = document.querySelector('.mobile-menu-toggle');
+
+        if (mobileNav && mobileToggle) {
+            mobileNav.classList.remove('active');
+            mobileToggle.querySelector('i').className = 'fas fa-bars';
+            this.mobileMenuOpen = false;
+
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }
     }
 
     canAccessRoute(routeKey) {
@@ -145,10 +292,7 @@ class AdminNavbarController {
     }
 
     handleLogout() {
-        // Clear user data
         clearUser();
-
-        // Redirect to logout page for smooth transition
         window.location.href = '/admin/logout.html';
     }
 
@@ -158,7 +302,6 @@ class AdminNavbarController {
         }
     }
 
-    // Method to check if current user can access current page
     validateCurrentPage() {
         const currentPath = window.location.pathname;
         const user = getUser();
@@ -168,7 +311,6 @@ class AdminNavbarController {
             return false;
         }
 
-        // Find the route config for current page
         const routeConfig = Object.entries(this.navConfig).find(([key, config]) =>
             config.href === currentPath
         );
@@ -177,7 +319,6 @@ class AdminNavbarController {
             const [routeKey, config] = routeConfig;
             if (!config.roles.includes(user.role)) {
                 showError('Access denied. You do not have permission to view this page.');
-                // Redirect to first accessible page
                 this.redirectToAccessiblePage();
                 return false;
             }
@@ -189,7 +330,6 @@ class AdminNavbarController {
     redirectToAccessiblePage() {
         const user = getUser();
 
-        // Find first accessible route
         const accessibleRoute = Object.entries(this.navConfig).find(([key, config]) =>
             config.roles.includes(user.role)
         );
@@ -205,19 +345,16 @@ class AdminNavbarController {
 // Initialize navbar controller
 let navbarController;
 document.addEventListener('DOMContentLoaded', () => {
-    // Only initialize on admin pages
     if (window.location.pathname.startsWith('/admin/') &&
         window.location.pathname !== '/admin/login.html' &&
         window.location.pathname !== '/admin/logout.html') {
 
         navbarController = new AdminNavbarController();
 
-        // Validate current page access
         if (!navbarController.validateCurrentPage()) {
             return;
         }
     }
 });
 
-// Export for use in other scripts
 window.AdminNavbarController = AdminNavbarController;

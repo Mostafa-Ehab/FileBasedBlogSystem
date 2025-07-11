@@ -1,10 +1,12 @@
 .admin-navbar {
-    background: var(--secondary-color);
+    background: white;
     padding: 1rem 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
 
     // Logo and Admin Badge
     .logo {
@@ -30,13 +32,32 @@
     }
 
     .admin-badge {
-        background: rgba(255, 255, 255, 0.2);
+        background: var(--secondary-color);
         color: white;
         padding: 0.25rem 0.75rem;
         border-radius: 15px;
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
+    }
+
+    // Mobile menu toggle button
+    .mobile-menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: background-color 0.3s ease;
+        position: absolute;
+        right: 2rem;
+
+        &:hover {
+            background: var(--background-light);
+        }
     }
 
     // Navigation Links
@@ -46,7 +67,7 @@
     }
 
     .admin-nav-link {
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--text-color);
         text-decoration: none;
         display: flex;
         align-items: center;
@@ -58,8 +79,8 @@
 
         &:hover,
         &.active {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: var(--background-light);
+            color: var(--primary-color);
             text-decoration: none;
         }
     }
@@ -75,21 +96,21 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        color: white;
+        color: var(--text-color);
     }
 
     .admin-avatar {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        border: 2px solid var(--border-color);
     }
 
     // Admin Logout Button
     .admin-logout-btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: white;
+        background: var(--background-light);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
         padding: 0.5rem 1rem;
         border-radius: var(--border-radius);
         cursor: pointer;
@@ -99,7 +120,143 @@
         gap: 0.5rem;
 
         &:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--background-muted);
+            color: var(--primary-color);
+        }
+    }
+}
+
+// Mobile dropdown menu
+.mobile-nav-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+
+    &.active {
+        display: block;
+    }
+
+    .mobile-nav-content {
+        padding: 1rem;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .mobile-nav-section {
+        margin-bottom: 1.5rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .mobile-nav-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.75rem;
+        padding: 0 0.5rem;
+    }
+
+    .mobile-nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mobile-nav-item {
+        margin-bottom: 0.25rem;
+    }
+
+    .mobile-nav-link {
+        color: var(--text-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: var(--border-radius);
+        transition: all 0.3s ease;
+        font-weight: 500;
+
+        &:hover,
+        &.active {
+            background: var(--background-light);
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        i {
+            font-size: 1.125rem;
+            width: 20px;
+            text-align: center;
+        }
+    }
+
+    .mobile-user-section {
+        border-top: 1px solid var(--border-color-light);
+        padding-top: 1rem;
+
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+
+            .admin-avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+            .user-details {
+                flex: 1;
+
+                .user-name {
+                    font-weight: 600;
+                    color: var(--text-color);
+                    margin: 0;
+                    font-size: 0.875rem;
+                }
+
+                .user-role {
+                    color: var(--text-muted);
+                    margin: 0;
+                    font-size: 0.75rem;
+                }
+            }
+        }
+
+        .mobile-logout-btn {
+            width: 100%;
+            background: var(--background-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            text-decoration: none;
+
+            &:hover {
+                background: var(--background-muted);
+                color: var(--primary-color);
+            }
         }
     }
 }
@@ -107,15 +264,31 @@
 @media (max-width: 768px) {
     .admin-navbar {
         padding: 1rem;
-        flex-direction: column;
-        gap: 1rem;
+
+        .mobile-menu-toggle {
+            display: block;
+        }
 
         .admin-nav-links {
-            order: 3;
-            width: 100%;
-            justify-content: center;
-            flex-wrap: wrap;
+            display: none;
+        }
+
+        .admin-user-menu {
+            .admin-user-info {
+                display: none;
+            }
+
+            .admin-logout-btn {
+                display: none;
+            }
         }
     }
+}
 
+@media (max-width: 480px) {
+    .admin-navbar {
+        .admin-badge {
+            display: none;
+        }
+    }
 }
