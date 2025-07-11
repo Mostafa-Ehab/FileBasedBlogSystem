@@ -13,6 +13,7 @@
     <script src="/js/shared/utils.js" defer></script>
     <script src="/js/admin/users.js" defer></script>
     <script src="/js/admin/shared/navbar.js" defer></script>
+    <script src="/js/admin/shared/filter.js" defer></script>
 </head>
 
 <body>
@@ -103,15 +104,35 @@
         <div class="admin-filters">
             <div class="admin-search">
                 <input type="text" placeholder="Search users..." class="admin-search-input" id="user-search">
-                <i class="fas fa-search"></i>
+                <i class="fas fa-search search-icon"></i>
             </div>
             <div class="admin-filter-group">
-                <select class="admin-select" id="role-filter">
-                    <option value="">All Roles</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Editor">Editor</option>
-                    <option value="Author">Author</option>
-                </select>
+                <button class="filter-toggle" id="filter-toggle" type="button">
+                    <i class="fas fa-filter"></i>
+                </button>
+
+                <!-- Filter Menu -->
+                <div class="filter-menu" id="filter-menu">
+                    <div class="filter-menu-header">
+                        <h4>
+                            <i class="fas fa-filter"></i>
+                            Filter Posts
+                        </h4>
+                    </div>
+                    <div class="filter-menu-content">
+                        <select class="admin-select" id="role-filter">
+                            <option value="">All Roles</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Editor">Editor</option>
+                            <option value="Author">Author</option>
+                        </select>
+                    </div>
+                    <div class="filter-menu-footer">
+                        <button type="button" class="btn-clear-filters" id="clear-filters">
+                            Clear All
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
