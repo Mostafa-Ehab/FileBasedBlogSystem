@@ -82,3 +82,19 @@
         gap: 1rem;
     }
 }
+
+@media (max-width: 768px) {
+
+    .admin-modal {
+        .modal-content {
+            width: 95%;
+            margin: 1rem;
+
+            &.large {
+                width: 98%;
+                margin: 1%;
+                max-height: 98vh;
+            }
+        }
+    }
+}

@@ -4,6 +4,6 @@ namespace BlogSystem.Features.Users.CreateUser
 {
     public interface ICreateUserHandler
     {
-        Task<CreateUserResponseDTO> CreateUserAsync(CreateUserRequestDTO createUserRequestDTO);
+        Task<CreatedUserDTO> CreateUserAsync(CreateUserRequestDTO createUserRequestDTO);
     }
 }

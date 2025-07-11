@@ -9,7 +9,7 @@ namespace BlogSystem.Features.Users.Data
         User? GetUserByEmail(string email);
         List<User> GetAllUsers();
         User CreateUser(User user);
-        void UpdateUser(User user);
+        User UpdateUser(User user);
         void DeleteUser(User user);
         bool UserExists(string id);
         bool UserExistsByUsername(string username);

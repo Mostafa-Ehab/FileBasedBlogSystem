@@ -6,6 +6,7 @@ using BlogSystem.Features.Users.CreateUser.DTOs;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Helpers;
+using BlogSystem.Shared.Mappings;
 using FluentValidation;
 
 namespace BlogSystem.Features.Users.CreateUser
@@ -23,7 +24,7 @@ namespace BlogSystem.Features.Users.CreateUser
             _createUserRequestValidator = createUserRequestValidator;
         }
 
-        public Task<CreateUserResponseDTO> CreateUserAsync(CreateUserRequestDTO requestDTO)
+        public Task<CreatedUserDTO> CreateUserAsync(CreateUserRequestDTO requestDTO)
         {
             ValidationHelper.Validate(requestDTO, _createUserRequestValidator);
 
@@ -38,7 +39,10 @@ namespace BlogSystem.Features.Users.CreateUser
             }
             else if (string.IsNullOrEmpty(requestDTO.Username))
             {
-                requestDTO.Username = SlugHelper.GenerateUniqueSlug(requestDTO.Email.Split('@')[0], _userRepository.UserExistsByUsername);
+                requestDTO.Username = SlugHelper.GenerateUniqueSlug(
+                    requestDTO.Email.Split('@')[0],
+                    _userRepository.UserExistsByUsername
+                );
             }
 
             var user = new User
@@ -50,24 +54,13 @@ namespace BlogSystem.Features.Users.CreateUser
                 HashedPassword = _authHelper.HashPassword(requestDTO.Password),
                 Role = requestDTO.Role ?? UserRole.Author,
                 Bio = requestDTO.Bio ?? string.Empty,
-                ProfilePictureUrl = string.IsNullOrWhiteSpace(requestDTO.ProfilePictureUrl) ?
-                                ImageHelper.GetRandomProfilePictureUrl() : requestDTO.ProfilePictureUrl,
+                ProfilePictureUrl = ImageHelper.GetRandomProfilePictureUrl(),
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
             var createdUser = _userRepository.CreateUser(user);
 
-            return Task.FromResult(new CreateUserResponseDTO
-            {
-                Id = createdUser.Id,
-                Username = createdUser.Username,
-                Email = createdUser.Email,
-                FullName = createdUser.FullName,
-                Bio = createdUser.Bio,
-                Role = createdUser.Role,
-                ProfilePictureUrl = createdUser.ProfilePictureUrl,
-                CreatedAt = createdUser.CreatedAt,
-            });
+            return Task.FromResult(createdUser.MapToCreatedUserDTO());
         }
     }
 }

@@ -13,7 +13,7 @@ namespace BlogSystem.Features.Users.CreateUser
             })
             .RequireAuthorization("Admin")
             .WithName("CreateUser")
-            .Produces<CreateUserResponseDTO>(StatusCodes.Status200OK)
+            .Produces<CreatedUserDTO>(StatusCodes.Status200OK)
             .ProducesValidationProblem()
             .ProducesProblem(StatusCodes.Status409Conflict)
             .WithTags("Users");

@@ -39,6 +39,9 @@ using BlogSystem.Features.Users.GetUser;
 using BlogSystem.Features.Posts.PostManagement.DTOs;
 using BlogSystem.Features.Posts.PostManagement;
 using BlogSystem.Features.Posts.PostManagement.States;
+using BlogSystem.Features.Users.UpdateUser.DTOs;
+using BlogSystem.Features.Users.UpdateUser.Validators;
+using BlogSystem.Features.Users.UpdateUser;
 
 namespace BlogSystem.Shared.Extensions
 {
@@ -55,12 +58,6 @@ namespace BlogSystem.Shared.Extensions
             services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
-
-            // Configure AutoMapper
-            services.AddAutoMapper(config =>
-            {
-                config.AddProfile<UserMappingProfile>();
             });
 
             // Register Authentication Service
@@ -182,11 +179,14 @@ namespace BlogSystem.Shared.Extensions
         {
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
             services.AddScoped<IValidator<CreateUserRequestDTO>, CreateUserRequestValidator>();
+            services.AddScoped<IValidator<UpdateUserRequestDTO>, UpdateUserRequestValidator>();
+            services.AddScoped<IValidator<UpdateProfileInfoRequestDTO>, UpdateProfileInfoRequestValidator>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILoginHandler, LoginHandler>();
             services.AddScoped<ICreateUserHandler, CreateUserHandler>();
             services.AddScoped<IGetUserHandler, GetUserHandler>();
+            services.AddScoped<IUpdateUserHandler, UpdateUserHandler>();
             return services;
         }
     }

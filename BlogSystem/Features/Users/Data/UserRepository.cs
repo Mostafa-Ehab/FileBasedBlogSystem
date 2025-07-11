@@ -96,9 +96,19 @@ namespace BlogSystem.Features.Users.Data
             return user;
         }
 
-        public void UpdateUser(User user)
+        public User UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            var path = Path.Combine("Content", "users", user.Id, "profile.json");
+            if (!File.Exists(path))
+            {
+                throw new InvalidOperationException("User does not exist");
+            }
+
+            string json = JsonSerializer.Serialize(user, _jsonSerializerOptions);
+            File.WriteAllText(path, json);
+
+            _userResolver.UpdateUser(user);
+            return user;
         }
 
         public void DeleteUser(User user)

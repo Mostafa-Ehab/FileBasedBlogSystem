@@ -1,0 +1,110 @@
+// Role Badge Styles
+.role-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.admin {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    &.editor {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    &.author {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+}
+
+// Users Table Styles
+#users-table {
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .user-details {
+
+        h4 {
+            margin: 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+    }
+}
+
+#user-modal {
+    .password-input-group {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        input {
+            flex: 1;
+            padding-right: 5rem;
+        }
+    }
+
+    .btn-password-action {
+        position: absolute;
+        right: 0.5rem;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background: var(--background-light);
+            color: var(--text-color);
+        }
+
+        &:first-of-type {
+            right: 2.5rem;
+        }
+
+        &.success {
+            color: #28a745;
+        }
+    }
+}
+
+// Delete user confirmation styles
+.delete-user-info {
+    background: var(--background-light);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+}

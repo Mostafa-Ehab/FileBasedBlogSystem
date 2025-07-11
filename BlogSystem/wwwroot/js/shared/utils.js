@@ -38,3 +38,12 @@ function getIconClass(platform) {
             return 'fa-solid fa-globe';
     }
 }
+
+function generateSlug(title) {
+    return title.toLowerCase()
+        .replace(/[^a-z0-9 -]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/\./g, '-')
+        .trim();
+}

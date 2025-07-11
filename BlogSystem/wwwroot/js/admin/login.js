@@ -31,7 +31,7 @@ class AdminLogin {
 
     checkExistingSession() {
         if (getUser().token) {
-            window.location.href = '/admin/index.html';
+            window.location.href = '/admin/posts.html'; // Redirect to posts instead of non-existent index
         }
     }
 
@@ -67,7 +67,7 @@ class AdminLogin {
 
                 // Redirect to dashboard after success message
                 setTimeout(() => {
-                    window.location.href = '/admin/index.html';
+                    window.location.href = '/admin/posts.html'; // Redirect to posts page
                 }, 1500);
             } else {
                 showError(result.message || 'Invalid credentials');

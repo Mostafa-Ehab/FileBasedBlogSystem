@@ -67,12 +67,3 @@ function deleteRequest(url, params = {}) {
         return;
     });
 }
-
-function setUser(data) {
-    localStorage.setItem('user', JSON.stringify(data));
-}
-
-function getUser() {
-    const data = localStorage.getItem('user');
-    return data ? JSON.parse(data) : null;
-}

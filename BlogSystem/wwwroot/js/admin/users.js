@@ -7,8 +7,45 @@ class AdminUsersManager {
         this.filteredUsers = [];
         this.editingUserId = null;
 
+        this.checkAuthentication();
         this.init();
     }
+
+    checkAuthentication() {
+        const userData = getUser();
+        if (!userData?.token) {
+            window.location.href = '/admin/login.html';
+            return;
+        }
+
+        // Update admin username in navbar
+        const adminUsername = userData?.username;
+        if (adminUsername) {
+            const usernameElement = document.querySelector('.admin-username');
+            if (usernameElement) {
+                usernameElement.textContent = adminUsername;
+            }
+        }
+
+        // Setup logout functionality
+        // this.setupLogout();
+    }
+
+    // setupLogout() {
+    //     const logoutBtn = document.querySelector('.admin-logout-btn');
+    //     if (logoutBtn) {
+    //         logoutBtn.addEventListener('click', () => {
+    //             localStorage.removeItem('adminToken');
+    //             localStorage.removeItem('userRole');
+    //             localStorage.removeItem('username');
+    //             sessionStorage.removeItem('adminToken');
+    //             sessionStorage.removeItem('userRole');
+    //             sessionStorage.removeItem('username');
+
+    //             window.location.href = '/admin/login.html';
+    //         });
+    //     }
+    // }
 
     init() {
         this.loadUsers();
@@ -107,19 +144,34 @@ class AdminUsersManager {
         document.getElementById('toggle-password-btn')?.addEventListener('click', () => {
             this.togglePasswordVisibility();
         });
+
+        // Username input auto-generation
+        document.getElementById('user-email')?.addEventListener('input', (e) => {
+            const email = e.target.value;
+            const usernameInput = document.getElementById('user-username');
+            if (usernameInput && email && this.editingUserId === null) {
+                // Generate username from email
+                const username = email.split('@')[0].toLowerCase();
+                usernameInput.value = generateSlug(username);
+            }
+        });
     }
 
     async loadUsers() {
         this.showLoading();
         try {
-            const data = await getRequest('/api/users/all');
+            const data = await getRequest('/api/users');
             this.users = data || [];
             this.filteredUsers = [...this.users];
             this.renderTable();
             this.updateStats();
         } catch (error) {
-            console.error('Error loading users:', error);
-            this.showNotification('Error loading users', 'error');
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error loading users');
+            } else {
+                console.error('Error loading users:', error);
+                showError('Error loading users');
+            }
         } finally {
             this.hideLoading();
         }
@@ -288,46 +340,39 @@ class AdminUsersManager {
             console.log('Saving user data:', userData);
             if (this.editingUserId) {
                 // Update existing user
-                // const updatedUser = postRequest('/api/users/update', {
-                // ...userData,
-                // id: this.editingUserId
+                const updatedUser = await putRequest(`/api/users/${this.editingUserId}`, {
+                    ...userData,
+                });
                 const userIndex = this.users.findIndex(u => u.id === this.editingUserId);
                 if (userIndex !== -1) {
                     this.users[userIndex] = {
                         ...this.users[userIndex],
-                        ...userData,
-                        id: this.editingUserId
+                        ...updatedUser,
                     };
                 }
-                this.showNotification('User updated successfully', 'success');
+                showSuccess('User updated successfully');
             } else {
                 // Add new user
                 const createdUser = await postRequest('/api/users', userData);
                 const newUser = {
-                    id: createdUser.id,
-                    ...userData,
-                    username: createdUser.username.toLowerCase(),
-                    createdAt: new Date().toISOString(),
-                    posts: [],
-                    profilePictureUrl: createdUser.profilePictureUrl
+                    ...createdUser
                 };
                 this.users.push(newUser);
-                this.showNotification('User created successfully', 'success');
+                showSuccess('User created successfully');
             }
 
             this.filteredUsers = [...this.users];
-            this.renderTable();
-            this.updateStats();
             this.hideUserModal();
         } catch (error) {
             if (error instanceof RequestError) {
-                console.error('RequestError details:', error.data);
-                this.showNotification(`Error saving user: ${error.data.message}`, 'error');
+                showError(error?.data?.message || 'Error saving user');
             } else {
                 console.error('Error saving user:', error);
-                this.showNotification('Error saving user', 'error');
+                showError('Error saving user');
             }
         } finally {
+            this.renderTable();
+            this.updateStats();
             this.hideLoading();
         }
     }
@@ -364,14 +409,18 @@ class AdminUsersManager {
 
             this.users = this.users.filter(u => u.id !== this.deletingUserId);
             this.filteredUsers = [...this.users];
+            this.hideDeleteModal();
+            showSuccess('User deleted successfully');
+        } catch (error) {
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error deleting user');
+            } else {
+                console.error('Error deleting user:', error);
+                showError('Error deleting user');
+            }
+        } finally {
             this.renderTable();
             this.updateStats();
-            this.hideDeleteModal();
-            this.showNotification('User deleted successfully', 'success');
-        } catch (error) {
-            console.error('Error deleting user:', error);
-            this.showNotification('Error deleting user', 'error');
-        } finally {
             this.hideLoading();
         }
     }
@@ -395,7 +444,7 @@ class AdminUsersManager {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
 
-        this.showNotification('Users exported successfully', 'success');
+        showSuccess('Users exported successfully');
     }
 
     generateCSV() {
@@ -422,30 +471,6 @@ class AdminUsersManager {
 
     hideLoading() {
         document.getElementById('loading-overlay')?.classList.remove('active');
-    }
-
-    showNotification(message, type = 'info') {
-        // Create a simple notification
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007bff'};
-            color: white;
-            border-radius: 4px;
-            z-index: 10000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        `;
-        notification.textContent = message;
-
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
     }
 
     delay(ms) {
@@ -504,7 +529,7 @@ class AdminUsersManager {
                 }, 2000);
             }
             if (showNotification) {
-                this.showNotification('Random password generated successfully', 'success');
+                showSuccess('Random password generated successfully');
             }
         }
     }

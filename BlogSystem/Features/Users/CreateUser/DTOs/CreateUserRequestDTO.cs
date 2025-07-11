@@ -9,7 +9,6 @@ namespace BlogSystem.Features.Users.CreateUser.DTOs
         public string FullName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Bio { get; set; } = string.Empty;
-        public string? ProfilePictureUrl { get; set; } = string.Empty;
         public UserRole? Role { get; set; }
     }
 }

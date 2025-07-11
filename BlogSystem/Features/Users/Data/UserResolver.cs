@@ -58,6 +58,30 @@ namespace BlogSystem.Features.Users.Data
             SaveUsers();
         }
 
+        public void UpdateUser(User user)
+        {
+            if (usernameCache.ContainsKey(user.Username.ToLowerInvariant()) && usernameCache[user.Username.ToLowerInvariant()] != user.Id)
+            {
+                throw new InvalidOperationException($"Username '{user.Username}' is already taken by another user.");
+            }
+
+            if (emailCache.ContainsKey(user.Email.ToLowerInvariant()) && emailCache[user.Email.ToLowerInvariant()] != user.Id)
+            {
+                throw new InvalidOperationException($"Email '{user.Email}' is already associated with another user.");
+            }
+
+            // Delete old entries from caches
+            usernameCache.Remove(idCache[user.Id][0].ToLowerInvariant());
+            emailCache.Remove(idCache[user.Id][1].ToLowerInvariant());
+
+            // Update caches with new values
+            usernameCache[user.Username.ToLowerInvariant()] = user.Id;
+            emailCache[user.Email.ToLowerInvariant()] = user.Id;
+            idCache[user.Id] = [user.Username.ToLowerInvariant(), user.Email.ToLowerInvariant()];
+
+            SaveUsers();
+        }
+
         private void SaveUsers()
         {
             var usersData = new UsersJson

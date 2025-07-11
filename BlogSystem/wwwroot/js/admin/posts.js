@@ -101,7 +101,7 @@ class AdminPostsManager {
         // Title to slug generation
         document.getElementById('post-title')?.addEventListener('input', (e) => {
             const slugField = document.getElementById('post-slug');
-            slugField.value = this.generateSlug(e.target.value);
+            slugField.value = generateSlug(e.target.value);
         });
 
         // Editor toolbar
@@ -408,14 +408,6 @@ class AdminPostsManager {
     hidePostModal() {
         document.getElementById('post-modal')?.classList.remove('active');
         this.editingPostId = null;
-    }
-
-    generateSlug(title) {
-        return title.toLowerCase()
-            .replace(/[^a-z0-9 -]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-')
-            .trim();
     }
 
     handleEditorAction(action) {

@@ -103,3 +103,19 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .admin-navbar {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+
+        .admin-nav-links {
+            order: 3;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    }
+
+}
