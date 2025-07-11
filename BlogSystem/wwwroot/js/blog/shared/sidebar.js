@@ -1,4 +1,4 @@
-async function loadAllTags() {
+async function loadSidebarTags() {
     const tagsContainer = document.getElementById("tags-cloud");
 
     // Fetch and load the tags
@@ -14,7 +14,7 @@ async function loadAllTags() {
     });
 }
 
-async function loadAllCategories() {
+async function loadSidebarCategories() {
     const categoriesContainer = document.getElementById("category-list");
 
     // Fetch and load the categories

@@ -68,7 +68,7 @@ class AdminLogin {
                 // Redirect to dashboard after success message
                 setTimeout(() => {
                     window.location.href = '/admin/posts.html'; // Redirect to posts page
-                }, 1500);
+                }, 200);
             } else {
                 showError(result.message || 'Invalid credentials');
             }

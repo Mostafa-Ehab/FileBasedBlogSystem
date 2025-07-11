@@ -2,12 +2,13 @@ async function loadSliderContent() {
     const postSlider = document.getElementById("post-slider");
 
     // Fetch and load the slider content
-    const response = await fetch("/api/posts/all");
+    const response = await fetch("/api/posts");
     const data = await response.json();
 
     data.forEach((post) => {
         const postCard = document.createElement("article");
         postCard.classList.add("slider-post-card");
+        postCard.classList.add("post-card");
         postCard.innerHTML = `
                     <div class="post-image">
                         <img src="${post.imageUrl}" alt="${post.title}">
@@ -42,7 +43,7 @@ async function loadMainContent() {
     const mainContent = document.getElementById("posts-section");
 
     // Fetch and load the main content
-    const response = await fetch("/api/posts/all");
+    const response = await fetch("/api/posts");
     const data = await response.json();
 
     data.forEach((post) => {
@@ -82,8 +83,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             initOwlCarousel();
         });
     loadMainContent();
-    loadAllCategories();
-    loadAllTags();
+    loadSidebarTags();
+    loadSidebarCategories();
 });
 
 
