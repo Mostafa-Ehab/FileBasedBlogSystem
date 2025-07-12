@@ -28,15 +28,10 @@ public class AuthHelper
     {
         return BC.EnhancedVerify(password, hashedPassword);
     }
-  
+
     public string HashPassword(string password)
     {
         return BC.EnhancedHashPassword(password, _hashWorkFactor);
-    }
-
-    public bool ValidatePassword(string password, string hashedPassword)
-    {
-        return BC.EnhancedVerify(password, hashedPassword);
     }
 
     // Generate JWT Token
