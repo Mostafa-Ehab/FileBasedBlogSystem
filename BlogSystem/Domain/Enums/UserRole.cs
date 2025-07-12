@@ -1,9 +1,8 @@
-namespace BlogSystem.Domain.Enums
+namespace BlogSystem.Domain.Enums;
+
+public enum UserRole
 {
-    public enum UserRole
-    {
-        Admin,
-        Editor,
-        Author
-    }
+    Admin,
+    Editor,
+    Author
 }

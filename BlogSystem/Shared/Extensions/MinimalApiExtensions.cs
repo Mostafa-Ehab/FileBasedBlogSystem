@@ -1,70 +1,76 @@
-using BlogSystem.Features.Posts.Get;
-using BlogSystem.Features.Categories.GetCategory;
-using BlogSystem.Features.Tags.GetTag;
-using BlogSystem.Features.Users.Login;
-using BlogSystem.Features.Users.CreateUser;
-using BlogSystem.Features.Posts.Create;
-using BlogSystem.Features.Posts.UpdatePost;
 using BlogSystem.Features.Categories.CreateCategory;
-using BlogSystem.Features.Tags.CreateTag;
+using BlogSystem.Features.Categories.GetCategory;
+using BlogSystem.Features.Posts.GetPost;
+using BlogSystem.Features.Posts.PostManagement;
 using BlogSystem.Features.Posts.RSS;
-using BlogSystem.Features.Posts.SchedulePost;
+using BlogSystem.Features.Tags.CreateTag;
+using BlogSystem.Features.Tags.GetTag;
+using BlogSystem.Features.Users.CreateUser;
 using BlogSystem.Features.Users.GetUser;
+using BlogSystem.Features.Users.Login;
+using BlogSystem.Features.Users.UpdateUser;
 
-namespace BlogSystem.Shared.Extensions
+namespace BlogSystem.Shared.Extensions;
+
+public static class MinimalApiExtensions
 {
-    public static class MinimalApiExtensions
+    public static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder app)
     {
-        public static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder app)
-        {
-            app.MapGroup("/api/posts").MapPostEndpoints();
-            app.MapGroup("/api/categories").MapCategoryEndpoints();
-            app.MapGroup("/api/tags").MapTagEndpoints();
-            app.MapGroup("/api/users").MapUserEndpoints();
-            app.MapRSSEndpoint();
+        app.MapGroup("/api/posts").MapPostEndpoints();
+        app.MapGroup("/api/categories").MapCategoryEndpoints();
+        app.MapGroup("/api/tags").MapTagEndpoints();
+        app.MapGroup("/api/users").MapUserEndpoints();
+        app.MapGroup("/api/auth").MapAuthEndpoints();
+        app.MapRSSEndpoint();
 
-            return app;
-        }
+        return app;
+    }
 
-        private static IEndpointRouteBuilder MapPostEndpoints(this IEndpointRouteBuilder app)
-        {
-            app.MapGetPostEndpoint();
-            app.MapGetAllPostsEndpoint();
-            app.MapCreatePostEndpoint();
-            app.MapUpdatePostEndpoint();
-            app.MapSearchPostsEndpoint();
-            app.MapSchedulePostEndpoints();
+    private static IEndpointRouteBuilder MapPostEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGetPostEndpoint();
+        app.MapPostManagementEndpoints();
+        app.MapGetAllPostsEndpoint();
+        app.MapUpdatePostEndpoint();
+        app.MapDeletePostEndpoint();
 
-            return app;
-        }
+        return app;
+    }
 
-        private static IEndpointRouteBuilder MapCategoryEndpoints(this IEndpointRouteBuilder app)
-        {
-            app.MapGetAllCategoriesEndpoint();
-            app.MapGetCategoryEndpoint();
-            app.MapGetPostsByCategoryEndpoint();
-            app.MapCreateCategoryEndpoint();
+    private static IEndpointRouteBuilder MapCategoryEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGetAllCategoriesEndpoint();
+        app.MapGetCategoryEndpoint();
+        app.MapGetPostsByCategoryEndpoint();
+        app.MapCreateCategoryEndpoint();
 
-            return app;
-        }
+        return app;
+    }
 
-        private static IEndpointRouteBuilder MapTagEndpoints(this IEndpointRouteBuilder app)
-        {
-            app.MapGetAllTagsEndpoint();
-            app.MapGetTagEndpoint();
-            app.MapGetPostsByTagEndpoint();
-            app.MapCreateTagEndpoint();
+    private static IEndpointRouteBuilder MapTagEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGetAllTagsEndpoint();
+        app.MapGetTagEndpoint();
+        app.MapGetPostsByTagEndpoint();
+        app.MapCreateTagEndpoint();
 
-            return app;
-        }
+        return app;
+    }
 
-        public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
-        {
-            app.MapLoginEndpoint();
-            app.MapGetUserEndpoint();
-            app.MapCreateUserEndpoint();
+    public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapGetUserEndpoint();
+        app.MapGetMyProfileEndpoint();
+        app.MapCreateUserEndpoint();
+        app.MapUpdateUserEndpoints();
 
-            return app;
-        }
+        return app;
+    }
+
+    public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
+    {
+        app.MapLoginEndpoint();
+
+        return app;
     }
 }

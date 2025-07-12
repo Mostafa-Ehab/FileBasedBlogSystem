@@ -1,0 +1,31 @@
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+
+    &.active {
+        display: flex;
+    }
+
+    .loading-spinner {
+        text-align: center;
+        color: var(--primary-color);
+
+        i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin: 0;
+            font-weight: 500;
+        }
+    }
+}

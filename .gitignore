@@ -62,3 +62,5 @@ nunit-*.xml
 .vs/
 
 Content/
+
+dev-data/

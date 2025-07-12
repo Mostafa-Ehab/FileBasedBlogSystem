@@ -1,9 +1,8 @@
 using BlogSystem.Features.Users.Login.DTOs;
 
-namespace BlogSystem.Features.Users.Login
+namespace BlogSystem.Features.Users.Login;
+
+public interface ILoginHandler
 {
-    public interface ILoginHandler
-    {
-        Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO);
-    }
+    Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO);
 }

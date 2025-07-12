@@ -1,12 +1,13 @@
-﻿using BlogSystem.Domain.Entities;
-using BlogSystem.Features.Posts.GetPost.DTOs;
+﻿using BlogSystem.Features.Posts.GetPost.DTOs;
 
-namespace BlogSystem.Features.Posts.Get
+namespace BlogSystem.Features.Posts.GetPost;
+
+public interface IGetPostHandler
 {
-    public interface IGetPostHandler
-    {
-        Task<GetPostDTO> GetPostAsync(string slug);
-        Task<GetPostDTO[]> GetAllPostsAsync(int pageNumber, int pageSize);
-        Task<GetPostDTO[]> SearchPostsAsync(string searchTerm);
-    }
+    // Public Routes
+    Task<PublicPostDTO> GetPostAsync(string slug);
+    Task<PublicPostDTO[]> GetPublicPostsAsync(string? query = null);
+
+    // Editor Routes
+    Task<ManagedPostDTO[]> GetManagedPostsAsync(string userId);
 }

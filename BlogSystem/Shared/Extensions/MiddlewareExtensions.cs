@@ -1,12 +1,11 @@
 using BlogSystem.Shared.Middlewares;
 
-namespace BlogSystem.Shared.Extensions
+namespace BlogSystem.Shared.Extensions;
+
+public static class MiddlewareExtensions
 {
-    public static class MiddlewareExtensions
+    public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder app)
     {
-        public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder app)
-        {
-            return app.UseMiddleware<ExceptionHandlerMiddleware>();
-        }
+        return app.UseMiddleware<ExceptionHandlerMiddleware>();
     }
 }

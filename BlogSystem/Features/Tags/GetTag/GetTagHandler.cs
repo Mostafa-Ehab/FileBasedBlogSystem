@@ -1,45 +1,44 @@
 using BlogSystem.Domain.Entities;
-using BlogSystem.Features.Tags.Data;
 using BlogSystem.Features.Posts.Data;
+using BlogSystem.Features.Tags.Data;
 using BlogSystem.Shared.Exceptions.Tags;
 
-namespace BlogSystem.Features.Tags.GetTag
+namespace BlogSystem.Features.Tags.GetTag;
+
+public class GetTagHandler : IGetTagHandler
 {
-    public class GetTagHandler : IGetTagHandler
+    private readonly ITagRepository _tagRepository;
+    private readonly IPostRepository _postRepository;
+
+    public GetTagHandler(ITagRepository tagRepository, IPostRepository postRepository)
     {
-        private readonly ITagRepository _tagRepository;
-        private readonly IPostRepository _postRepository;
+        _tagRepository = tagRepository;
+        _postRepository = postRepository;
+    }
 
-        public GetTagHandler(ITagRepository tagRepository, IPostRepository postRepository)
+    public Task<Tag> GetTagAsync(string slug)
+    {
+        Tag? tag = _tagRepository.GetTagBySlug(slug);
+        if (tag == null)
         {
-            _tagRepository = tagRepository;
-            _postRepository = postRepository;
+            throw new TagNotFoundException(slug);
         }
+        return Task.FromResult(tag);
+    }
 
-        public Task<Tag> GetTagAsync(string slug)
-        {
-            Tag? tag = _tagRepository.GetTagBySlug(slug);
-            if (tag == null)
-            {
-                throw new TagNotFoundException(slug);
-            }
-            return Task.FromResult(tag);
-        }
+    public Task<Tag[]> GetAllTagsAsync()
+    {
+        Tag[] tags = _tagRepository.GetAllTags();
+        return Task.FromResult(tags);
+    }
 
-        public Task<Tag[]> GetAllTagsAsync()
+    public Task<Post[]> GetPostsByTagAsync(string tagSlug)
+    {
+        Post[] posts = _postRepository.GetPostsByTag(tagSlug);
+        if (posts == null || posts.Length == 0)
         {
-            Tag[] tags = _tagRepository.GetAllTags();
-            return Task.FromResult(tags);
+            throw new TagNotFoundException(tagSlug);
         }
-
-        public Task<Post[]> GetPostsByTagAsync(string tagSlug)
-        {
-            Post[] posts = _postRepository.GetPostsByTag(tagSlug);
-            if (posts == null || posts.Length == 0)
-            {
-                throw new TagNotFoundException(tagSlug);
-            }
-            return Task.FromResult(posts);
-        }
+        return Task.FromResult(posts);
     }
 }

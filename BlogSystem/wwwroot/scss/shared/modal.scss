@@ -1,0 +1,100 @@
+.admin-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    &.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: var(--background-color);
+        border-radius: var(--border-radius);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow: hidden;
+
+        &.small {
+            max-width: 400px;
+        }
+
+        &.large {
+            max-width: 900px;
+            width: 95%;
+            max-height: 95vh;
+        }
+    }
+
+    .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color-light);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h3 {
+            margin: 0;
+            color: var(--text-color);
+        }
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: var(--background-light);
+            color: var(--text-color);
+        }
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-color-light);
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .admin-modal {
+        .modal-content {
+            width: 95%;
+            margin: 1rem;
+
+            &.large {
+                width: 98%;
+                margin: 1%;
+                max-height: 98vh;
+            }
+        }
+    }
+}

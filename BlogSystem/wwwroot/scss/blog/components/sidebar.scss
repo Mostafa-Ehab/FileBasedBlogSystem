@@ -1,0 +1,93 @@
+.sidebar {
+
+    // General styles for the sidebar
+    .sidebar-widget {
+        background: var(--background-color, white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .sidebar-widget-header {
+        background: var(--background-light, #f8f9fa);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color, #dee2e6);
+    }
+
+    .sidebar-widget-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--text-color, #333);
+    }
+
+    .sidebar-widget-content {
+        padding: 1.5rem;
+    }
+
+    // Tags Cloud Styles
+    .tags-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .tag-pill {
+        background: var(--background-light, #f8f9fa);
+        color: var(--text-muted, #6c757d);
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius-pill, 25px);
+        font-size: 0.875rem;
+        text-decoration: none;
+        border: 1px solid var(--border-color, #dee2e6);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+
+        &:hover {
+            background: var(--accent-color);
+            color: var(--text-color);
+            border-color: var(--text-muted);
+            transform: translateY(-1px);
+        }
+    }
+
+    // Categories List Styles
+    .category-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .category-item {
+        border-bottom: 1px solid var(--border-color-light, #f1f3f4);
+        padding: 0.75rem 0;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .category-link {
+        color: var(--text-color, #333);
+        text-decoration: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: var(--secondary-color, #007bff);
+            text-decoration: none;
+        }
+    }
+
+    .category-count {
+        background: var(--background-muted, #e9ecef);
+        color: var(--text-muted, #6c757d);
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--border-radius-small, 12px);
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+}

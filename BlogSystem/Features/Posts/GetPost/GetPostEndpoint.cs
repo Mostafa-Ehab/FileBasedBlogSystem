@@ -1,44 +1,43 @@
 ﻿using BlogSystem.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
-namespace BlogSystem.Features.Posts.Get
+namespace BlogSystem.Features.Posts.GetPost;
+
+public static class GetPostEndpoint
 {
-    public static class GetPostEndpoint
+    public static void MapGetPostEndpoint(this IEndpointRouteBuilder app)
     {
-        public static void MapGetPostEndpoint(this IEndpointRouteBuilder app)
+        app.MapGet("/{slug}", async (string slug, IGetPostHandler handler) =>
         {
-            app.MapGet("/p/{slug}", async (string slug, IGetPostHandler handler) =>
-            {
-                var post = await handler.GetPostAsync(slug);
-                return Results.Ok(post);
-            })
-            .WithName("GetPostBySlug")
-            .WithTags("Posts")
-            .Produces<Post>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound);
-        }
+            var post = await handler.GetPostAsync(slug);
+            return Results.Ok(post);
+        })
+        .WithName("GetPostBySlug")
+        .WithTags("Posts")
+        .Produces<Post>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound);
+    }
 
-        public static void MapGetAllPostsEndpoint(this IEndpointRouteBuilder app)
+    public static void MapGetAllPostsEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapGet("/", async (IGetPostHandler handler, ClaimsPrincipal user, [FromQuery] string? query) =>
         {
-            app.MapGet("/all", async (IGetPostHandler handler, int pageNumber = 1, int pageSize = 10) =>
+            var userId = user.FindFirstValue("Id");
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                var posts = await handler.GetAllPostsAsync(pageNumber, pageSize);
+                var posts = await handler.GetPublicPostsAsync(query);
                 return Results.Ok(posts);
-            })
-            .WithName("GetAllPosts")
-            .WithTags("Posts")
-            .Produces<Post[]>(StatusCodes.Status200OK);
-        }
+            }
+            else
+            {
+                var posts = await handler.GetManagedPostsAsync(userId);
+                return Results.Ok(posts);
+            }
 
-        public static void MapSearchPostsEndpoint(this IEndpointRouteBuilder app)
-        {
-            app.MapGet("/search", async (IGetPostHandler handler, string query) =>
-            {
-                var posts = await handler.SearchPostsAsync(query);
-                return Results.Ok(posts);
-            })
-            .WithName("SearchPosts")
-            .WithTags("Posts")
-            .Produces<Post[]>(StatusCodes.Status200OK);
-        }
+        })
+        .WithName("GetAllPosts")
+        .WithTags("Posts")
+        .Produces<Post[]>(StatusCodes.Status200OK);
     }
 }

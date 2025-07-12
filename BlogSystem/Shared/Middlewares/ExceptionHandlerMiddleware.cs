@@ -1,93 +1,92 @@
+using BlogSystem.Shared.Exceptions;
 using System.Net;
 using System.Text.Json;
-using BlogSystem.Shared.Exceptions;
 
-namespace BlogSystem.Shared.Middlewares
+namespace BlogSystem.Shared.Middlewares;
+
+public class ExceptionHandlerMiddleware
 {
-    public class ExceptionHandlerMiddleware
+    private readonly RequestDelegate _next;
+    private readonly ILogger<ExceptionHandlerMiddleware> _logger;
+
+    public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
+        _next = next;
+        _logger = logger;
+    }
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = logger;
+            await _next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (ApplicationCustomException ex)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (ApplicationCustomException ex)
-            {
-                await HandleCustomExceptionAsync(context, ex);
-            }
-            catch (Exception ex)
-            {
-                await HandleExceptionAsync(context, ex);
-            }
+            await HandleCustomExceptionAsync(context, ex);
         }
-
-        private async Task HandleCustomExceptionAsync(HttpContext context, ApplicationCustomException exception)
+        catch (Exception ex)
         {
-            _logger.LogError(exception, "An application custom exception occurred: {Message}", exception.Message);
-
-            var response = context.Response;
-            response.ContentType = "application/json";
-            response.StatusCode = exception.StatusCode;
-
-            var errorResponse = new
-            {
-                StatusCode = exception.StatusCode,
-                ErrorCode = exception.ErrorCode,
-                Message = exception.Message,
-                Timestamp = DateTime.UtcNow
-            };
-
-            await response.WriteAsync(
-                JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    WriteIndented = true
-                })
-            );
+            await HandleExceptionAsync(context, ex);
         }
+    }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleCustomExceptionAsync(HttpContext context, ApplicationCustomException exception)
+    {
+        _logger.LogError(exception, "An application custom exception occurred: {Message}", exception.Message);
+
+        var response = context.Response;
+        response.ContentType = "application/json";
+        response.StatusCode = exception.StatusCode;
+
+        var errorResponse = new
         {
-            _logger.LogError(exception, "An unhandled exception occurred: {Message}", exception.Message);
+            StatusCode = exception.StatusCode,
+            ErrorCode = exception.ErrorCode,
+            Message = exception.Message,
+            Timestamp = DateTime.UtcNow
+        };
 
-            var response = context.Response;
-            response.ContentType = "application/json";
-
-            var (statusCode, errorMessage) = exception switch
+        await response.WriteAsync(
+            JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
             {
-                KeyNotFoundException => (HttpStatusCode.NotFound, "Resource not found."),
-                UnauthorizedAccessException => (HttpStatusCode.Unauthorized, "Access denied."),
-                BadHttpRequestException => (HttpStatusCode.BadRequest, "Invalid request."),
-                ArgumentException => (HttpStatusCode.BadRequest, exception.Message),
-                _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
-            };
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            })
+        );
+    }
 
-            response.StatusCode = (int)statusCode;
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        _logger.LogError(exception, "An unhandled exception occurred: {Message}", exception.Message);
 
-            var errorResponse = new
+        var response = context.Response;
+        response.ContentType = "application/json";
+
+        var (statusCode, errorMessage) = exception switch
+        {
+            KeyNotFoundException => (HttpStatusCode.NotFound, "Resource not found."),
+            UnauthorizedAccessException => (HttpStatusCode.Unauthorized, "Access denied."),
+            BadHttpRequestException => (HttpStatusCode.BadRequest, "Invalid request."),
+            ArgumentException => (HttpStatusCode.BadRequest, exception.Message),
+            _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
+        };
+
+        response.StatusCode = (int)statusCode;
+
+        var errorResponse = new
+        {
+            StatusCode = statusCode,
+            Message = errorMessage,
+            Timestamp = DateTime.UtcNow
+        };
+
+        await response.WriteAsync(
+            JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
             {
-                StatusCode = statusCode,
-                Message = errorMessage,
-                Timestamp = DateTime.UtcNow
-            };
-
-            await response.WriteAsync(
-                JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    WriteIndented = true
-                })
-            );
-        }
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            })
+        );
     }
 }

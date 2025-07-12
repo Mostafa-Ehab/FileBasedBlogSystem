@@ -5,7 +5,7 @@
     "authorId": "john-smith",
     "createdAt": "2025-06-09T14:00:00Z",
     "updatedAt": "2025-06-09T14:00:00Z",
-    "isPublished": true,
+    "status": "Published",
     "tags": [
         "conclusion",
         "blog",

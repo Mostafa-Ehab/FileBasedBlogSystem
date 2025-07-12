@@ -1,21 +1,20 @@
-namespace BlogSystem.Infrastructure.MarkdownService
+namespace BlogSystem.Infrastructure.MarkdownService;
+
+public class MarkdownService
 {
-    public class MarkdownService
+    private readonly Markdig.MarkdownPipeline pipeline;
+    public MarkdownService()
     {
-        private readonly Markdig.MarkdownPipeline pipeline;
-        public MarkdownService()
+        pipeline = new Markdig.MarkdownPipelineBuilder().Build();
+    }
+
+    public string RenderMarkdown(string markdown)
+    {
+        if (string.IsNullOrWhiteSpace(markdown))
         {
-            pipeline = new Markdig.MarkdownPipelineBuilder().Build();
+            return string.Empty;
         }
 
-        public string RenderMarkdown(string markdown)
-        {
-            if (string.IsNullOrWhiteSpace(markdown))
-            {
-                return string.Empty;
-            }
-
-            return Markdig.Markdown.ToHtml(markdown, pipeline);
-        }
+        return Markdig.Markdown.ToHtml(markdown, pipeline);
     }
 }

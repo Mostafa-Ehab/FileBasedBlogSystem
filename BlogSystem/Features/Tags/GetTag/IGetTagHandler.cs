@@ -1,11 +1,10 @@
 using BlogSystem.Domain.Entities;
 
-namespace BlogSystem.Features.Tags.GetTag
+namespace BlogSystem.Features.Tags.GetTag;
+
+public interface IGetTagHandler
 {
-    public interface IGetTagHandler
-    {
-        Task<Tag> GetTagAsync(string slug);
-        Task<Tag[]> GetAllTagsAsync();
-        Task<Post[]> GetPostsByTagAsync(string tagSlug);
-    }
+    Task<Tag> GetTagAsync(string slug);
+    Task<Tag[]> GetAllTagsAsync();
+    Task<Post[]> GetPostsByTagAsync(string tagSlug);
 }
