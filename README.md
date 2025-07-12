@@ -8,29 +8,63 @@
 
 ## ✨ Features
 
+### User Roles and Permissions
+
+The system supports role-based access control with four distinct user roles:
+
+- Admin
+- Editor
+- Author
+- Viewer
+
+Each role has specific permissions to manage blog posts, users, and access the admin panel. The default role is **Viewer**, which allows reading published posts.
+
+### Post Management
+
+- Create, read, update, and delete Markdown-based blog posts.
+- Supports image serving from `/Content/posts/*/assets/` using [ImageSharp.Web](https://github.com/SixLabors/ImageSharp.Web).
+- Scheduled publishing using [Hangfire](https://www.hangfire.io/) with in-memory storage (non-persistent).
+- Generate an RSS 2.0 feed for published posts via `/rss`.
+- Save as draft or publish immediately.
+
+### Tag and Category Management
+
+- Assign and organize posts by tags and categories for better filtering and navigation.
+
+---
+
+### Admin Role
+
 - **Post Management**
-  Create, read, update, and schedule Markdown-based blog posts.
+  Create, read, update, and delete any Markdown-based blog posts.
+- **User Management**
+  Create, read and update users with role-based access control.
 
-- **Image Serving**
-  Serve images from `/Content/posts/*/assets/` using [ImageSharp.Web](https://github.com/SixLabors/ImageSharp.Web) with caching support.
+### Editor Role
 
-- **RSS Feed**
-  Generate an RSS 2.0 feed for published posts via `/posts/rss`.
+- **Post Management**
+  Create, read, update, and delete any Markdown-based blog posts.
 
-- **Scheduled Publishing**
-  Uses [Hangfire](https://www.hangfire.io/) with in-memory storage to publish posts at scheduled times (non-persistent).
+### Author Role
 
-- **Search**
-  Perform keyword-based search on post content and tags using regular expressions.
+- **Post Management**
+  Create, read, update, and delete their own Markdown-based blog posts.
 
-- **Tags & Categories**
-  Assign and organize posts by tags and categories for better filtering and navigation.
+### Viewer Role (default role)
 
-- **User Authentication**
-  Basic user registration, login, and role-based route protection.
+- **Post Viewing**
+  Read and view published Markdown-based blog posts.
+- **Tag and Category Browsing**
+  View posts filtered by tags and categories.
 
-- **Static Frontend**
-  A simple HTML/CSS/JS frontend served from `/wwwroot`.
+---
+
+## 🚀 Future Enhancements
+
+- A separate page for managing tags and categories.
+- Implement server side pagination for admin panel instead of client-side pagination.
+- Implement paginations for the viewing public posts.
+- Implement search functionality for posts, tags, and categories.
 
 ---
 
@@ -46,8 +80,8 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Mostafa-Ehab/BlogSystem.git
-cd BlogSystem
+git clone https://github.com/Mostafa-Ehab/FileBasedBlogSystem.git
+cd FileBasedBlogSystem
 ```
 
 ### 2. Configure JWT Secret
@@ -75,7 +109,7 @@ Create the `secrets.json` file with the following content:
 **Alternative method using .NET CLI**:
 
 ```bash
-cd BlogSystem
+cd FileBasedBlogSystem
 dotnet user-secrets set "JWT_SecretKey" "your-super-secret-jwt-key-here-make-it-long-and-secure"
 ```
 
@@ -85,10 +119,18 @@ dotnet user-secrets set "JWT_SecretKey" "your-super-secret-jwt-key-here-make-it-
 dotnet restore
 ```
 
-### 4. Run the Application
+### 4. Seed the Database with Initial Data
+
+The application uses a file-based approach for posts, tags, and categories. To seed initial data, run the following command:
 
 ```bash
-dotnet run --project BlogSystem/BlogSystem.csproj
+dotnet run --project DevTools -- seed
+```
+
+### 5. Run the Application
+
+```bash
+dotnet run --project BlogSystem
 ```
 
 > ⚠️ **Note**: Hangfire uses in-memory storage. Scheduled jobs will be cleared on application restart.
@@ -101,16 +143,20 @@ dotnet run --project BlogSystem/BlogSystem.csproj
 
 - Frontend: [http://localhost:5000](http://localhost:5000)
 
-### API Endpoints
+### Admin Login
 
-| Method | Endpoint                          | Description                                 |
-|--------|------------------------------------|---------------------------------------------|
-| GET    | `/`                                | Serves the static frontend.                 |
-| GET    | `/posts/rss`                       | Returns the RSS feed.                       |
-| POST   | `/posts/{slug}/schedule`           | Schedule a post *(auth required)*.      |
-| GET    | `/search?q={query}`                | Search posts and tags by keyword.           |
-| GET    | `/images/posts/{slug}/{image}`     | Serve images embedded in posts.             |
-| POST   | `/users/login`                     | Log in an existing user.                    |
+- Admin Panel: [http://localhost:5000/admin](http://localhost:5000/admin/login.html)
+
+To log in to the admin panel, use the following credentials:
+
+- Admin Role:
+  - **Username**: `john-doe`
+  - **Password**: `password123`
+- Author Role:
+  - **Username**: `jane-doe`
+  - **Password**: `password123`
+
+> No Editors created by default. You can create them via the admin panel.
 
 ---
 
@@ -120,14 +166,12 @@ dotnet run --project BlogSystem/BlogSystem.csproj
 /Content/                  → Markdown content and post assets
 /Domain/
 ├── Entities/              → Core domain models (Post, User, etc.)
-├── Enums/                 → Domain enums (roles, status, etc.)
+└── Enums/                 → Domain enums (roles, status, etc.)
 
 /Features/                 → Organized per feature (Vertical Slice)
 ├── Posts/
-│   ├── CreatePost/
+│   ├── PostManagement/
 │   ├── GetPost/
-│   ├── UpdatePost/
-│   ├── SchedulePost/
 │   ├── RSS/
 │   └── Data/
 ├── Tags/
@@ -140,6 +184,8 @@ dotnet run --project BlogSystem/BlogSystem.csproj
 │   └── Data/
 └── Users/
     ├── CreateUser/
+    ├── UpdateUser/
+    ├── GetUser/
     ├── Login/
     └── Data/
 
@@ -152,25 +198,29 @@ dotnet run --project BlogSystem/BlogSystem.csproj
 ├── Exceptions/            → Custom exception handling
 ├── Extensions/            → Extension methods
 ├── Helpers/               → Utility classes
-├── Mappings/              → AutoMapper profiles
+├── Mappings/              → Exctension methods for mapping
 └── Middlewares/           → Middleware components
 
 /wwwroot/
+├── admin/                 → Admin panel static files
+│   ├── index.html          → Admin dashboard
+│   ├── logout.html         → Admin logout page
+│   ├── login.html          → Admin login page
+│   ├── posts.html          → Admin posts management page
+│   ├── tags.html           → Admin tags management page
+│   └── users.html          → Admin users management page
+├── images/                → Image assets
+├── scss/                  → SCSS files
+├── css/                   → Compiled CSS files
+├── js/                    → JavaScript files
+│   ├── blog/                → Blog-specific scripts
+│   ├── admin/               → Admin panel scripts
+│   └── shared/              → Shared scripts
 ├── index.html             → Homepage
 ├── post.html              → Single post template
 ├── tag.html               → Tag-based listing
-├── category.html          → Category-based listing
-└── css/, js/, images/     → Static assets
+└── category.html          → Category-based listing
 ```
-
----
-
-## 🔧 Configuration
-
-- **JWT Authentication**: Configure the `JWT_SecretKey` in user secrets as described in the Getting Started section
-- **ImageSharp.Web**: Configured in `Program.cs` for image caching and secure path handling
-- **Hangfire**: Uses `InMemoryStorage` by default. For production, consider switching to a persistent provider (e.g., SQL Server)
-- **AutoMapper**: Profiles are defined under `/Shared/Mappings/`.
 
 ---
 
