@@ -53,7 +53,7 @@ async function loadMainContent() {
                     <img src="${post.imageUrl}" alt="${post.title}" class="post-card-image">
                     <div class="post-card-content">
                         <h2>
-                            <a href="#" class="post-card-title">
+                            <a href="/post.html?id=${post.slug}" class="post-card-title">
                                 ${post.title}
                             </a>
                         </h2>

@@ -1,20 +1,20 @@
-/* Tag Header */
-.tag-header {
-    background-color: var(--secondary-color);
+/* Category Header */
+.category-header {
+    background: var(--primary-color);
     color: white;
     padding: 3rem 0;
     margin-bottom: 2rem;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 
-    .tag-info {
+    .category-info {
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 1rem;
         text-align: center;
     }
 
-    .tag-title {
+    .category-title {
         font-size: 2.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
@@ -28,7 +28,7 @@
         }
     }
 
-    .tag-description {
+    .category-description {
         font-size: 1.25rem;
         opacity: 0.9;
         margin-bottom: 1.5rem;
@@ -38,7 +38,7 @@
         line-height: 1.6;
     }
 
-    .tag-meta {
+    .category-meta {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -52,13 +52,12 @@
     }
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
-    .tag-header {
+    .category-header {
         padding: 2rem 0;
         margin-bottom: 1.5rem;
 
-        .tag-title {
+        .category-title {
             font-size: 2rem;
             flex-direction: column;
             gap: 0.5rem;
@@ -68,11 +67,11 @@
             }
         }
 
-        .tag-description {
+        .category-description {
             font-size: 1rem;
         }
 
-        .tag-meta {
+        .category-meta {
             flex-direction: column;
             gap: 0.5rem;
         }
@@ -80,10 +79,12 @@
 }
 
 @media (max-width: 480px) {
-    .tag-title {
-        font-size: 1.75rem;
+    .category-header {
+        .category-title {
+            font-size: 1.75rem;
+        }
 
-        .tag-description {
+        .category-description {
             font-size: 0.9rem;
         }
     }

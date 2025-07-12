@@ -75,6 +75,6 @@ async function loadCategoryPosts() {
 document.addEventListener('DOMContentLoaded', () => {
     loadCategory();
     loadCategoryPosts();
-    loadAllCategories();
-    loadAllTags();
+    loadSidebarCategories();
+    loadSidebarTags();
 });

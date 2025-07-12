@@ -178,6 +178,12 @@ class AdminNavbarController {
                 avatar.alt = user.fullName || 'User';
             }
         });
+
+        // Update user role
+        const userRoleElement = document.querySelector('.admin-badge');
+        if (userRoleElement) {
+            userRoleElement.textContent = user.role || 'User';
+        }
     }
 
     setupEventListeners() {

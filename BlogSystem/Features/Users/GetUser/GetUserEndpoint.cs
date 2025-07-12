@@ -12,7 +12,7 @@ public static class GetUserEndpoint
             var response = await getUserHandler.GetAllUsers();
             return Results.Ok(response);
         })
-        .RequireAuthorization("Admin")
+        .RequireAuthorization("Editor")
         .WithName("GetAllUsers")
         .WithTags("Users")
         .Produces<GetUserDTO[]>(StatusCodes.Status200OK);

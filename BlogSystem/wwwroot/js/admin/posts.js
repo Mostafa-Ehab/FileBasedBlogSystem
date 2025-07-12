@@ -285,7 +285,7 @@ class AdminPostsManager {
                 </td>
                 <td>${new Date(post.createdAt).toLocaleDateString()}</td>
                 <td>
-                    <span class="views-count">${post.views}</span>
+                    <span class="views-count">${post.views || 0}</span>
                 </td>
                 <td>
                     <div class="action-buttons">
