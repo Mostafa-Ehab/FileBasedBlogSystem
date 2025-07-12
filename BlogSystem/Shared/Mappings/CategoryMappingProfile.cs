@@ -1,5 +1,4 @@
 using BlogSystem.Domain.Entities;
-using BlogSystem.Features.Categories.CreateCategory.DTOs;
 using BlogSystem.Features.Categories.GetCategory.DTOs;
 
 namespace BlogSystem.Shared.Mappings;

@@ -1,7 +1,7 @@
-using System.ServiceModel.Syndication;
-using System.Xml;
 using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Posts.Data;
+using System.ServiceModel.Syndication;
+using System.Xml;
 
 namespace BlogSystem.Features.Posts.RSS;
 

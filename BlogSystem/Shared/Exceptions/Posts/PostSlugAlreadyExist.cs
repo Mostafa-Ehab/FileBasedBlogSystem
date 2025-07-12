@@ -1,5 +1,3 @@
-using System;
-
 namespace BlogSystem.Shared.Exceptions.Posts;
 
 public class PostSlugAlreadyExistException : ApplicationCustomException

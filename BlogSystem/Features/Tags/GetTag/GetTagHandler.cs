@@ -1,6 +1,6 @@
 using BlogSystem.Domain.Entities;
-using BlogSystem.Features.Tags.Data;
 using BlogSystem.Features.Posts.Data;
+using BlogSystem.Features.Tags.Data;
 using BlogSystem.Shared.Exceptions.Tags;
 
 namespace BlogSystem.Features.Tags.GetTag;

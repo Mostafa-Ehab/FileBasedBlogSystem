@@ -1,4 +1,3 @@
-using BlogSystem.Domain.Entities;
 using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.UpdateUser.DTOs;

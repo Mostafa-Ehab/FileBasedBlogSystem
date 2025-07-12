@@ -1,6 +1,5 @@
-using FluentValidation;
 using BlogSystem.Features.Tags.CreateTag.DTOs;
-using BlogSystem.Features.Tags.Data;
+using FluentValidation;
 
 namespace BlogSystem.Features.Tags.CreateTag.Validators;
 

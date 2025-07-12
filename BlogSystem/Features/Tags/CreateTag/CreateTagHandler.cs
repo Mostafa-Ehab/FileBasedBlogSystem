@@ -1,6 +1,5 @@
 using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Tags.CreateTag.DTOs;
-using BlogSystem.Features.Tags.CreateTag.Validators;
 using BlogSystem.Features.Tags.Data;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Helpers;

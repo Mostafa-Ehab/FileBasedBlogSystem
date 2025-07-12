@@ -1,7 +1,5 @@
-using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.Login.DTOs;
 using BlogSystem.Shared.Exceptions.Users;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Users.Login;
 

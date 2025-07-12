@@ -1,6 +1,6 @@
-using FluentValidation;
 using BlogSystem.Features.Users.CreateUser.DTOs;
 using BlogSystem.Shared.Helpers;
+using FluentValidation;
 
 namespace BlogSystem.Features.Users.CreateUser.Validators;
 

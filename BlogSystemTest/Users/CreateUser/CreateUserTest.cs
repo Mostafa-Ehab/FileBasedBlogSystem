@@ -1,10 +1,7 @@
 using BlogSystem.Domain.Enums;
-using BlogSystem.Features.Users.CreateUser;
 using BlogSystem.Features.Users.CreateUser.DTOs;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Users;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Users.CreateUser;
 

@@ -1,7 +1,3 @@
-using System.Text.Json;
-using BlogSystem.Features.Categories.Data;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace BlogSystemTest.Categories.Data;
 
 public class GetAllCategoriesTest : UnitTestBase

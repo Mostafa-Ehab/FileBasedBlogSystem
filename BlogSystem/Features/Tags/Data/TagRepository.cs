@@ -1,5 +1,5 @@
-using System.Text.Json;
 using BlogSystem.Domain.Entities;
+using System.Text.Json;
 
 namespace BlogSystem.Features.Tags.Data;
 

@@ -1,5 +1,4 @@
 using BlogSystem.Domain.Entities;
-using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Tags.Data;
@@ -7,7 +6,6 @@ using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Infrastructure.Scheduling;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Categories;
-using BlogSystem.Shared.Exceptions.Posts;
 using BlogSystem.Shared.Exceptions.Tags;
 
 namespace BlogSystem.Features.Posts.PostManagement.States;

@@ -1,14 +1,14 @@
-using BlogSystem.Features.Categories.GetCategory;
-using BlogSystem.Features.Tags.GetTag;
-using BlogSystem.Features.Users.Login;
-using BlogSystem.Features.Users.CreateUser;
 using BlogSystem.Features.Categories.CreateCategory;
-using BlogSystem.Features.Tags.CreateTag;
-using BlogSystem.Features.Posts.RSS;
-using BlogSystem.Features.Users.GetUser;
-using BlogSystem.Features.Posts.PostManagement;
-using BlogSystem.Features.Users.UpdateUser;
+using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Posts.GetPost;
+using BlogSystem.Features.Posts.PostManagement;
+using BlogSystem.Features.Posts.RSS;
+using BlogSystem.Features.Tags.CreateTag;
+using BlogSystem.Features.Tags.GetTag;
+using BlogSystem.Features.Users.CreateUser;
+using BlogSystem.Features.Users.GetUser;
+using BlogSystem.Features.Users.Login;
+using BlogSystem.Features.Users.UpdateUser;
 
 namespace BlogSystem.Shared.Extensions;
 

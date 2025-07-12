@@ -1,5 +1,5 @@
-using FluentValidation;
 using BlogSystem.Features.Users.Login.DTOs;
+using FluentValidation;
 
 namespace BlogSystem.Features.Users.Login.Validators;
 

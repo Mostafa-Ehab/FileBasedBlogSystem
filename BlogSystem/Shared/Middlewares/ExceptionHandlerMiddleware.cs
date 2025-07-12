@@ -1,6 +1,6 @@
+using BlogSystem.Shared.Exceptions;
 using System.Net;
 using System.Text.Json;
-using BlogSystem.Shared.Exceptions;
 
 namespace BlogSystem.Shared.Middlewares;
 

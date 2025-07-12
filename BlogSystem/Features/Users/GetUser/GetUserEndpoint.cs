@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using BlogSystem.Features.Users.GetUser.DTOs;
+﻿using BlogSystem.Features.Users.GetUser.DTOs;
+using System.Security.Claims;
 
 namespace BlogSystem.Features.Users.GetUser;
 

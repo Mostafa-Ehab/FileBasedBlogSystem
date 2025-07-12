@@ -1,5 +1,4 @@
 using BlogSystem.Domain.Entities;
-using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Tags.Data;

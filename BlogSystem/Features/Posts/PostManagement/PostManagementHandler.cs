@@ -4,7 +4,6 @@ using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.PostManagement.DTOs;
 using BlogSystem.Features.Posts.PostManagement.States;
 using BlogSystem.Features.Users.Data;
-using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Posts;
 using BlogSystem.Shared.Helpers;

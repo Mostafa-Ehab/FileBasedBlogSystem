@@ -1,6 +1,5 @@
-using FluentValidation;
 using BlogSystem.Features.Categories.CreateCategory.DTOs;
-using BlogSystem.Features.Categories.Data;
+using FluentValidation;
 
 namespace BlogSystem.Features.Categories.CreateCategory.Validators;
 

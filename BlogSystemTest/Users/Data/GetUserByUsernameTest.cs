@@ -1,4 +1,3 @@
-using BlogSystem.Features.Users.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BlogSystemTest.Users.Data;

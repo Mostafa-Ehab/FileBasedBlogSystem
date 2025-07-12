@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using BlogSystem.Features.Users.UpdateUser.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BlogSystem.Features.Users.UpdateUser;
 

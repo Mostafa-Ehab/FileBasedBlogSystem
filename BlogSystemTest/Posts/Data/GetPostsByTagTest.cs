@@ -1,7 +1,3 @@
-using System.Text.Json;
-using BlogSystem.Features.Posts.Data;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace BlogSystemTest.Posts.Data;
 
 public class GetPostsByTagTest : UnitTestBase

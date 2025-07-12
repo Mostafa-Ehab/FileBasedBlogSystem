@@ -1,6 +1,5 @@
 using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Categories.CreateCategory.DTOs;
-using BlogSystem.Features.Categories.CreateCategory.Validators;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Helpers;

@@ -1,4 +1,3 @@
-using System.Text.Json;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Users.CreateUser;
@@ -8,6 +7,7 @@ using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.Login.Validators;
 using BlogSystem.Shared.Helpers;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 public class UnitTestBase
 {

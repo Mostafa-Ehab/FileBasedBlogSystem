@@ -1,9 +1,8 @@
+using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Helpers;
+using Microsoft.Extensions.FileProviders;
 using SixLabors.ImageSharp.Web.Providers;
 using SixLabors.ImageSharp.Web.Resolvers;
-using Microsoft.Extensions.FileProviders;
-using BlogSystem.Shared.Exceptions;
-using SixLabors.ImageSharp;
 
 namespace BlogSystem.Infrastructure.ImageService;
 
