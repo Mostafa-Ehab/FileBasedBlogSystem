@@ -1,9 +1,8 @@
 using BlogSystem.Features.Users.CreateUser.DTOs;
 
-namespace BlogSystem.Features.Users.CreateUser
+namespace BlogSystem.Features.Users.CreateUser;
+
+public interface ICreateUserHandler
 {
-    public interface ICreateUserHandler
-    {
-        Task<CreatedUserDTO> CreateUserAsync(CreateUserRequestDTO createUserRequestDTO);
-    }
+    Task<CreatedUserDTO> CreateUserAsync(CreateUserRequestDTO createUserRequestDTO);
 }

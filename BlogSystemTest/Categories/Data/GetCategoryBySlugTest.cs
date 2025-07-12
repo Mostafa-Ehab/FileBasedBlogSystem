@@ -3,47 +3,46 @@ using BlogSystem.Features.Categories.Data;
 using BlogSystem.Shared.Exceptions.Categories;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BlogSystemTest.Categories.Data
+namespace BlogSystemTest.Categories.Data;
+
+public class GetCategoryBySlugTest : UnitTestBase
 {
-    public class GetCategoryBySlugTest : UnitTestBase
+    public GetCategoryBySlugTest()
     {
-        public GetCategoryBySlugTest()
-        {
-            SeedContent();
-        }
+        SeedContent();
+    }
 
-        [Fact]
-        public void GetCategoryBySlug_ShouldReturnCategory_WhenCategoryExists()
-        {
-            // Arrange
-            var categoryRepository = CreateCategoryRepository();
-            var slug = "updates";
-            var expectedName = "Updates";
-            var expectedDescription = "Latest updates and news from our team.";
-            var expectedPosts = new List<string> { "2025-06-09-second-post" };
+    [Fact]
+    public void GetCategoryBySlug_ShouldReturnCategory_WhenCategoryExists()
+    {
+        // Arrange
+        var categoryRepository = CreateCategoryRepository();
+        var slug = "updates";
+        var expectedName = "Updates";
+        var expectedDescription = "Latest updates and news from our team.";
+        var expectedPosts = new List<string> { "2025-06-09-second-post" };
 
-            // Act
-            var category = categoryRepository.GetCategoryBySlug(slug);
+        // Act
+        var category = categoryRepository.GetCategoryBySlug(slug);
 
-            // Assert
-            Assert.NotNull(category);
-            Assert.Equal(expectedName, category.Name);
-            Assert.Equal(expectedDescription, category.Description);
-            Assert.Equivalent(expectedPosts, category.Posts);
-        }
+        // Assert
+        Assert.NotNull(category);
+        Assert.Equal(expectedName, category.Name);
+        Assert.Equal(expectedDescription, category.Description);
+        Assert.Equivalent(expectedPosts, category.Posts);
+    }
 
-        [Fact]
-        public void GetCategoryBySlug_ShouldReturnNull_WhenCategoryDoesNotExist()
-        {
-            // Arrange
-            var categoryRepository = CreateCategoryRepository();
-            var slug = "non-existent-category";
+    [Fact]
+    public void GetCategoryBySlug_ShouldReturnNull_WhenCategoryDoesNotExist()
+    {
+        // Arrange
+        var categoryRepository = CreateCategoryRepository();
+        var slug = "non-existent-category";
 
-            // Act
-            var category = categoryRepository.GetCategoryBySlug(slug);
+        // Act
+        var category = categoryRepository.GetCategoryBySlug(slug);
 
-            // Assert
-            Assert.Null(category);
-        }
+        // Assert
+        Assert.Null(category);
     }
 }

@@ -2,31 +2,30 @@ using System.Text.Json;
 using BlogSystem.Features.Categories.Data;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BlogSystemTest.Categories.Data
+namespace BlogSystemTest.Categories.Data;
+
+public class GetAllCategoriesTest : UnitTestBase
 {
-    public class GetAllCategoriesTest : UnitTestBase
+    public GetAllCategoriesTest()
     {
-        public GetAllCategoriesTest()
-        {
-            SeedContent();
-        }
+        SeedContent();
+    }
 
-        [Fact]
-        public void GetAllCategories_ShouldReturnCategories_WhenCategoriesExist()
-        {
-            // Arrange
-            var categoryRepository = CreateCategoryRepository();
-            var expectedCategory = categoryRepository.GetCategoryBySlug("updates");
+    [Fact]
+    public void GetAllCategories_ShouldReturnCategories_WhenCategoriesExist()
+    {
+        // Arrange
+        var categoryRepository = CreateCategoryRepository();
+        var expectedCategory = categoryRepository.GetCategoryBySlug("updates");
 
-            // Act
-            var categories = categoryRepository.GetAllCategories();
+        // Act
+        var categories = categoryRepository.GetAllCategories();
 
-            // Assert
-            Assert.NotNull(categories);
-            Assert.Equal(3, categories.Length);
-            Assert.Contains(categories, c => c.Name == "Updates");
-            Assert.Contains(categories, c => c.Name == "Announcements");
-            Assert.Contains(categories, c => c.Name == "Final Thoughts");
-        }
+        // Assert
+        Assert.NotNull(categories);
+        Assert.Equal(3, categories.Length);
+        Assert.Contains(categories, c => c.Name == "Updates");
+        Assert.Contains(categories, c => c.Name == "Announcements");
+        Assert.Contains(categories, c => c.Name == "Final Thoughts");
     }
 }

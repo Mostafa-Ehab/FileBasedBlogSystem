@@ -1,8 +1,7 @@
-namespace BlogSystem.Infrastructure.Scheduling
+namespace BlogSystem.Infrastructure.Scheduling;
+
+public interface IScheduleService<T>
 {
-    public interface IScheduleService<T>
-    {
-        Task RunTaskAsync(T taskData);
-        void RunTask(T taskData);
-    }
+    Task RunTaskAsync(T taskData);
+    void RunTask(T taskData);
 }

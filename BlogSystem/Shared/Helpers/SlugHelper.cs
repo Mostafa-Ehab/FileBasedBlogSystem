@@ -1,47 +1,46 @@
 using System.Text.RegularExpressions;
 
-namespace BlogSystem.Shared.Helpers
+namespace BlogSystem.Shared.Helpers;
+
+public static class SlugHelper
 {
-    public static class SlugHelper
+    public static string GenerateSlug(string input, int maxLength = 20)
     {
-        public static string GenerateSlug(string input, int maxLength = 20)
+        if (string.IsNullOrWhiteSpace(input))
+            throw new ArgumentException("Input cannot be empty.", nameof(input));
+
+        // Remove special characters and convert to lowercase
+        var baseSlug = Regex.Replace(input.ToLowerInvariant(), "[^a-z0-9-]", "-")
+            .Trim('-');
+
+        // Truncate to maxLength
+        return baseSlug.Length > maxLength ? baseSlug[..maxLength] : baseSlug;
+    }
+
+    public static string GenerateUniqueSlug(string input, Func<string, bool> isTaken, int maxLength = 20)
+    {
+        var baseSlug = GenerateSlug(input, maxLength);
+        var uniqueSlug = baseSlug;
+        var counter = 1;
+        while (isTaken(uniqueSlug))
         {
-            if (string.IsNullOrWhiteSpace(input))
-                throw new ArgumentException("Input cannot be empty.", nameof(input));
-
-            // Remove special characters and convert to lowercase
-            var baseSlug = Regex.Replace(input.ToLowerInvariant(), "[^a-z0-9-]", "-")
-                .Trim('-');
-
-            // Truncate to maxLength
-            return baseSlug.Length > maxLength ? baseSlug[..maxLength] : baseSlug;
-        }
-
-        public static string GenerateUniqueSlug(string input, Func<string, bool> isTaken, int maxLength = 20)
-        {
-            var baseSlug = GenerateSlug(input, maxLength);
-            var uniqueSlug = baseSlug;
-            var counter = 1;
-            while (isTaken(uniqueSlug))
+            uniqueSlug = $"{baseSlug}{counter++}";
+            if (uniqueSlug.Length > maxLength)
             {
-                uniqueSlug = $"{baseSlug}{counter++}";
-                if (uniqueSlug.Length > maxLength)
-                {
-                    uniqueSlug = $"{uniqueSlug[..(maxLength - 1)]}{counter}";
-                }
+                uniqueSlug = $"{uniqueSlug[..(maxLength - 1)]}{counter}";
             }
-            return uniqueSlug;
         }
+        return uniqueSlug;
+    }
 
-        public static bool ValidateSlug(string slug)
-        {
-            if (string.IsNullOrWhiteSpace(slug))
-                return false;
+    public static bool ValidateSlug(string slug)
+    {
+        if (string.IsNullOrWhiteSpace(slug))
+            return false;
 
-            if (ValidationHelper.SlugRegex.IsMatch(slug) == false)
-                return false;
+        if (ValidationHelper.SlugRegex.IsMatch(slug) == false)
+            return false;
 
-            return true;
-        }
+        return true;
     }
 }

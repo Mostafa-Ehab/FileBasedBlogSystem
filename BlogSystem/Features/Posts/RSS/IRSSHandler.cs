@@ -1,7 +1,6 @@
-namespace BlogSystem.Features.Posts.RSS
+namespace BlogSystem.Features.Posts.RSS;
+
+public interface IRSSHandler
 {
-    public interface IRSSHandler
-    {
-        Task<string> GenerateRSSFeedAsync();
-    }
+    Task<string> GenerateRSSFeedAsync();
 }

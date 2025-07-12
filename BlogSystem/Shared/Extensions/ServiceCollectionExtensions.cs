@@ -8,7 +8,6 @@ using BlogSystem.Features.Categories.CreateCategory.Validators;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Posts.Data;
-using BlogSystem.Features.Posts.Get;
 using BlogSystem.Features.Posts.RSS;
 using BlogSystem.Features.Tags.CreateTag;
 using BlogSystem.Features.Tags.CreateTag.DTOs;
@@ -42,152 +41,152 @@ using BlogSystem.Features.Posts.PostManagement.States;
 using BlogSystem.Features.Users.UpdateUser.DTOs;
 using BlogSystem.Features.Users.UpdateUser.Validators;
 using BlogSystem.Features.Users.UpdateUser;
+using BlogSystem.Features.Posts.GetPost;
 
-namespace BlogSystem.Shared.Extensions
+namespace BlogSystem.Shared.Extensions;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        // Configure JSON serialization options
+        services.ConfigureHttpJsonOptions(options =>
         {
-            // Configure JSON serialization options
-            services.ConfigureHttpJsonOptions(options =>
-            {
-                options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
 
-            services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
+        services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
 
-            // Register Authentication Service
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
-                options =>
+        // Register Authentication Service
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+            options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes(services.BuildServiceProvider().GetRequiredService<IConfiguration>()["JWT_SecretKey"] ?? throw new InvalidOperationException("JWT_SecretKey is not configured"))
-                        ),
-                    };
-                });
-
-            // Configure Authorization
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
-                options.AddPolicy("Editor", policy => policy.RequireAssertion(context =>
-                    context.User.HasClaim(c => c.Type == "Role" && (c.Value == "Admin" || c.Value == "Editor"))));
-                options.AddPolicy("Author", policy => policy.RequireAssertion(context =>
-                    context.User.HasClaim(c => c.Type == "Role" && (c.Value == "Admin" || c.Value == "Editor" || c.Value == "Author"))));
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.ASCII.GetBytes(services.BuildServiceProvider().GetRequiredService<IConfiguration>()["JWT_SecretKey"] ?? throw new InvalidOperationException("JWT_SecretKey is not configured"))
+                    ),
+                };
             });
 
-            // Register ImageSharp services
-            services.AddImageSharp()
-                .AddProvider<PostImageProvider>()
-                .RemoveProvider<PhysicalFileSystemProvider>()
-                .AddProvider<PhysicalFileSystemProvider>()
-                .Configure<PhysicalFileSystemCacheOptions>(options =>
-                {
-                    options.CacheRootPath = Path.Combine("Content", "cache");
-                })
-                .Configure<ImageSharpMiddlewareOptions>(options =>
-                {
-                    options.OnPrepareResponseAsync = context =>
-                    {
-                        context.Response.Headers.CacheControl = "public, max-age=31536000"; // Cache for 1 year
-                        return Task.CompletedTask;
-                    };
-                });
+        // Configure Authorization
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
+            options.AddPolicy("Editor", policy => policy.RequireAssertion(context =>
+                context.User.HasClaim(c => c.Type == "Role" && (c.Value == "Admin" || c.Value == "Editor"))));
+            options.AddPolicy("Author", policy => policy.RequireAssertion(context =>
+                context.User.HasClaim(c => c.Type == "Role" && (c.Value == "Admin" || c.Value == "Editor" || c.Value == "Author"))));
+        });
 
-            // Register Hangfire for scheduling
-            services.AddHangfire(config =>
+        // Register ImageSharp services
+        services.AddImageSharp()
+            .AddProvider<PostImageProvider>()
+            .RemoveProvider<PhysicalFileSystemProvider>()
+            .AddProvider<PhysicalFileSystemProvider>()
+            .Configure<PhysicalFileSystemCacheOptions>(options =>
             {
-                config.UseMemoryStorage();
-            });
-            services.AddHangfireServer();
-
-            services.AddSingleton(new JsonSerializerOptions
+                options.CacheRootPath = Path.Combine("Content", "cache");
+            })
+            .Configure<ImageSharpMiddlewareOptions>(options =>
             {
-                PropertyNameCaseInsensitive = true,
-                IgnoreReadOnlyProperties = true,
-                Converters =
+                options.OnPrepareResponseAsync = context =>
                 {
-                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-                }
+                    context.Response.Headers.CacheControl = "public, max-age=31536000"; // Cache for 1 year
+                    return Task.CompletedTask;
+                };
             });
+
+        // Register Hangfire for scheduling
+        services.AddHangfire(config =>
+        {
+            config.UseMemoryStorage();
+        });
+        services.AddHangfireServer();
+
+        services.AddSingleton(new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            IgnoreReadOnlyProperties = true,
+            Converters =
+            {
+                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+            }
+        });
 
 #if DEBUG
-            services.AddSassCompiler();
+        services.AddSassCompiler();
 #endif
 
-            services.AddSingleton<AuthHelper>();
+        services.AddSingleton<AuthHelper>();
 
-            services.AddSingleton<SlugResolver>();
-            services.AddSingleton<UserResolver>();
+        services.AddSingleton<SlugResolver>();
+        services.AddSingleton<UserResolver>();
 
-            services.AddSingleton<MarkdownService>();
-            services.AddSingleton<PostImageProvider>();
-            services.AddSingleton<IScheduler, HangfireScheduler>();
+        services.AddSingleton<MarkdownService>();
+        services.AddSingleton<PostImageProvider>();
+        services.AddSingleton<IScheduler, HangfireScheduler>();
 
-            services.AddCategoryServices();
-            services.AddPostServices();
-            services.AddTagServices();
-            services.AddUserServices();
+        services.AddCategoryServices();
+        services.AddPostServices();
+        services.AddTagServices();
+        services.AddUserServices();
 
-            return services;
-        }
+        return services;
+    }
 
-        private static IServiceCollection AddPostServices(this IServiceCollection services)
-        {
-            services.AddScoped<IPostRepository, PostRepository>();
-            services.AddScoped<IGetPostHandler, GetPostHandler>();
-            services.AddScoped<IPostManagementHandler, PostManagementHandler>();
-            services.AddScoped<IRSSHandler, RSSHandler>();
-            services.AddScoped<PublishPostService>();
+    private static IServiceCollection AddPostServices(this IServiceCollection services)
+    {
+        services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<IGetPostHandler, GetPostHandler>();
+        services.AddScoped<IPostManagementHandler, PostManagementHandler>();
+        services.AddScoped<IRSSHandler, RSSHandler>();
+        services.AddScoped<PublishPostService>();
 
-            services.AddScoped<DraftState>();
-            services.AddScoped<ScheduledState>();
-            services.AddScoped<PublishedState>();
-            return services;
-        }
+        services.AddScoped<DraftState>();
+        services.AddScoped<ScheduledState>();
+        services.AddScoped<PublishedState>();
+        return services;
+    }
 
-        private static IServiceCollection AddCategoryServices(this IServiceCollection services)
-        {
-            services.AddScoped<IValidator<CreateCategoryRequestDTO>, CreateCategoryRequestValidator>();
+    private static IServiceCollection AddCategoryServices(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<CreateCategoryRequestDTO>, CreateCategoryRequestValidator>();
 
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IGetCategoryHandler, GetCategoryHandler>();
-            services.AddScoped<ICreateCategoryHandler, CreateCategoryHandler>();
-            return services;
-        }
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IGetCategoryHandler, GetCategoryHandler>();
+        services.AddScoped<ICreateCategoryHandler, CreateCategoryHandler>();
+        return services;
+    }
 
-        private static IServiceCollection AddTagServices(this IServiceCollection services)
-        {
-            services.AddScoped<IValidator<CreateTagRequestDTO>, CreateTagRequestValidator>();
+    private static IServiceCollection AddTagServices(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<CreateTagRequestDTO>, CreateTagRequestValidator>();
 
-            services.AddScoped<ITagRepository, TagRepository>();
-            services.AddScoped<IGetTagHandler, GetTagHandler>();
-            services.AddScoped<ICreateTagHandler, CreateTagHandler>();
-            return services;
-        }
+        services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<IGetTagHandler, GetTagHandler>();
+        services.AddScoped<ICreateTagHandler, CreateTagHandler>();
+        return services;
+    }
 
-        private static IServiceCollection AddUserServices(this IServiceCollection services)
-        {
-            services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
-            services.AddScoped<IValidator<CreateUserRequestDTO>, CreateUserRequestValidator>();
-            services.AddScoped<IValidator<UpdateUserRequestDTO>, UpdateUserRequestValidator>();
-            services.AddScoped<IValidator<UpdateProfileInfoRequestDTO>, UpdateProfileInfoRequestValidator>();
+    private static IServiceCollection AddUserServices(this IServiceCollection services)
+    {
+        services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
+        services.AddScoped<IValidator<CreateUserRequestDTO>, CreateUserRequestValidator>();
+        services.AddScoped<IValidator<UpdateUserRequestDTO>, UpdateUserRequestValidator>();
+        services.AddScoped<IValidator<UpdateProfileInfoRequestDTO>, UpdateProfileInfoRequestValidator>();
 
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ILoginHandler, LoginHandler>();
-            services.AddScoped<ICreateUserHandler, CreateUserHandler>();
-            services.AddScoped<IGetUserHandler, GetUserHandler>();
-            services.AddScoped<IUpdateUserHandler, UpdateUserHandler>();
-            return services;
-        }
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ILoginHandler, LoginHandler>();
+        services.AddScoped<ICreateUserHandler, CreateUserHandler>();
+        services.AddScoped<IGetUserHandler, GetUserHandler>();
+        services.AddScoped<IUpdateUserHandler, UpdateUserHandler>();
+        return services;
     }
 }

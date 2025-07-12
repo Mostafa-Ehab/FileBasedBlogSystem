@@ -6,35 +6,34 @@ using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Helpers;
 using FluentValidation;
 
-namespace BlogSystem.Features.Categories.CreateCategory
+namespace BlogSystem.Features.Categories.CreateCategory;
+
+public class CreateCategoryHandler : ICreateCategoryHandler
 {
-    public class CreateCategoryHandler : ICreateCategoryHandler
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IValidator<CreateCategoryRequestDTO> _validator;
+    public CreateCategoryHandler(ICategoryRepository categoryRepository, IValidator<CreateCategoryRequestDTO> validator)
     {
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IValidator<CreateCategoryRequestDTO> _validator;
-        public CreateCategoryHandler(ICategoryRepository categoryRepository, IValidator<CreateCategoryRequestDTO> validator)
+        _validator = validator;
+        _categoryRepository = categoryRepository;
+    }
+
+    public async Task<Category> CreateCategoryAsync(CreateCategoryRequestDTO category)
+    {
+        ValidationHelper.Validate(category, _validator);
+
+        var slug = SlugHelper.GenerateSlug(category.Name);
+        if (_categoryRepository.CategoryExists(slug))
         {
-            _validator = validator;
-            _categoryRepository = categoryRepository;
+            throw new ValidationErrorException($"Category with slug '{slug}' already exists.");
         }
 
-        public async Task<Category> CreateCategoryAsync(CreateCategoryRequestDTO category)
+        return await Task.FromResult(_categoryRepository.CreateCategory(new Category
         {
-            ValidationHelper.Validate(category, _validator);
-
-            var slug = SlugHelper.GenerateSlug(category.Name);
-            if (_categoryRepository.CategoryExists(slug))
-            {
-                throw new ValidationErrorException($"Category with slug '{slug}' already exists.");
-            }
-
-            return await Task.FromResult(_categoryRepository.CreateCategory(new Category
-            {
-                Name = category.Name,
-                Description = category.Description,
-                Slug = slug,
-                Posts = [],
-            }));
-        }
+            Name = category.Name,
+            Description = category.Description,
+            Slug = slug,
+            Posts = [],
+        }));
     }
 }

@@ -1,9 +1,8 @@
-namespace BlogSystem.Domain.Enums
+namespace BlogSystem.Domain.Enums;
+
+public enum PostStatus
 {
-    public enum PostStatus
-    {
-        Draft,
-        Scheduled,
-        Published
-    }
+    Draft,
+    Scheduled,
+    Published
 }
