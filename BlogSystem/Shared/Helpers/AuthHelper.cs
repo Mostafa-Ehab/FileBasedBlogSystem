@@ -21,6 +21,14 @@ public class AuthHelper
         _securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey));
     }
 
+    public static string HashPassword(string password, int workFactor = 10) =>
+        BC.EnhancedHashPassword(password, workFactor);
+
+    public bool ValidatePassword(string password, string hashedPassword)
+    {
+        return BC.EnhancedVerify(password, hashedPassword);
+    }
+  
     public string HashPassword(string password)
     {
         return BC.EnhancedHashPassword(password, _hashWorkFactor);
