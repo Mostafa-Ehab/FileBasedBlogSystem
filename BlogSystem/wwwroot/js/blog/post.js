@@ -6,7 +6,7 @@ async function loadPost() {
     }
 
     try {
-        const response = await fetch(`/api/posts/p/${postId}`);
+        const response = await fetch(`/api/posts/${postId}`);
         if (!response.ok) {
             throw new Error(`Error fetching post: ${response.statusText}`);
         }
@@ -32,7 +32,7 @@ function setArticleHeader(post) {
                     <span class="author-name">${post.author.fullName}</span>
                 </div>
                 <div class="post-meta-details">
-                    <span class="post-date">${formatReadableDate(post.createdAt)}</span>
+                    <span class="post-date">${formatReadableDate(post.publishedAt)}</span>
                     <span class="post-read-time">${estimateReadingTime(post.content)} min read</span>
                 </div>
             </div>
@@ -95,9 +95,9 @@ async function setRelatedPosts(postSlug, category) {
         <article class="related-post">
             <img src="${post.imageUrl}" alt="${post.title}" class="related-post-image">
             <div class="related-post-content">
-                <h4><a href="/post.html?id=${post.id}" class="related-post-title">${post.title}</a></h4>
+                <h4><a href="/post.html?id=${post.slug}" class="related-post-title">${post.title}</a></h4>
                 <div class="related-post-meta">
-                    <span class="related-post-date">${formatReadableDate(post.createdAt)}</span>
+                    <span class="related-post-date">${formatReadableDate(post.publishedAt)}</span>
                 </div>
             </div>
         </article>
@@ -106,5 +106,5 @@ async function setRelatedPosts(postSlug, category) {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadPost();
-    loadAllCategories();
+    loadSidebarCategories();
 });

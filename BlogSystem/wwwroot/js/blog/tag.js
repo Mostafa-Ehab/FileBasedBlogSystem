@@ -53,7 +53,7 @@ async function loadTagPosts() {
                         </a>
                     </h2>
                     <div class="post-card-meta">
-                        ${formatReadableDate(post.createdAt)} • ${estimateReadingTime(post.content)} min read
+                        ${formatReadableDate(post.publishedAt)} • ${estimateReadingTime(post.content)} min read
                     </div>
                     <p class="post-card-description">${post.description}</p>
                     <div class="post-card-tags">
@@ -75,6 +75,6 @@ async function loadTagPosts() {
 document.addEventListener('DOMContentLoaded', () => {
     loadTag();
     loadTagPosts();
-    loadAllCategories();
-    loadAllTags();
+    loadSidebarCategories();
+    loadSidebarTags();
 });
