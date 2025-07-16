@@ -1,5 +1,5 @@
 async function loadTag() {
-    const tag = new URLSearchParams(window.location.search).get('tag');
+    const tag = window.location.pathname.split('/').pop();
     if (!tag) {
         console.error('Tag is missing in the URL');
         return;
@@ -23,10 +23,11 @@ async function loadTag() {
             </div>
         </div>
     `;
+    document.title = `${data.name} - Tag`;
 }
 
 async function loadTagPosts() {
-    const tag = new URLSearchParams(window.location.search).get('tag');
+    const tag = window.location.pathname.split('/').pop();
     if (!tag) {
         console.error('Tag is missing in the URL');
         return;
@@ -48,7 +49,7 @@ async function loadTagPosts() {
                 <img src="${post.imageUrl}" alt="${post.title}" class="post-card-image">
                 <div class="post-card-content">
                     <h2>
-                        <a href="/post.html?id=${post.slug}" class="post-card-title">
+                        <a href="/posts/${post.slug}" class="post-card-title">
                             ${post.title}
                         </a>
                     </h2>
@@ -58,13 +59,13 @@ async function loadTagPosts() {
                     <p class="post-card-description">${post.description}</p>
                     <div class="post-card-tags">
                         ${post.tags.map(tag => `
-                            <a href="/tag.html?tag=${encodeURIComponent(tag)}" class="post-card-tag">
+                            <a href="/tags/${encodeURIComponent(tag)}" class="post-card-tag">
                                 ${tag}
                             </a>
                         `).join("")}
                     </div>
                     <div class="post-card-footer">
-                        <a href="/post.html?id=${post.slug}" class="read-more-btn">Read More →</a>
+                        <a href="/posts/${post.slug}" class="read-more-btn">Read More →</a>
                     </div>
                 </div>
         `;

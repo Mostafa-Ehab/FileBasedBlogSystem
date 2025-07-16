@@ -15,7 +15,7 @@ async function loadSliderContent() {
                     </div>
                     <div class="post-content">
                         <h2>
-                            <a href="/post.html?id=${post.slug}" class="post-card-title">
+                            <a href="/posts/${post.slug}" class="post-card-title">
                                 ${post.title}
                             </a>
                         </h2>
@@ -25,13 +25,13 @@ async function loadSliderContent() {
                         <p class="post-excerpt">${post.description}</p>
                         <div class="post-card-tags">
                             ${post.tags.map(tag => `
-                                <a href="/tag.html?tag=${encodeURIComponent(tag)}" class="post-card-tag">
+                                <a href="/tags/${encodeURIComponent(tag)}" class="post-card-tag">
                                     ${tag}
                                 </a>
                             `).join("")}
                         </div>
                         <div class="post-card-footer">
-                            <a href="/post.html?id=${post.slug}" class="read-more">Read More →</a>
+                            <a href="/posts/${post.slug}" class="read-more">Read More →</a>
                         </div>
                     </div>
                 `;
@@ -53,7 +53,7 @@ async function loadMainContent() {
                     <img src="${post.imageUrl}" alt="${post.title}" class="post-card-image">
                     <div class="post-card-content">
                         <h2>
-                            <a href="/post.html?id=${post.slug}" class="post-card-title">
+                            <a href="/posts/${post.slug}" class="post-card-title">
                                 ${post.title}
                             </a>
                         </h2>
@@ -63,13 +63,13 @@ async function loadMainContent() {
                         <p class="post-card-description">${post.description}</p>
                         <div class="post-card-tags">
                             ${post.tags.map(tag => `
-                                <a href="/tag.html?tag=${encodeURIComponent(tag)}" class="post-card-tag">
+                                <a href="/tags/${encodeURIComponent(tag)}" class="post-card-tag">
                                     ${tag}
                                 </a>
                             `).join("")}
                         </div>
                         <div class="post-card-footer">
-                            <a href="/post.html?id=${post.slug}" class="read-more-btn">Read More →</a>
+                            <a href="/posts/${post.slug}" class="read-more-btn">Read More →</a>
                         </div>
                     </div>
                 `;

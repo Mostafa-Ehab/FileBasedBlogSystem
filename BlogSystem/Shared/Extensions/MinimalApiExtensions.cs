@@ -22,6 +22,7 @@ public static class MinimalApiExtensions
         app.MapGroup("/api/users").MapUserEndpoints();
         app.MapGroup("/api/auth").MapAuthEndpoints();
         app.MapRSSEndpoint();
+        app.MapStaticPagesEndpoints();
 
         return app;
     }

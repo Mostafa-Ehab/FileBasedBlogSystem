@@ -1,16 +1,17 @@
 async function loadPost() {
-    const postId = new URLSearchParams(window.location.search).get('id');
-    if (!postId) {
+    const postSlug = window.location.pathname.split('/').pop();
+    if (!postSlug) {
         console.error('Post ID is missing in the URL');
         return;
     }
 
     try {
-        const response = await fetch(`/api/posts/${postId}`);
+        const response = await fetch(`/api/posts/${postSlug}`);
         if (!response.ok) {
             throw new Error(`Error fetching post: ${response.statusText}`);
         }
         const post = await response.json();
+        setPageTitle(post);
         setArticleHeader(post);
         setArticleMainContent(post);
         setAuthorInfo(post.author);
@@ -18,6 +19,10 @@ async function loadPost() {
     } catch (error) {
         console.error(error);
     }
+}
+
+function setPageTitle(post) {
+    document.title = post.title + ' - Blog';
 }
 
 function setArticleHeader(post) {
@@ -38,7 +43,7 @@ function setArticleHeader(post) {
             </div>
             <div class="post-tags">
                 ${post.tags.map(tag => `
-                    <a href="/tag.html?tag=${encodeURIComponent(tag)}" class="post-tag">
+                    <a href="/tags/${encodeURIComponent(tag)}" class="post-tag">
                         ${tag}
                     </a>
                 `).join('')}
@@ -95,7 +100,7 @@ async function setRelatedPosts(postSlug, category) {
         <article class="related-post">
             <img src="${post.imageUrl}" alt="${post.title}" class="related-post-image">
             <div class="related-post-content">
-                <h4><a href="/post.html?id=${post.slug}" class="related-post-title">${post.title}</a></h4>
+                <h4><a href="/posts/${post.slug}" class="related-post-title">${post.title}</a></h4>
                 <div class="related-post-meta">
                     <span class="related-post-date">${formatReadableDate(post.publishedAt)}</span>
                 </div>

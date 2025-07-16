@@ -1,5 +1,5 @@
 async function loadCategory() {
-    const category = new URLSearchParams(window.location.search).get('category');
+    const category = window.location.pathname.split('/').pop();
     if (!category) {
         console.error('Category ID is missing in the URL');
         return;
@@ -23,10 +23,11 @@ async function loadCategory() {
             </div>
         </div>
     `;
+    document.title = `${data.name} - Category`;
 }
 
 async function loadCategoryPosts() {
-    const category = new URLSearchParams(window.location.search).get('category');
+    const category = window.location.pathname.split('/').pop();
     if (!category) {
         console.error('Category ID is missing in the URL');
         return;
@@ -48,7 +49,7 @@ async function loadCategoryPosts() {
                 <img src="${post.imageUrl}" alt="${post.title}" class="post-card-image">
                 <div class="post-card-content">
                     <h2>
-                        <a href="/post.html?id=${post.slug}" class="post-card-title">
+                        <a href="/posts/${post.slug}" class="post-card-title">
                             ${post.title}
                         </a>
                     </h2>
@@ -58,13 +59,13 @@ async function loadCategoryPosts() {
                     <p class="post-card-description">${post.description}</p>
                     <div class="post-card-tags">
                         ${post.tags.map(tag => `
-                            <a href="/tag.html?tag=${encodeURIComponent(tag)}" class="post-card-tag">
+                            <a href="/tags/${encodeURIComponent(tag)}" class="post-card-tag">
                                 ${tag}
                             </a>
                         `).join("")}
                     </div>
                     <div class="post-card-footer">
-                        <a href="/post.html?id=${post.slug}" class="read-more-btn">Read More →</a>
+                        <a href="/posts/${post.slug}" class="read-more-btn">Read More →</a>
                     </div>
                 </div>
             `;

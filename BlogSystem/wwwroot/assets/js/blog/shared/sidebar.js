@@ -7,7 +7,7 @@ async function loadSidebarTags() {
 
     tags.forEach((tag) => {
         const tagElement = document.createElement("a");
-        tagElement.href = `/tag.html?tag=${encodeURIComponent(tag.slug)}`;
+        tagElement.href = `/tags/${encodeURIComponent(tag.slug)}`;
         tagElement.classList.add("tag-pill");
         tagElement.textContent = tag.name;
         tagsContainer.appendChild(tagElement);
@@ -25,7 +25,7 @@ async function loadSidebarCategories() {
         const categoryElement = document.createElement("li");
         categoryElement.classList.add("category-item");
         categoryElement.innerHTML = `
-            <a href="/category.html?category=${encodeURIComponent(category.slug)}" class="category-link">
+            <a href="/categories/${encodeURIComponent(category.slug)}" class="category-link">
                 ${category.name}
                 <span class="category-count">${category.posts.length}</span>
             </a>
