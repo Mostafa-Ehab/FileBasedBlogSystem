@@ -4,56 +4,28 @@ class AdminTags {
         this.filteredTags = [];
         this.currentPage = 1;
         this.itemsPerPage = 10;
-        // this.editingTag = null;
-        // this.selectedTags = new Set();
 
         this.init();
     }
 
     init() {
-        // this.setupFilterManager();
         this.loadData();
         this.setupEventListeners();
     }
 
-    // setupFilterManager() {
-    //     this.filterManager = new AdminFilterManager({
-    //         searchInputId: 'tag-search',
-    //         filters: ['usage-filter', 'popularity-filter'],
-    //         onFilterChange: (filterValues) => {
-    //             this.applyFilters(filterValues);
-    //         }
-    //     });
-    // }
-
     setupEventListeners() {
-        // // Add tag button
-        // document.getElementById('add-tag-btn')?.addEventListener('click', () => {
-        //     this.showTagModal();
-        // });
+        // Search and filters
+        document.getElementById('tag-search')?.addEventListener('input', (e) => {
+            this.filterTags();
+        });
 
-        // // Modal controls
-        // document.getElementById('close-modal')?.addEventListener('click', () => {
-        //     this.hideTagModal();
-        // });
+        document.getElementById('usage-filter')?.addEventListener('change', (e) => {
+            this.filterTags();
+        });
 
-        // document.getElementById('cancel-modal')?.addEventListener('click', () => {
-        //     this.hideTagModal();
-        // });
-
-        // // Tag form submission
-        // document.getElementById('tag-form')?.addEventListener('submit', (e) => {
-        //     e.preventDefault();
-        //     this.saveTag();
-        // });
-
-        // // Auto-generate slug from name
-        // document.getElementById('tag-name')?.addEventListener('input', (e) => {
-        //     if (!this.editingTag) {
-        //         const slug = this.generateSlug(e.target.value);
-        //         document.getElementById('tag-slug').value = slug;
-        //     }
-        // });
+        document.getElementById('popularity-filter')?.addEventListener('change', (e) => {
+            this.filterTags();
+        });
 
         // Delete modal
         document.getElementById('close-delete-modal')?.addEventListener('click', () => {
@@ -67,11 +39,6 @@ class AdminTags {
         document.getElementById('confirm-delete')?.addEventListener('click', () => {
             this.deleteTag();
         });
-
-        // // Bulk actions
-        // document.getElementById('select-all-tags')?.addEventListener('change', (e) => {
-        //     this.selectAllTags(e.target.checked);
-        // });
 
         // Export
         document.getElementById('export-tags-btn')?.addEventListener('click', () => {
@@ -128,12 +95,15 @@ class AdminTags {
         document.getElementById('popular-tags').textContent = popularTags;
     }
 
-    applyFilters(filterValues) {
+    filterTags() {
         let filtered = [...this.tags];
 
+        const searchTerm = document.getElementById('tag-search')?.value.toLowerCase();
+        const usageFilter = document.getElementById('usage-filter')?.value;
+        const popularityFilter = document.getElementById('popularity-filter')?.value;
+
         // Search filter
-        if (filterValues.search) {
-            const searchTerm = filterValues.search.toLowerCase();
+        if (searchTerm) {
             filtered = filtered.filter(tag =>
                 tag.name.toLowerCase().includes(searchTerm) ||
                 tag.slug.toLowerCase().includes(searchTerm) ||
@@ -142,26 +112,24 @@ class AdminTags {
         }
 
         // Usage filter
-        if (filterValues['usage-filter']) {
-            const usage = filterValues['usage-filter'];
-            if (usage === 'used') {
+        if (usageFilter) {
+            if (usageFilter === 'used') {
                 filtered = filtered.filter(tag => (tag.posts?.length || 0) > 0);
-            } else if (usage === 'unused') {
+            } else if (usageFilter === 'unused') {
                 filtered = filtered.filter(tag => (tag.posts?.length || 0) === 0);
             }
         }
 
         // Popularity filter
-        if (filterValues['popularity-filter']) {
-            const popularity = filterValues['popularity-filter'];
-            if (popularity === 'popular') {
+        if (popularityFilter) {
+            if (popularityFilter === 'popular') {
                 filtered = filtered.filter(tag => (tag.posts?.length || 0) >= 10);
-            } else if (popularity === 'moderate') {
+            } else if (popularityFilter === 'moderate') {
                 filtered = filtered.filter(tag => {
                     const count = tag.posts?.length || 0;
                     return count >= 5 && count <= 9;
                 });
-            } else if (popularity === 'low') {
+            } else if (popularityFilter === 'low') {
                 filtered = filtered.filter(tag => {
                     const count = tag.posts?.length || 0;
                     return count >= 1 && count <= 4;
@@ -172,7 +140,6 @@ class AdminTags {
         this.filteredTags = filtered;
         this.currentPage = 1;
         this.renderTable();
-        this.updatePagination();
     }
 
     renderTable() {
@@ -182,7 +149,6 @@ class AdminTags {
         const start = (this.currentPage - 1) * this.itemsPerPage;
         const end = start + this.itemsPerPage;
         const pageItems = this.filteredTags.slice(start, end);
-        console.log(pageItems)
 
         tbody.innerHTML = pageItems.map(tag => `
             <tr>
@@ -209,7 +175,7 @@ class AdminTags {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a class="action-btn edit" href="/api/tags/${tag.slug}/edit" title="Edit">
+                        <a class="action-btn edit" href="/admin/tags/${tag.slug}/edit" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                         <button class="action-btn delete" onclick="adminTags.confirmDelete('${tag.slug}')" title="Delete">
@@ -220,54 +186,8 @@ class AdminTags {
             </tr>
         `).join('');
 
-        // Update checkboxes
-        // this.updateCheckboxes();
         this.updatePagination();
     }
-
-    // updateCheckboxes() {
-    //     const checkboxes = document.querySelectorAll('.tag-checkbox');
-    //     checkboxes.forEach(checkbox => {
-    //         checkbox.addEventListener('change', (e) => {
-    //             const tagSlug = e.target.value;
-    //             if (e.target.checked) {
-    //                 this.selectedTags.add(tagSlug);
-    //             } else {
-    //                 this.selectedTags.delete(tagSlug);
-    //             }
-    //             this.updateBulkActions();
-    //         });
-    //     });
-    // }
-
-    // updateBulkActions() {
-    //     const selectedCount = this.selectedTags.size;
-    //     const selectAllCheckbox = document.getElementById('select-all-tags');
-
-    //     if (selectAllCheckbox) {
-    //         selectAllCheckbox.checked = selectedCount > 0 && selectedCount === this.filteredTags.length;
-    //         selectAllCheckbox.indeterminate = selectedCount > 0 && selectedCount < this.filteredTags.length;
-    //     }
-
-    //     // Show/hide bulk actions
-    //     if (selectedCount > 0) {
-    //         // Could show bulk action bar here
-    //     }
-    // }
-
-    // selectAllTags(checked) {
-    //     const checkboxes = document.querySelectorAll('.tag-checkbox');
-    //     checkboxes.forEach(checkbox => {
-    //         checkbox.checked = checked;
-    //         const tagSlug = checkbox.value;
-    //         if (checked) {
-    //             this.selectedTags.add(tagSlug);
-    //         } else {
-    //             this.selectedTags.delete(tagSlug);
-    //         }
-    //     });
-    //     this.updateBulkActions();
-    // }
 
     updatePagination() {
         const totalItems = this.filteredTags.length;
@@ -315,77 +235,6 @@ class AdminTags {
         this.renderTable();
     }
 
-    // showTagModal(tag = null) {
-    //     this.editingTag = tag;
-    //     const modal = document.getElementById('tag-modal');
-    //     const title = document.getElementById('modal-title');
-    //     const saveBtn = document.getElementById('save-tag');
-    //     const form = document.getElementById('tag-form');
-
-    //     if (tag) {
-    //         title.textContent = 'Edit Tag';
-    //         saveBtn.textContent = 'Update Tag';
-    //         document.getElementById('tag-name').value = tag.name;
-    //         document.getElementById('tag-slug').value = tag.slug;
-    //         document.getElementById('tag-description').value = tag.description || '';
-    //         document.getElementById('tag-color').value = tag.color || '#007bff';
-    //     } else {
-    //         title.textContent = 'Create New Tag';
-    //         saveBtn.textContent = 'Create Tag';
-    //         form.reset();
-    //     }
-
-    //     modal.classList.add('active');
-    // }
-
-    // hideTagModal() {
-    //     document.getElementById('tag-modal').classList.remove('active');
-    //     this.editingTag = null;
-    // }
-
-    // async saveTag() {
-    //     const formData = new FormData(document.getElementById('tag-form'));
-    //     const tagData = {
-    //         name: formData.get('name'),
-    //         slug: formData.get('slug'),
-    //         description: formData.get('description'),
-    //         color: formData.get('color')
-    //     };
-
-    //     // Validate required fields
-    //     if (!tagData.name || !tagData.slug) {
-    //         showError('Name and slug are required');
-    //         return;
-    //     }
-
-    //     try {
-    //         showLoading();
-
-    //         if (this.editingTag) {
-    //             await putRequest(`/api/tags/${this.editingTag.slug}`, tagData);
-    //             showSuccess('Tag updated successfully');
-    //         } else {
-    //             await postRequest('/api/tags', tagData);
-    //             showSuccess('Tag created successfully');
-    //         }
-
-    //         this.hideTagModal();
-    //         this.loadTags();
-    //     } catch (error) {
-    //         console.error('Error saving tag:', error);
-    //         showError(error.message || 'Failed to save tag');
-    //     } finally {
-    //         hideLoading();
-    //     }
-    // }
-
-    // editTag(slug) {
-    //     const tag = this.tags.find(t => t.slug === slug);
-    //     if (tag) {
-    //         this.showTagModal(tag);
-    //     }
-    // }
-
     confirmDelete(slug) {
         const tag = this.tags.find(t => t.slug === slug);
         if (!tag) return;
@@ -418,13 +267,6 @@ class AdminTags {
             hideLoading();
         }
     }
-
-    // generateSlug(name) {
-    //     return name
-    //         .toLowerCase()
-    //         .replace(/[^a-z0-9]+/g, '-')
-    //         .replace(/^-+|-+$/g, '');
-    // }
 
     async exportTags() {
         try {

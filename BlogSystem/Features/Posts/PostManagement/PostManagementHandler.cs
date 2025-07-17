@@ -184,5 +184,6 @@ public class PostManagementHandler : IPostManagementHandler
 
         // Delete the post
         _postRepository.DeletePost(post);
+        await Task.FromResult<object>(null!);
     }
 }

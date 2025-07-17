@@ -49,10 +49,10 @@
                 <p class="admin-page-description">Create, edit, and manage blog tags</p>
             </div>
             <div class="admin-page-actions">
-                <button class="btn btn-primary" id="add-tag-btn">
+                <a href="/admin/tags/create" class="btn btn-primary">
                     <i class="fas fa-plus"></i>
                     Create New Tag
-                </button>
+                </a>
                 <button class="btn btn-secondary" id="export-tags-btn">
                     <i class="fas fa-download"></i>
                     Export Tags
@@ -181,43 +181,6 @@
             </nav>
         </div>
     </main>
-
-    <!-- Add/Edit Tag Modal -->
-    <div class="admin-modal" id="tag-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title">Create New Tag</h3>
-                <button class="modal-close" id="close-modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form class="modal-body" id="tag-form">
-                <div class="form-group">
-                    <label for="tag-name">Tag Name *</label>
-                    <input type="text" id="tag-name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="tag-slug">Slug *</label>
-                    <input type="text" id="tag-slug" name="slug" required>
-                    <small class="form-help">URL-friendly version of the tag name</small>
-                </div>
-                <div class="form-group">
-                    <label for="tag-description">Description</label>
-                    <textarea id="tag-description" name="description" rows="3"
-                        placeholder="Brief description of what this tag represents..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="tag-color">Color</label>
-                    <input type="color" id="tag-color" name="color" value="#007bff">
-                    <small class="form-help">Choose a color for this tag</small>
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancel-modal">Cancel</button>
-                <button type="submit" form="tag-form" class="btn btn-primary" id="save-tag">Create Tag</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Delete Confirmation Modal -->
     <div class="admin-modal" id="delete-modal">
