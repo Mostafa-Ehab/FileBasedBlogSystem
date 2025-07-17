@@ -6,6 +6,7 @@ using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Categories;
 using BlogSystem.Shared.Exceptions.Tags;
+using BlogSystem.Shared.Helpers;
 
 namespace BlogSystem.Features.Posts.PostManagement.States;
 
@@ -55,7 +56,17 @@ public class DraftState
         {
             post.Tags.ForEach(tag =>
             {
-                if (!_tagRepository.TagExists(tag)) throw new TagNotFoundException(tag);
+                var tagSlug = SlugHelper.GenerateSlug(tag);
+                if (!_tagRepository.TagExists(tagSlug))
+                {
+                    _tagRepository.CreateTag(new Tag
+                    {
+                        Name = tag,
+                        Slug = tagSlug,
+                        Description = string.Empty,
+                        Posts = []
+                    });
+                }
             });
         }
     }

@@ -74,7 +74,6 @@ public class PostManagementHandler : IPostManagementHandler
         }
         else if (post.Status == PostStatus.Scheduled)
         {
-            Console.WriteLine($"Post status: {post.Status}");
             await _scheduledState.ValidateAndCreatePost(post, request.Image);
         }
         else if (post.Status == PostStatus.Published)

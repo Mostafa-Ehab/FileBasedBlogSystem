@@ -7,6 +7,7 @@ using BlogSystem.Infrastructure.Scheduling;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Categories;
 using BlogSystem.Shared.Exceptions.Tags;
+using BlogSystem.Shared.Helpers;
 
 namespace BlogSystem.Features.Posts.PostManagement.States;
 
@@ -70,14 +71,23 @@ public class ScheduledState
             throw new CategoryNotFoundException(post.Category);
         }
 
-        if (post.Tags == null || post.Tags.Count == 0)
+        if (post.Tags != null && post.Tags.Count > 0)
         {
-            throw new ValidationErrorException("Post must have at least one tag.");
+            post.Tags.ForEach(tag =>
+            {
+                var tagSlug = SlugHelper.GenerateSlug(tag);
+                if (!_tagRepository.TagExists(tagSlug))
+                {
+                    _tagRepository.CreateTag(new Tag
+                    {
+                        Name = tag,
+                        Slug = tagSlug,
+                        Description = string.Empty,
+                        Posts = []
+                    });
+                }
+            });
         }
-        post.Tags.ForEach(tag =>
-        {
-            if (!_tagRepository.TagExists(tag)) throw new TagNotFoundException(tag);
-        });
     }
 
     private void ValidateScheduling(Post post)
