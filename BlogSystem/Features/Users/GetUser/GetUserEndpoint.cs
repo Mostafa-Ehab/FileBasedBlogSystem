@@ -5,7 +5,7 @@ namespace BlogSystem.Features.Users.GetUser;
 
 public static class GetUserEndpoint
 {
-    public static void MapGetUserEndpoint(this IEndpointRouteBuilder app)
+    public static void MapGetUsersEndpoint(this IEndpointRouteBuilder app)
     {
         app.MapGet("/", async (IGetUserHandler getUserHandler) =>
         {
@@ -31,4 +31,18 @@ public static class GetUserEndpoint
         .WithTags("Users")
         .Produces<GetMyProfileDTO>(StatusCodes.Status200OK);
     }
+
+    public static void MapGetUserEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapGet("/{userId}", async (IGetUserHandler getUserHandler, string userId) =>
+        {
+            var response = await getUserHandler.GetUser(userId);
+            return Results.Ok(response);
+        })
+        .RequireAuthorization("Editor")
+        .WithName("GetUser")
+        .WithTags("Users")
+        .Produces<GetUserDTO>(StatusCodes.Status200OK);
+    }
+
 }

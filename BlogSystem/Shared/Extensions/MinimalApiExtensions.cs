@@ -61,8 +61,9 @@ public static class MinimalApiExtensions
 
     public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGetUserEndpoint();
+        app.MapGetUsersEndpoint();
         app.MapGetMyProfileEndpoint();
+        app.MapGetUserEndpoint();
         app.MapCreateUserEndpoint();
         app.MapUpdateUserEndpoints();
         app.MapDeleteUserEndpoint();

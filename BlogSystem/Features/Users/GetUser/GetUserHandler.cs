@@ -33,4 +33,14 @@ public class GetUserHandler : IGetUserHandler
         }
         return Task.FromResult(user.MapToGetMyProfileDTO());
     }
+
+    public Task<GetUserDTO> GetUser(string userId)
+    {
+        var user = _userRepository.GetUserById(userId);
+        if (user == null)
+        {
+            throw new UserNotFoundException(userId);
+        }
+        return Task.FromResult(user.MapToGetUserDTO());
+    }
 }

@@ -6,4 +6,5 @@ public interface IGetUserHandler
 {
     public Task<GetUserDTO[]> GetAllUsers();
     public Task<GetMyProfileDTO> GetMyProfile(string userId);
+    public Task<GetUserDTO> GetUser(string userId);
 }
