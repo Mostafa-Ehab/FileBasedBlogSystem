@@ -322,6 +322,23 @@
         }
     }
 
+    // Admin form
+    .admin-form {
+        display: block;
+        background: var(--accent-color);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        padding: 1.5rem;
+
+        .admin-form-footer {
+            border-top: 1px solid var(--border-color-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+    }
+
     // Pagination
     .admin-pagination {
         display: flex;

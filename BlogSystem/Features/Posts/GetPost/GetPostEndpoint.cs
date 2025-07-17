@@ -8,10 +8,19 @@ public static class GetPostEndpoint
 {
     public static void MapGetPostEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/{slug}", async (string slug, IGetPostHandler handler) =>
+        app.MapGet("/{slug}", async (string slug, ClaimsPrincipal user, IGetPostHandler handler) =>
         {
-            var post = await handler.GetPostAsync(slug);
-            return Results.Ok(post);
+            var userId = user.FindFirstValue("Id");
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                var post = await handler.GetPostAsync(slug);
+                return Results.Ok(post);
+            }
+            else
+            {
+                var post = await handler.GetManagedPostAsync(slug, userId);
+                return Results.Ok(post);
+            }
         })
         .WithName("GetPostBySlug")
         .WithTags("Posts")

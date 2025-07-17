@@ -9,5 +9,6 @@ public interface IGetPostHandler
     Task<PublicPostDTO[]> GetPublicPostsAsync(string? query = null);
 
     // Editor Routes
+    Task<ManagedPostDTO> GetManagedPostAsync(string postId, string userId);
     Task<ManagedPostDTO[]> GetManagedPostsAsync(string userId);
 }

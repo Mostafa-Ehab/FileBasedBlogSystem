@@ -1097,6 +1097,20 @@ a:hover {
   background: #d32f2f;
   color: white;
 }
+.admin-content .admin-form {
+  display: block;
+  background: var(--accent-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  padding: 1.5rem;
+}
+.admin-content .admin-form .admin-form-footer {
+  border-top: 1px solid var(--border-color-light);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
 .admin-content .admin-pagination {
   display: flex;
   justify-content: space-between;
@@ -1336,18 +1350,18 @@ a:hover {
   line-height: 1.5;
 }
 
-#post-modal .image-preview {
+#post-form .image-preview {
   display: flex;
   align-items: center;
   margin-top: 0.5rem;
 }
-#post-modal .image-preview img {
+#post-form .image-preview img {
   max-width: 200px;
   max-height: 150px;
   border-radius: 8px;
   margin-right: 0.5rem;
 }
-#post-modal .btn-remove-image {
+#post-form .btn-remove-image {
   background: #dc3545;
   color: white;
   border: none;
@@ -1361,10 +1375,10 @@ a:hover {
   font-size: 0.75rem;
   transition: background-color 0.3s ease;
 }
-#post-modal .btn-remove-image:hover {
+#post-form .btn-remove-image:hover {
   background: #c82333;
 }
-#post-modal .content-preview {
+#post-form .content-preview {
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   padding: 1rem;
@@ -1372,34 +1386,34 @@ a:hover {
   max-height: 400px;
   overflow-y: auto;
 }
-#post-modal .content-preview h1,
-#post-modal .content-preview h2,
-#post-modal .content-preview h3 {
+#post-form .content-preview h1,
+#post-form .content-preview h2,
+#post-form .content-preview h3 {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
-#post-modal .content-preview h1:first-child,
-#post-modal .content-preview h2:first-child,
-#post-modal .content-preview h3:first-child {
+#post-form .content-preview h1:first-child,
+#post-form .content-preview h2:first-child,
+#post-form .content-preview h3:first-child {
   margin-top: 0;
 }
-#post-modal .content-preview p {
+#post-form .content-preview p {
   margin-bottom: 1rem;
   line-height: 1.6;
 }
-#post-modal .content-preview pre {
+#post-form .content-preview pre {
   background: var(--background-light);
   padding: 1rem;
   border-radius: 4px;
   overflow-x: auto;
 }
-#post-modal .content-preview code {
+#post-form .content-preview code {
   background: var(--background-light);
   padding: 0.125rem 0.25rem;
   border-radius: 2px;
   font-family: "Courier New", monospace;
 }
-#post-modal .content-preview blockquote {
+#post-form .content-preview blockquote {
   border-left: 4px solid var(--primary-color);
   padding-left: 1rem;
   margin: 1rem 0;

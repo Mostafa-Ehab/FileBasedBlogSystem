@@ -1,6 +1,6 @@
 namespace BlogSystem.Shared.Extensions;
 
-static class PageEndpointsExtension
+static class PageEndpointExtension
 {
     public static IEndpointRouteBuilder MapStaticPagesEndpoints(this IEndpointRouteBuilder app)
     {
@@ -21,6 +21,20 @@ static class PageEndpointsExtension
         app.MapGet("/tags/{slug}", async context =>
         {
             var filePath = Path.Combine("wwwroot", "blog", "tag.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
+        app.MapGet("/admin/posts/{slug}/edit", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "admin", "edit", "edit-post.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
+        app.MapGet("/admin/posts/create", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "admin", "edit", "edit-post.html");
             context.Response.ContentType = "text/html";
             await context.Response.SendFileAsync(filePath);
         });

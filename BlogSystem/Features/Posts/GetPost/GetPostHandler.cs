@@ -5,6 +5,7 @@ using BlogSystem.Features.Posts.GetPost.DTOs;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Infrastructure.MarkdownService;
 using BlogSystem.Shared.Exceptions.Posts;
+using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Mappings;
 
 namespace BlogSystem.Features.Posts.GetPost;
@@ -28,6 +29,21 @@ public class GetPostHandler : IGetPostHandler
         var postDto = post.MapToPublicPostDTO(_userRepository);
         postDto.Content = _markdownService.RenderMarkdown(post.Content ?? string.Empty);
         return Task.FromResult(postDto);
+    }
+
+    public Task<ManagedPostDTO> GetManagedPostAsync(string postId, string userId)
+    {
+        var post = _postRepository.GetPostById(postId) ?? throw new PostNotFoundException(postId);
+        var user = _userRepository.GetUserById(userId)!;
+
+        if (user.Role != UserRole.Admin && user.Role != UserRole.Author && user.Id != post.AuthorId)
+        {
+            throw new NotAuthorizedException("You don't have access to this content");
+        }
+
+        return Task.FromResult(
+            post.MapToManagedPostDTO(_userRepository)
+        );
     }
 
     public Task<PublicPostDTO[]> GetPublicPostsAsync(string? query)
