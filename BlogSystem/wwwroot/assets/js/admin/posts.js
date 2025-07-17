@@ -285,12 +285,16 @@ class AdminPostsManager {
             await deleteRequest(`/api/posts/${this.deletingPostId}`);
 
             this.posts = this.posts.filter(p => p.id !== this.deletingPostId);
-            this.filteredPosts = [...this.posts];
+            this.filteredPosts = this.filteredPosts.filter(p => p.id !== this.deletingPostId);
             this.hideDeleteModal();
             showSuccess('Post deleted successfully');
         } catch (error) {
-            console.error('Error deleting post:', error);
-            showError('Error deleting post');
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error deleting post');
+            } else {
+                console.error('Error deleting post:', error);
+                showError('Error deleting post');
+            }
         } finally {
             this.renderTable();
             this.updateStats();

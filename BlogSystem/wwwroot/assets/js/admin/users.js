@@ -257,7 +257,7 @@ class AdminUsersManager {
             await deleteRequest(`/api/users/${this.deletingUserId}`);
 
             this.users = this.users.filter(u => u.id !== this.deletingUserId);
-            this.filteredUsers = [...this.users];
+            this.filteredUsers = this.filteredUsers.filter(u => u.id !== this.deletingUserId);
             this.hideDeleteModal();
             showSuccess('User deleted successfully');
         } catch (error) {

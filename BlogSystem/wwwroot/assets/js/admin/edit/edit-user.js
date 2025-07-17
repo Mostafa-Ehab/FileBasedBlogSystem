@@ -181,8 +181,6 @@ class EditUserManager {
                 console.error('Error saving user:', error);
                 showError('Error saving user');
             }
-        } finally {
-            hideLoading();
         }
     }
 }
