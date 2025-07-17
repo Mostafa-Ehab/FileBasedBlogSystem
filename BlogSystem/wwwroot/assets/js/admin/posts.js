@@ -18,15 +18,6 @@ class AdminPostsManager {
     }
 
     setupEventListeners() {
-        // Modal controls
-        document.getElementById('close-modal')?.addEventListener('click', () => {
-            this.hidePostModal();
-        });
-
-        document.getElementById('cancel-modal')?.addEventListener('click', () => {
-            this.hidePostModal();
-        });
-
         // Search and filters
         document.getElementById('post-search')?.addEventListener('input', () => {
             this.filterPosts();
