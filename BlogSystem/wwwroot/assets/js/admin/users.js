@@ -92,7 +92,7 @@ class AdminUsersManager {
     }
 
     async loadUsers() {
-        this.showLoading();
+        showLoading();
         try {
             const data = await getRequest('/api/users');
             this.users = data || [];
@@ -108,7 +108,7 @@ class AdminUsersManager {
                 showError('Error loading users');
             }
         } finally {
-            this.hideLoading();
+            hideLoading();
         }
     }
 
@@ -252,7 +252,7 @@ class AdminUsersManager {
     async deleteUser() {
         if (!this.deletingUserId) return;
 
-        this.showLoading();
+        showLoading();
         try {
             await deleteRequest(`/api/users/${this.deletingUserId}`);
 
@@ -270,7 +270,7 @@ class AdminUsersManager {
         } finally {
             this.renderTable();
             this.updateStats();
-            this.hideLoading();
+            hideLoading();
         }
     }
 
@@ -312,18 +312,6 @@ class AdminUsersManager {
             .join('\n');
 
         return csvContent;
-    }
-
-    showLoading() {
-        document.getElementById('loading-overlay')?.classList.add('active');
-    }
-
-    hideLoading() {
-        document.getElementById('loading-overlay')?.classList.remove('active');
-    }
-
-    delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 

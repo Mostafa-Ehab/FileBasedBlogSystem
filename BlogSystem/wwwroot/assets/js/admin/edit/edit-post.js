@@ -34,13 +34,11 @@ class EditPostManager {
             if (e.target.value === 'Draft') {
                 document.getElementById('post-description').required = false;
                 document.getElementById('post-category').required = false;
-                document.getElementById('post-tags').required = false;
                 document.getElementById('post-content').required = false;
                 document.getElementById('post-image').required = false;
             } else {
                 document.getElementById('post-description').required = true;
                 document.getElementById('post-category').required = true;
-                document.getElementById('post-tags').required = true;
                 document.getElementById('post-content').required = true;
 
                 // Show/hide image upload based on status
@@ -86,7 +84,7 @@ class EditPostManager {
     }
 
     async loadData() {
-        this.showLoading();
+        showLoading();
         try {
             const currentUrl = window.location.pathname.split('/');
             const action = currentUrl.pop();
@@ -107,7 +105,7 @@ class EditPostManager {
                 showError('Error loading data');
             }
         } finally {
-            this.hideLoading();
+            hideLoading();
         }
     }
 
@@ -275,7 +273,7 @@ class EditPostManager {
                 showSuccess('Post created successfully');
             }
 
-            await this.delay(1000);
+            await delay(1000);
             window.location = "/admin/posts.html";
         } catch (error) {
             if (error instanceof RequestError) {
@@ -285,20 +283,8 @@ class EditPostManager {
                 showError('Error saving post');
             }
         } finally {
-            this.hideLoading();
+            hideLoading();
         }
-    }
-
-    showLoading() {
-        document.getElementById('loading-overlay')?.classList.add('active');
-    }
-
-    hideLoading() {
-        document.getElementById('loading-overlay')?.classList.remove('active');
-    }
-
-    delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 

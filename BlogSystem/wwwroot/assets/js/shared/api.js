@@ -67,3 +67,11 @@ function deleteRequest(url, params = {}) {
         return;
     });
 }
+
+function showLoading() {
+    document.getElementById('loading-overlay')?.classList.add('active');
+}
+
+function hideLoading() {
+    document.getElementById('loading-overlay')?.classList.remove('active');
+}

@@ -71,7 +71,7 @@ class AdminPostsManager {
     }
 
     async loadData() {
-        this.showLoading();
+        showLoading();
         try {
             const posts = await getRequest("/api/posts");
             this.posts = posts || [];
@@ -108,7 +108,7 @@ class AdminPostsManager {
                 showError('Error loading data');
             }
         } finally {
-            this.hideLoading();
+            hideLoading();
         }
     }
 
@@ -280,7 +280,7 @@ class AdminPostsManager {
     async deletePost() {
         if (!this.deletingPostId) return;
 
-        this.showLoading();
+        showLoading();
         try {
             await deleteRequest(`/api/posts/${this.deletingPostId}`);
 
@@ -294,7 +294,7 @@ class AdminPostsManager {
         } finally {
             this.renderTable();
             this.updateStats();
-            this.hideLoading();
+            hideLoading();
         }
     }
 
@@ -329,18 +329,6 @@ class AdminPostsManager {
         return [headers, ...rows]
             .map(row => row.map(field => `"${field}"`).join(','))
             .join('\n');
-    }
-
-    showLoading() {
-        document.getElementById('loading-overlay')?.classList.add('active');
-    }
-
-    hideLoading() {
-        document.getElementById('loading-overlay')?.classList.remove('active');
-    }
-
-    delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 

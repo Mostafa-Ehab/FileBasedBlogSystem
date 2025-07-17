@@ -42,7 +42,7 @@ class EditUserManager {
     }
 
     async loadData() {
-        this.showLoading();
+        showLoading();
         console.log('Loading user data...');
         try {
             const currentUrl = window.location.pathname.split('/');
@@ -62,7 +62,7 @@ class EditUserManager {
                 showError('Error loading data');
             }
         } finally {
-            this.hideLoading();
+            hideLoading();
         }
     }
 
@@ -172,7 +172,7 @@ class EditUserManager {
                 showSuccess('User created successfully');
             }
 
-            await this.delay(1000);
+            await delay(1000);
             window.location = "/admin/users.html";
         } catch (error) {
             if (error instanceof RequestError) {
@@ -182,20 +182,8 @@ class EditUserManager {
                 showError('Error saving user');
             }
         } finally {
-            this.hideLoading();
+            hideLoading();
         }
-    }
-
-    showLoading() {
-        document.getElementById('loading-overlay')?.classList.add('active');
-    }
-
-    hideLoading() {
-        document.getElementById('loading-overlay')?.classList.remove('active');
-    }
-
-    delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 
