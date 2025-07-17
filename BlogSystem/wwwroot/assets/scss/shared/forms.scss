@@ -24,6 +24,11 @@
         font-size: 0.875rem;
         background: var(--background-color);
         color: var(--text-color);
+
+        &:disabled {
+            background: var(--background-muted);
+            cursor: not-allowed;
+        }
     }
 
     input[type="file"] {

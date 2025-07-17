@@ -115,6 +115,7 @@ a:hover {
   color: white;
 }
 .btn-primary:hover {
+  color: var(--background-light);
   background: var(--primary-color);
   transform: translateY(-1px);
 }
@@ -255,6 +256,12 @@ a:hover {
   font-size: 0.875rem;
   background: var(--background-color);
   color: var(--text-color);
+}
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background: var(--background-muted);
+  cursor: not-allowed;
 }
 .form-group input[type=file] {
   padding: 0.5rem;
