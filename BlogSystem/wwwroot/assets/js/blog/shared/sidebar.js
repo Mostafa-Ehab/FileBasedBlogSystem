@@ -4,6 +4,7 @@ async function loadSidebarTags() {
     // Fetch and load the tags
     const response = await fetch("/api/tags");
     const tags = await response.json();
+    tags.sort((a, b) => a.name.localeCompare(b.name));
 
     tags.forEach((tag) => {
         const tagElement = document.createElement("a");
@@ -20,6 +21,7 @@ async function loadSidebarCategories() {
     // Fetch and load the categories
     const response = await fetch("/api/categories");
     const categories = await response.json();
+    categories.sort((a, b) => a.name.localeCompare(b.name));
 
     categories.forEach((category) => {
         const categoryElement = document.createElement("li");

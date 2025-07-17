@@ -90,10 +90,8 @@ class EditPostManager {
         try {
             const currentUrl = window.location.pathname.split('/');
             const action = currentUrl.pop();
-            console.log(action)
             if (action == 'edit') {
                 const postId = currentUrl.pop();
-                console.log(postId)
                 this.post = await getRequest(`/api/posts/${postId}`);
             }
 
@@ -125,9 +123,9 @@ class EditPostManager {
         if (this.post) {
             const title = document.getElementById('form-title');
             const desc = document.getElementById("form-desc");
-            const form = document.getElementById('post-form');
             const preview = document.getElementById('image-preview');
 
+            document.title = `Edit Post - ${this.post.title} - Admin Dashboard`;
             title.textContent = 'Edit Post';
             desc.textContent = 'Modify the details of your blog post';
 
@@ -278,7 +276,7 @@ class EditPostManager {
             }
 
             await this.delay(1000);
-            window.location = "/admin/posts.html"
+            window.location = "/admin/posts.html";
         } catch (error) {
             if (error instanceof RequestError) {
                 showError(error?.data?.message || 'Error saving post');

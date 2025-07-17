@@ -96,7 +96,7 @@ public class PostManagementHandler : IPostManagementHandler
 
         // Validate the user permissions
         var user = _userRepository.GetUserById(userId)!;
-        if (user.Role == UserRole.Author && !user.Posts.Contains(post.Id))
+        if (!user.Posts.Contains(post.Id))
         {
             throw new UnauthorizedAccessException("You do not have permission to edit this post.");
         }

@@ -191,7 +191,7 @@ class AdminPostsManager {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="/admin/posts/${post.id}/edit">
+                        <a class="action-btn edit" href="/admin/posts/${post.id}/edit">
                             <i class="fas fa-edit"></i>
                         </a>
                         <button class="action-btn delete" onclick="adminPosts.confirmDeletePost('${post.id}')" title="Delete Post">
