@@ -8,4 +8,5 @@ public interface ITagRepository
     Tag[] GetAllTags();
     bool TagExists(string slug);
     Tag CreateTag(Tag tag);
+    Tag UpdateTag(Tag tag);
 }

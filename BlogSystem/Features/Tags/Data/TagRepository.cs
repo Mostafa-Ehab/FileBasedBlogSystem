@@ -49,6 +49,19 @@ public class TagRepository : ITagRepository
         return tag;
     }
 
+    public Tag UpdateTag(Tag tag)
+    {
+        var path = Path.Combine("Content", "tags", $"{tag.Slug}.json");
+        if (!File.Exists(path))
+        {
+            throw new InvalidOperationException($"Tag with slug '{tag.Slug}' does not exist.");
+        }
+
+        string json = JsonSerializer.Serialize(tag, _jsonSerializerOptions);
+        File.WriteAllText(path, json);
+        return tag;
+    }
+
     public bool TagExists(string slug)
     {
         var path = Path.Combine("Content", "tags", $"{slug}.json");
