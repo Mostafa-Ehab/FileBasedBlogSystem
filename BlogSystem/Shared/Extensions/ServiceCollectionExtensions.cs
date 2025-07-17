@@ -12,6 +12,7 @@ using BlogSystem.Features.Tags.CreateTag;
 using BlogSystem.Features.Tags.CreateTag.DTOs;
 using BlogSystem.Features.Tags.CreateTag.Validators;
 using BlogSystem.Features.Tags.Data;
+using BlogSystem.Features.Tags.DeleteTag;
 using BlogSystem.Features.Tags.GetTag;
 using BlogSystem.Features.Tags.UpdateTag;
 using BlogSystem.Features.Users.CreateUser;
@@ -173,6 +174,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGetTagHandler, GetTagHandler>();
         services.AddScoped<ICreateTagHandler, CreateTagHandler>();
         services.AddScoped<IUpdateTagHandler, UpdateTagHandler>();
+        services.AddScoped<IDeleteTagHandler, DeleteTagHandler>();
         return services;
     }
 

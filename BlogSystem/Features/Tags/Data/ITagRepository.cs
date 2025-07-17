@@ -9,4 +9,5 @@ public interface ITagRepository
     bool TagExists(string slug);
     Tag CreateTag(Tag tag);
     Tag UpdateTag(Tag tag);
+    void DeleteTag(Tag tag);
 }

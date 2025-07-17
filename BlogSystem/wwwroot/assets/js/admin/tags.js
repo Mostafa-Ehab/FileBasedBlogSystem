@@ -257,13 +257,21 @@ class AdminTags {
         try {
             showLoading();
             await deleteRequest(`/api/tags/${this.tagToDelete.slug}`);
-            showSuccess('Tag deleted successfully');
+
+            this.tags = this.tags.filter(t => t.slug !== this.tagToDelete.slug);
+            this.filteredTags = this.filteredTags.filter(t => t.slug !== this.tagToDelete.slug);
             this.hideDeleteModal();
-            this.loadTags();
+            showSuccess('Tag deleted successfully');
         } catch (error) {
-            console.error('Error deleting tag:', error);
-            showError(error.message || 'Failed to delete tag');
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error deleting tag');
+            } else {
+                console.error('Error deleting tag:', error);
+                showError('Error deleting tag');
+            }
         } finally {
+            this.renderTable();
+            this.updateStats();
             hideLoading();
         }
     }

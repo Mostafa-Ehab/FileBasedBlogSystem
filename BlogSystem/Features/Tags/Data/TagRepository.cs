@@ -62,6 +62,31 @@ public class TagRepository : ITagRepository
         return tag;
     }
 
+    public void DeleteTag(Tag tag)
+    {
+        var existingTag = GetTagBySlug(tag.Slug)!;
+        var postsPath = Path.Combine("Content", "posts");
+        foreach (var postId in existingTag.Posts)
+        {
+            var postFilePath = Path.Combine(postsPath, postId, "meta.json");
+            if (File.Exists(postFilePath))
+            {
+                var postJson = File.ReadAllText(postFilePath);
+                var postData = JsonSerializer.Deserialize<Post>(postJson, _jsonSerializerOptions);
+                if (postData != null)
+                {
+                    postData.Tags.Remove(existingTag.Slug);
+                    var updatedPostJson = JsonSerializer.Serialize(postData, _jsonSerializerOptions);
+                    File.WriteAllText(postFilePath, updatedPostJson);
+                }
+            }
+        }
+
+        File.Delete(
+            Path.Combine("Content", "tags", $"{tag.Slug}.json")
+        );
+    }
+
     public bool TagExists(string slug)
     {
         var path = Path.Combine("Content", "tags", $"{slug}.json");

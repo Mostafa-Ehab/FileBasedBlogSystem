@@ -4,6 +4,7 @@ using BlogSystem.Features.Posts.GetPost;
 using BlogSystem.Features.Posts.PostManagement;
 using BlogSystem.Features.Posts.RSS;
 using BlogSystem.Features.Tags.CreateTag;
+using BlogSystem.Features.Tags.DeleteTag;
 using BlogSystem.Features.Tags.GetTag;
 using BlogSystem.Features.Tags.UpdateTag;
 using BlogSystem.Features.Users.CreateUser;
@@ -57,6 +58,7 @@ public static class MinimalApiExtensions
         app.MapGetPostsByTagEndpoint();
         app.MapCreateTagEndpoint();
         app.MapUpdateTagEndpoint();
+        app.MapDeleteTagEndpoint();
 
         return app;
     }
