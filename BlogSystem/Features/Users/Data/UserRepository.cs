@@ -1,4 +1,5 @@
 using BlogSystem.Domain.Entities;
+using BlogSystem.Features.Posts.Data;
 using System.Text.Json;
 
 namespace BlogSystem.Features.Users.Data;
@@ -7,11 +8,13 @@ public class UserRepository : IUserRepository
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly UserResolver _userResolver;
+    private readonly IPostRepository _postRepository;
 
-    public UserRepository(JsonSerializerOptions jsonSerializerOptions, UserResolver userResolver)
+    public UserRepository(JsonSerializerOptions jsonSerializerOptions, UserResolver userResolver, IPostRepository postRepository)
     {
         _jsonSerializerOptions = jsonSerializerOptions;
         _userResolver = userResolver;
+        _postRepository = postRepository;
     }
 
     public User? GetUserById(string id)
@@ -113,7 +116,17 @@ public class UserRepository : IUserRepository
 
     public void DeleteUser(User user)
     {
-        throw new NotImplementedException();
+        var existingUser = GetUserById(user.Id)!;
+        var path = Path.Combine("Content", "users", user.Id);
+
+        foreach (var postId in existingUser.Posts)
+        {
+            _postRepository.DeletePost(
+                _postRepository.GetPostById(postId)!
+            );
+        }
+
+        Directory.Delete(path, true);
     }
 
     public bool UserExists(string id)

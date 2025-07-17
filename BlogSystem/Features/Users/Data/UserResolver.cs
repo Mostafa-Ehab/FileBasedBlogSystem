@@ -82,6 +82,21 @@ public class UserResolver
         SaveUsers();
     }
 
+    public void DeleteUser(User user)
+    {
+        if (!idCache.ContainsKey(user.Id))
+        {
+            throw new InvalidOperationException("User does not exist.");
+        }
+
+        // Remove from caches
+        usernameCache.Remove(idCache[user.Id][0].ToLowerInvariant());
+        emailCache.Remove(idCache[user.Id][1].ToLowerInvariant());
+        idCache.Remove(user.Id);
+
+        SaveUsers();
+    }
+
     private void SaveUsers()
     {
         var usersData = new UsersJson

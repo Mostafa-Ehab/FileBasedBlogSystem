@@ -6,6 +6,7 @@ using BlogSystem.Features.Posts.RSS;
 using BlogSystem.Features.Tags.CreateTag;
 using BlogSystem.Features.Tags.GetTag;
 using BlogSystem.Features.Users.CreateUser;
+using BlogSystem.Features.Users.DeleteUser;
 using BlogSystem.Features.Users.GetUser;
 using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.UpdateUser;
@@ -64,6 +65,7 @@ public static class MinimalApiExtensions
         app.MapGetMyProfileEndpoint();
         app.MapCreateUserEndpoint();
         app.MapUpdateUserEndpoints();
+        app.MapDeleteUserEndpoint();
 
         return app;
     }

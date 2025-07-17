@@ -17,6 +17,7 @@ using BlogSystem.Features.Users.CreateUser;
 using BlogSystem.Features.Users.CreateUser.DTOs;
 using BlogSystem.Features.Users.CreateUser.Validators;
 using BlogSystem.Features.Users.Data;
+using BlogSystem.Features.Users.DeleteUser;
 using BlogSystem.Features.Users.GetUser;
 using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.Login.DTOs;
@@ -185,6 +186,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICreateUserHandler, CreateUserHandler>();
         services.AddScoped<IGetUserHandler, GetUserHandler>();
         services.AddScoped<IUpdateUserHandler, UpdateUserHandler>();
+        services.AddScoped<IDeleteUserHandler, DeleteUserHandler>();
         return services;
     }
 }

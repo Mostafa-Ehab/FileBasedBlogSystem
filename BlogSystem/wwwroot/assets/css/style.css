@@ -1479,16 +1479,16 @@ a:hover {
   color: var(--text-muted);
 }
 
-#user-modal .password-input-group {
+#user-form .password-input-group {
   position: relative;
   display: flex;
   align-items: center;
 }
-#user-modal .password-input-group input {
+#user-form .password-input-group input {
   flex: 1;
   padding-right: 5rem;
 }
-#user-modal .btn-password-action {
+#user-form .btn-password-action {
   position: absolute;
   right: 0.5rem;
   background: none;
@@ -1505,14 +1505,14 @@ a:hover {
   align-items: center;
   justify-content: center;
 }
-#user-modal .btn-password-action:hover {
+#user-form .btn-password-action:hover {
   background: var(--background-light);
   color: var(--text-color);
 }
-#user-modal .btn-password-action:first-of-type {
+#user-form .btn-password-action:first-of-type {
   right: 2.5rem;
 }
-#user-modal .btn-password-action.success {
+#user-form .btn-password-action.success {
   color: #28a745;
 }
 

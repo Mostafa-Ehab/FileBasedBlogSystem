@@ -39,6 +39,20 @@ static class PageEndpointExtension
             await context.Response.SendFileAsync(filePath);
         });
 
+        app.MapGet("/admin/users/{userId}/edit", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "admin", "edit", "edit-user.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
+        app.MapGet("/admin/users/create", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "admin", "edit", "edit-user.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
         return app;
     }
 }
