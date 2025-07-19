@@ -1,7 +1,7 @@
-class AdminTags {
+class AdminCategories {
     constructor() {
-        this.tags = [];
-        this.filteredTags = [];
+        this.categories = [];
+        this.filteredCategories = [];
         this.currentPage = 1;
         this.itemsPerPage = 10;
 
@@ -15,16 +15,16 @@ class AdminTags {
 
     setupEventListeners() {
         // Search and filters
-        document.getElementById('tag-search')?.addEventListener('input', (e) => {
-            this.filterTags();
+        document.getElementById('category-search')?.addEventListener('input', (e) => {
+            this.filterCategories();
         });
 
         document.getElementById('usage-filter')?.addEventListener('change', (e) => {
-            this.filterTags();
+            this.filterCategories();
         });
 
         document.getElementById('popularity-filter')?.addEventListener('change', (e) => {
-            this.filterTags();
+            this.filterCategories();
         });
 
         // Delete modal
@@ -37,12 +37,12 @@ class AdminTags {
         });
 
         document.getElementById('confirm-delete')?.addEventListener('click', () => {
-            this.deleteTag();
+            this.deleteCategory();
         });
 
         // Export
-        document.getElementById('export-tags-btn')?.addEventListener('click', () => {
-            this.exportTags();
+        document.getElementById('export-categories-btn')?.addEventListener('click', () => {
+            this.exportCategories();
         });
 
         // Pagination
@@ -54,7 +54,7 @@ class AdminTags {
         });
 
         document.getElementById('next-page')?.addEventListener('click', () => {
-            const totalPages = Math.ceil(this.filteredTags.length / this.itemsPerPage);
+            const totalPages = Math.ceil(this.filteredCategories.length / this.itemsPerPage);
             if (this.currentPage < totalPages) {
                 this.currentPage++;
                 this.renderTable();
@@ -65,10 +65,10 @@ class AdminTags {
     async loadData() {
         try {
             showLoading();
-            const response = await getRequest('/api/tags');
-            this.tags = response || [];
-            this.tags.sort((a, b) => a.slug.localeCompare(b.slug))
-            this.filteredTags = [...this.tags];
+            const response = await getRequest('/api/categories');
+            this.categories = response || [];
+            this.categories.sort((a, b) => a.slug.localeCompare(b.slug))
+            this.filteredCategories = [...this.categories];
             this.updateStats();
             this.renderTable();
         } catch (error) {
@@ -84,101 +84,101 @@ class AdminTags {
     }
 
     updateStats() {
-        const totalTags = this.tags.length;
-        const activeTags = this.tags.filter(tag => tag.posts?.length > 0).length;
-        const totalPosts = this.tags.reduce((sum, tag) => sum + (tag.posts?.length || 0), 0);
-        const popularTags = this.tags.filter(tag => (tag.posts?.length || 0) >= 10).length;
+        const totalCategories = this.categories.length;
+        const activeCategories = this.categories.filter(category => category.posts?.length > 0).length;
+        const totalPosts = this.categories.reduce((sum, category) => sum + (category.posts?.length || 0), 0);
+        const popularCategories = this.categories.filter(category => (category.posts?.length || 0) >= 10).length;
 
-        document.getElementById('total-tags').textContent = totalTags;
-        document.getElementById('active-tags').textContent = activeTags;
+        document.getElementById('total-categories').textContent = totalCategories;
+        document.getElementById('active-categories').textContent = activeCategories;
         document.getElementById('total-posts').textContent = totalPosts;
-        document.getElementById('popular-tags').textContent = popularTags;
+        document.getElementById('popular-categories').textContent = popularCategories;
     }
 
-    filterTags() {
-        let filtered = [...this.tags];
+    filterCategories() {
+        let filtered = [...this.categories];
 
-        const searchTerm = document.getElementById('tag-search')?.value.toLowerCase();
+        const searchTerm = document.getElementById('category-search')?.value.toLowerCase();
         const usageFilter = document.getElementById('usage-filter')?.value;
         const popularityFilter = document.getElementById('popularity-filter')?.value;
 
         // Search filter
         if (searchTerm) {
-            filtered = filtered.filter(tag =>
-                tag.name.toLowerCase().includes(searchTerm) ||
-                tag.slug.toLowerCase().includes(searchTerm) ||
-                (tag.description && tag.description.toLowerCase().includes(searchTerm))
+            filtered = filtered.filter(category =>
+                category.name.toLowerCase().includes(searchTerm) ||
+                category.slug.toLowerCase().includes(searchTerm) ||
+                (category.description && category.description.toLowerCase().includes(searchTerm))
             );
         }
 
         // Usage filter
         if (usageFilter) {
             if (usageFilter === 'used') {
-                filtered = filtered.filter(tag => (tag.posts?.length || 0) > 0);
+                filtered = filtered.filter(category => (category.posts?.length || 0) > 0);
             } else if (usageFilter === 'unused') {
-                filtered = filtered.filter(tag => (tag.posts?.length || 0) === 0);
+                filtered = filtered.filter(category => (category.posts?.length || 0) === 0);
             }
         }
 
         // Popularity filter
         if (popularityFilter) {
             if (popularityFilter === 'popular') {
-                filtered = filtered.filter(tag => (tag.posts?.length || 0) >= 10);
+                filtered = filtered.filter(category => (category.posts?.length || 0) >= 10);
             } else if (popularityFilter === 'moderate') {
-                filtered = filtered.filter(tag => {
-                    const count = tag.posts?.length || 0;
+                filtered = filtered.filter(category => {
+                    const count = category.posts?.length || 0;
                     return count >= 5 && count <= 9;
                 });
             } else if (popularityFilter === 'low') {
-                filtered = filtered.filter(tag => {
-                    const count = tag.posts?.length || 0;
+                filtered = filtered.filter(category => {
+                    const count = category.posts?.length || 0;
                     return count >= 1 && count <= 4;
                 });
             }
         }
 
-        this.filteredTags = filtered;
+        this.filteredCategories = filtered;
         this.currentPage = 1;
         this.renderTable();
     }
 
     renderTable() {
-        const tbody = document.getElementById('tags-table-body');
+        const tbody = document.getElementById('categories-table-body');
         if (!tbody) return;
 
         const start = (this.currentPage - 1) * this.itemsPerPage;
         const end = start + this.itemsPerPage;
-        const pageItems = this.filteredTags.slice(start, end);
+        const pageItems = this.filteredCategories.slice(start, end);
 
-        tbody.innerHTML = pageItems.map(tag => `
+        tbody.innerHTML = pageItems.map(category => `
             <tr>
                 <td>
-                    <input type="checkbox" class="tag-checkbox" value="${tag.slug}">
+                    <input type="checkbox" class="category-checkbox" value="${category.slug}">
                 </td>
                 <td>
-                    <div class="tag-name-cell">
-                        ${tag.name}
+                    <div class="category-name-cell">
+                        ${category.name}
                     </div>
                 </td>
                 <td>
-                    <code class="tag-slug">${tag.slug}</code>
+                    <code class="category-slug">${category.slug}</code>
                 </td>
                 <td>
-                    <div class="tag-description">
-                        ${tag.description || '<em>No description</em>'}
+                    <div class="category-description">
+                        ${category.description || '<em>No description</em>'}
                     </div>
                 </td>
                 <td>
-                    <span class="post-count ${(tag.posts?.length || 0) > 0 ? 'has-posts' : 'no-posts'}">
-                        ${tag.posts?.length || 0}
+                    <span class="post-count ${(category.posts?.length || 0) > 0 ? 'has-posts' : 'no-posts'}">
+                        ${category.posts?.length || 0}
                     </span>
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a class="action-btn edit" href="/admin/tags/${tag.slug}/edit" title="Edit">
+                        <a class="action-btn edit" href="/admin/categories/${category.slug}/edit" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <button class="action-btn delete" onclick="adminTags.confirmDelete('${tag.slug}')" title="Delete">
+                        <button class="action-btn delete" onclick="adminCategories.confirmDelete('${category.slug}')" title="Delete">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -190,7 +190,7 @@ class AdminTags {
     }
 
     updatePagination() {
-        const totalItems = this.filteredTags.length;
+        const totalItems = this.filteredCategories.length;
         const totalPages = Math.ceil(totalItems / this.itemsPerPage);
         const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
         const endItem = Math.min(this.currentPage * this.itemsPerPage, totalItems);
@@ -220,7 +220,7 @@ class AdminTags {
             for (let i = start; i <= end; i++) {
                 numbers.push(`
                     <button class="pagination-number ${i === this.currentPage ? 'active' : ''}"
-                            onclick="adminTags.goToPage(${i})">
+                            onclick="adminCategories.goToPage(${i})">
                         ${i}
                     </button>
                 `);
@@ -236,38 +236,38 @@ class AdminTags {
     }
 
     confirmDelete(slug) {
-        const tag = this.tags.find(t => t.slug === slug);
-        if (!tag) return;
+        const category = this.categories.find(c => c.slug === slug);
+        if (!category) return;
 
-        document.getElementById('delete-tag-name').textContent = tag.name;
-        document.getElementById('delete-tag-posts').textContent = tag.posts?.length || 0;
+        document.getElementById('delete-category-name').textContent = category.name;
+        document.getElementById('delete-category-posts').textContent = category.posts?.length || 0;
 
-        this.tagToDelete = tag;
+        this.categoryToDelete = category;
         document.getElementById('delete-modal').classList.add('active');
     }
 
     hideDeleteModal() {
         document.getElementById('delete-modal').classList.remove('active');
-        this.tagToDelete = null;
+        this.categoryToDelete = null;
     }
 
-    async deleteTag() {
-        if (!this.tagToDelete) return;
+    async deleteCategory() {
+        if (!this.categoryToDelete) return;
 
         try {
             showLoading();
-            await deleteRequest(`/api/tags/${this.tagToDelete.slug}`);
+            await deleteRequest(`/api/categories/${this.categoryToDelete.slug}`);
 
-            this.tags = this.tags.filter(t => t.slug !== this.tagToDelete.slug);
-            this.filteredTags = this.filteredTags.filter(t => t.slug !== this.tagToDelete.slug);
+            this.categories = this.categories.filter(c => c.slug !== this.categoryToDelete.slug);
+            this.filteredCategories = this.filteredCategories.filter(c => c.slug !== this.categoryToDelete.slug);
             this.hideDeleteModal();
-            showSuccess('Tag deleted successfully');
+            showSuccess('Category deleted successfully');
         } catch (error) {
             if (error instanceof RequestError) {
-                showError(error?.data?.message || 'Error deleting tag');
+                showError(error?.data?.message || 'Error deleting category');
             } else {
-                console.error('Error deleting tag:', error);
-                showError('Error deleting tag');
+                console.error('Error deleting category:', error);
+                showError('Error deleting category');
             }
         } finally {
             this.renderTable();
@@ -276,26 +276,26 @@ class AdminTags {
         }
     }
 
-    async exportTags() {
+    async exportCategories() {
         try {
-            const dataStr = JSON.stringify(this.tags, null, 2);
+            const dataStr = JSON.stringify(this.categories, null, 2);
             const dataBlob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(dataBlob);
 
             const link = document.createElement('a');
             link.href = url;
-            link.download = `tags-export-${new Date().toISOString().split('T')[0]}.json`;
+            link.download = `categories-export-${new Date().toISOString().split('T')[0]}.json`;
             link.click();
 
             URL.revokeObjectURL(url);
-            showSuccess('Tags exported successfully');
+            showSuccess('Categories exported successfully');
         } catch (error) {
-            console.error('Error exporting tags:', error);
-            showError('Failed to export tags');
+            console.error('Error exporting categories:', error);
+            showError('Failed to export categories');
         }
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new AdminTags();
+    new AdminCategories();
 });

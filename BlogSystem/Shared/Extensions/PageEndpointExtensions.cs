@@ -64,6 +64,27 @@ static class PageEndpointExtension
             context.Response.ContentType = "text/html";
             await context.Response.SendFileAsync(filePath);
         });
+
+        app.MapGet("/admin/categories", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "admin", "categories.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
+        app.MapGet("/admin/categories/{slug}/edit", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "admin", "edit", "edit-category.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
+        app.MapGet("/admin/categories/create", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "admin", "edit", "edit-category.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
         #endregion
 
         #region Tag Pages

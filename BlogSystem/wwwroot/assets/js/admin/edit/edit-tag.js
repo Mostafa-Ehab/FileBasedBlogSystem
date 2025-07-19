@@ -24,9 +24,8 @@ class EditTagManager {
     }
 
     async loadData() {
-        showLoading();
-        console.log('Loading tag data...');
         try {
+            showLoading();
             const currentUrl = window.location.pathname.split('/');
             const action = currentUrl.pop();
             if (action === 'edit') {
@@ -34,7 +33,8 @@ class EditTagManager {
                 this.tag = await getRequest(`/api/tags/${tagId}`);
             }
 
-            this.renderForm();
+            this.populateForm();
+            this.updatePageTitle();
         } catch (error) {
             if (error instanceof RequestError) {
                 showError(error?.data?.message || 'Error loading data');
@@ -47,27 +47,32 @@ class EditTagManager {
         }
     }
 
-    renderForm() {
-        if (this.tag) {
-            const title = document.getElementById('form-title');
-            const desc = document.getElementById('form-desc');
-            const tagName = document.getElementById('tag-name');
-            const tagSlug = document.getElementById('tag-slug');
-            const tagDescription = document.getElementById('tag-description');
-            const saveButton = document.getElementById('save-tag');
+    populateForm() {
+        if (!this.tag) return;
+        const tagNameInput = document.getElementById('tag-name');
+        const tagSlugInput = document.getElementById('tag-slug');
+        const tagDescriptionInput = document.getElementById('tag-description');
 
-            document.title = `Edit Tag - ${this.tag.name} - Admin Dashboard`;
-            title.textContent = "Edit Tag";
-            desc.textContent = "Update the details of this tag.";
-            saveButton.textContent = "Save Changes";
+        tagNameInput.value = this.tag.name || '';
+        tagSlugInput.value = this.tag.slug || '';
+        tagDescriptionInput.value = this.tag.description || '';
 
-            tagName.value = this.tag.name || '';
-            tagSlug.value = this.tag.slug || '';
-            tagDescription.value = this.tag.description || '';
+        tagNameInput.setAttribute('disabled', 'disabled');
+        tagSlugInput.setAttribute('disabled', 'disabled');
+    }
 
-            tagName.setAttribute('disabled', 'disabled');
-            tagSlug.setAttribute('disabled', 'disabled');
-        }
+    updatePageTitle() {
+        if (!this.tag) return;
+        document.title = `Edit Tag - ${this.tag.name} - Admin Dashboard`;
+
+        const title = document.getElementById('form-title');
+        title?.textContent = "Edit Tag";
+
+        const desc = document.getElementById('form-desc');
+        desc?.textContent = "Update the details of this tag.";
+
+        const saveButton = document.getElementById('save-tag');
+        saveButton?.textContent = "Save Changes";
     }
 
     async saveTag() {
@@ -95,7 +100,6 @@ class EditTagManager {
     }
 }
 
-let editTagManager;
 document.addEventListener('DOMContentLoaded', () => {
-    editTagManager = new EditTagManager();
+    new EditTagManager();
 });
