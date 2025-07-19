@@ -4,26 +4,22 @@ class AdminNavbarController {
             'posts': {
                 href: '/admin/posts.html',
                 icon: 'fas fa-file-alt',
-                text: 'Posts',
-                roles: ['Admin', 'Editor', 'Author']
+                text: 'Posts'
             },
             'users': {
                 href: '/admin/users.html',
                 icon: 'fas fa-users',
-                text: 'Users',
-                roles: ['Admin'] // Only admins can access users
+                text: 'Users'
             },
             'categories': {
                 href: '/admin/categories.html',
                 icon: 'fas fa-folder',
-                text: 'Categories',
-                roles: ['Admin', 'Editor']
+                text: 'Categories'
             },
             'tags': {
                 href: '/admin/tags.html',
                 icon: 'fas fa-tags',
-                text: 'Tags',
-                roles: ['Admin', 'Editor']
+                text: 'Tags'
             }
         };
 
@@ -74,13 +70,13 @@ class AdminNavbarController {
         // Clear existing links
         navLinksContainer.innerHTML = '';
 
-        // Filter and render links based on user role
-        Object.entries(this.navConfig).forEach(([key, config]) => {
-            if (config.roles.includes(user.role)) {
+        // Render links only for admin
+        if (user.role === 'Admin') {
+            Object.entries(this.navConfig).forEach(([key, config]) => {
                 const link = this.createNavLink(key, config);
                 navLinksContainer.appendChild(link);
-            }
-        });
+            });
+        }
     }
 
     renderMobileNav(user) {
@@ -98,10 +94,12 @@ class AdminNavbarController {
         mobileNav.innerHTML = `
             <div class="mobile-nav-content">
                 <div class="mobile-nav-section">
-                    <div class="mobile-nav-title">Navigation</div>
-                    <ul class="mobile-nav-links" id="mobile-nav-links">
-                        ${this.generateMobileNavLinks(user)}
-                    </ul>
+                ${user.role === "Admin" ? `
+                        <div class="mobile-nav-title">Navigation</div>
+                        <ul class="mobile-nav-links" id="mobile-nav-links">
+                            ${this.generateMobileNavLinks()}
+                        </ul>` : ""
+            }
                 </div>
                 <div class="mobile-nav-section mobile-user-section">
                     <div class="mobile-user-info">
@@ -122,9 +120,8 @@ class AdminNavbarController {
         navbar.appendChild(mobileNav);
     }
 
-    generateMobileNavLinks(user) {
+    generateMobileNavLinks() {
         return Object.entries(this.navConfig)
-            .filter(([key, config]) => config.roles.includes(user.role))
             .map(([key, config]) => `
                 <li class="mobile-nav-item">
                     <a href="${config.href}" class="mobile-nav-link" data-nav-key="${key}">
