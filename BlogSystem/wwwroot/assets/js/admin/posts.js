@@ -199,9 +199,14 @@ class AdminPostsManager {
                 </td>
                 <td>
                     <div class="action-buttons">
+                        ${post.authorId === getUser().userId ? `
                         <a class="action-btn edit" href="/admin/posts/${post.id}/edit">
                             <i class="fas fa-edit"></i>
+                        </a>` : `
+                        <a class="action-btn view" href="/posts/${post.slug}" target="_blank">
+                            <i class="fas fa-eye"></i>
                         </a>
+                        `}
                         <button class="action-btn delete" onclick="adminPosts.confirmDeletePost('${post.id}')" title="Delete Post">
                             <i class="fas fa-trash"></i>
                         </button>

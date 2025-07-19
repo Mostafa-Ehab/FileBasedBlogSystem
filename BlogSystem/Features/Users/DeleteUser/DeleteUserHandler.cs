@@ -19,6 +19,8 @@ public class DeleteUserHandler : IDeleteUserHandler
         {
             throw new UserNotFoundException(userId);
         }
+
         _userRepository.DeleteUser(user);
+        await Task.CompletedTask;
     }
 }

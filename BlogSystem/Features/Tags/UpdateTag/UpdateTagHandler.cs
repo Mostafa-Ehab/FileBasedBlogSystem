@@ -8,10 +8,12 @@ namespace BlogSystem.Features.Tags.UpdateTag;
 public class UpdateTagHandler : IUpdateTagHandler
 {
     private readonly ITagRepository _tagRepository;
+
     public UpdateTagHandler(ITagRepository tagRepository)
     {
         _tagRepository = tagRepository;
     }
+
     public async Task<Tag> UpdateTagAsync(UpdateTagRequestDTO request, string slug)
     {
         var existingTag = _tagRepository.GetTagBySlug(slug);
@@ -22,6 +24,8 @@ public class UpdateTagHandler : IUpdateTagHandler
 
         existingTag.Description = request.Description;
 
-        return await Task.FromResult(_tagRepository.UpdateTag(existingTag));
+        return await Task.FromResult(
+            _tagRepository.UpdateTag(existingTag)
+        );
     }
 }

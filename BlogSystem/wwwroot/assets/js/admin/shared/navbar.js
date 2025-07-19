@@ -4,22 +4,26 @@ class AdminNavbarController {
             'posts': {
                 href: '/admin/posts.html',
                 icon: 'fas fa-file-alt',
-                text: 'Posts'
+                text: 'Posts',
+                roles: ['Admin', 'Author']
             },
             'users': {
                 href: '/admin/users.html',
                 icon: 'fas fa-users',
-                text: 'Users'
+                text: 'Users',
+                roles: ['Admin']
             },
             'categories': {
                 href: '/admin/categories.html',
                 icon: 'fas fa-folder',
-                text: 'Categories'
+                text: 'Categories',
+                roles: ['Admin']
             },
             'tags': {
                 href: '/admin/tags.html',
                 icon: 'fas fa-tags',
-                text: 'Tags'
+                text: 'Tags',
+                roles: ['Admin']
             }
         };
 
