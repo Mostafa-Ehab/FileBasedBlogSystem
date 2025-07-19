@@ -4,6 +4,7 @@ using BlogSystem.Features.Categories.CreateCategory.Validators;
 using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Categories.DeleteCategory;
 using BlogSystem.Features.Categories.GetCategory;
+using BlogSystem.Features.Categories.UpdateCategory;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.GetPost;
 using BlogSystem.Features.Posts.PostManagement;
@@ -164,6 +165,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IGetCategoryHandler, GetCategoryHandler>();
         services.AddScoped<ICreateCategoryHandler, CreateCategoryHandler>();
+        services.AddScoped<IUpdateCategoryHandler, UpdateCategoryHandler>();
         services.AddScoped<IDeleteCategoryHandler, DeleteCategoryHandler>();
         return services;
     }
