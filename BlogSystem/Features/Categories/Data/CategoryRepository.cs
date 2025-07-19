@@ -54,6 +54,31 @@ public class CategoryRepository : ICategoryRepository
         return category;
     }
 
+    public Category UpdateCategory(Category category)
+    {
+        var path = Path.Combine("Content", "categories", $"{category.Slug}.json");
+        if (!File.Exists(path))
+        {
+            throw new InvalidOperationException($"Category with slug '{category.Slug}' does not exist.");
+        }
+
+        string json = JsonSerializer.Serialize(category, _jsonSerializerOptions);
+        File.WriteAllText(path, json);
+        return category;
+    }
+
+    public void DeleteCategory(Category category)
+    {
+        if (category.Posts != null && category.Posts.Count > 0)
+        {
+            throw new InvalidOperationException($"Cannot delete category '{category.Slug}' because it has associated posts.");
+        }
+
+        File.Delete(
+            Path.Combine("Content", "categories", $"{category.Slug}.json")
+        );
+    }
+
     public bool CategoryExists(string slug)
     {
         var path = Path.Combine("Content", "categories", $"{slug}.json");

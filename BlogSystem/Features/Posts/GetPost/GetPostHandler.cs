@@ -77,16 +77,15 @@ public class GetPostHandler : IGetPostHandler
         var user = _userRepository.GetUserById(userId)!;
 
         var posts = new List<Post>();
-        if (user.Role != UserRole.Editor && user.Role != UserRole.Admin)
+        if (user.Role == UserRole.Admin)
         {
-            posts = user.Posts
-                .Select(_postRepository.GetPostById)
-                .OrderByDescending(p => p!.UpdatedAt)
-                .ToList()!;
+            posts = _postRepository.GetAllPosts()
+                .Where(p => p.Status != PostStatus.Draft || p.AuthorId == user.Id)
+                .ToList();
         }
         else
         {
-            posts = _postRepository.GetAllPosts().ToList();
+            posts = _postRepository.GetAuthorPosts(user.Id).ToList();
         }
 
         return Task.FromResult(

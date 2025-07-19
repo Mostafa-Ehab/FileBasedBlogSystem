@@ -1,4 +1,5 @@
 using BlogSystem.Features.Categories.CreateCategory;
+using BlogSystem.Features.Categories.DeleteCategory;
 using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Posts.GetPost;
 using BlogSystem.Features.Posts.PostManagement;
@@ -47,6 +48,7 @@ public static class MinimalApiExtensions
         app.MapGetCategoryEndpoint();
         app.MapGetPostsByCategoryEndpoint();
         app.MapCreateCategoryEndpoint();
+        app.MapDeleteCategoryEndpoint();
 
         return app;
     }

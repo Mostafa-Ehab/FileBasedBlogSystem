@@ -2,6 +2,7 @@ using BlogSystem.Features.Categories.CreateCategory;
 using BlogSystem.Features.Categories.CreateCategory.DTOs;
 using BlogSystem.Features.Categories.CreateCategory.Validators;
 using BlogSystem.Features.Categories.Data;
+using BlogSystem.Features.Categories.DeleteCategory;
 using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.GetPost;
@@ -163,6 +164,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IGetCategoryHandler, GetCategoryHandler>();
         services.AddScoped<ICreateCategoryHandler, CreateCategoryHandler>();
+        services.AddScoped<IDeleteCategoryHandler, DeleteCategoryHandler>();
         return services;
     }
 

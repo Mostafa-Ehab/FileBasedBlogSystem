@@ -43,7 +43,6 @@ public static class GetPostEndpoint
                 var posts = await handler.GetManagedPostsAsync(userId);
                 return Results.Ok(posts);
             }
-
         })
         .WithName("GetAllPosts")
         .WithTags("Posts")
