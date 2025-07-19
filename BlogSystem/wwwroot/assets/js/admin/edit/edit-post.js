@@ -16,6 +16,10 @@ class EditPostManager {
             goBack();
         });
 
+        document.getElementById('cancel-button')?.addEventListener('click', () => {
+            goBack();
+        });
+
         // Post form submission
         document.getElementById('post-form')?.addEventListener('submit', (e) => {
             e.preventDefault();

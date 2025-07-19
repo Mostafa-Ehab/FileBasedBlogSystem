@@ -15,13 +15,13 @@ class EditUserManager {
             goBack();
         });
 
+        document.getElementById('cancel-button').addEventListener('click', () => {
+            goBack();
+        });
+
         document.getElementById('user-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             await this.saveUser();
-        });
-
-        document.getElementById('cancel-button').addEventListener('click', () => {
-            window.location.href = '/admin/users';
         });
 
         // Password generation and toggle

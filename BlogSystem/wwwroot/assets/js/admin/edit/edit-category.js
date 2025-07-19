@@ -15,6 +15,10 @@ class EditCategoryManager {
             goBack();
         });
 
+        document.getElementById('cancel-button')?.addEventListener('click', () => {
+            goBack();
+        });
+
         document.getElementById('category-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             this.saveCategory();

@@ -15,6 +15,10 @@ class EditTagManager {
             goBack();
         });
 
+        document.getElementById('cancel-button')?.addEventListener('click', () => {
+            goBack();
+        });
+
         document.getElementById('tag-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             this.saveTag();
