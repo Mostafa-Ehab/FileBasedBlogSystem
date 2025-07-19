@@ -2,8 +2,8 @@ class AdminTags {
     constructor() {
         this.tags = [];
         this.filteredTags = [];
-        this.currentPage = 1;
-        this.itemsPerPage = 10;
+        this.currentPage = getCurrentPage();
+        this.itemsPerPage = getItemsPerPage();
 
         this.init();
     }
@@ -57,6 +57,14 @@ class AdminTags {
             const totalPages = Math.ceil(this.filteredTags.length / this.itemsPerPage);
             if (this.currentPage < totalPages) {
                 this.currentPage++;
+                this.renderTable();
+            }
+        });
+
+        window.addEventListener("popstate", (event) => {
+            const page = getCurrentPage();
+            if (page !== this.currentPage) {
+                this.currentPage = page;
                 this.renderTable();
             }
         });
@@ -228,6 +236,9 @@ class AdminTags {
 
             numbersContainer.innerHTML = numbers.join('');
         }
+
+        // Update current page in URL
+        setCurrentPage(this.currentPage);
     }
 
     goToPage(page) {

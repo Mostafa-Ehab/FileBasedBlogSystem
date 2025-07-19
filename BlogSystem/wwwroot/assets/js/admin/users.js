@@ -2,8 +2,8 @@
 class AdminUsersManager {
     constructor() {
         this.users = [];
-        this.currentPage = 1;
-        this.itemsPerPage = 10;
+        this.currentPage = getCurrentPage();
+        this.itemsPerPage = getItemsPerPage();
         this.filteredUsers = [];
         this.editingUserId = null;
 
@@ -68,6 +68,12 @@ class AdminUsersManager {
             this.deleteUser();
         });
 
+        document.getElementById('delete-modal')?.addEventListener('click', (e) => {
+            if (e.target.classList.contains('admin-modal')) {
+                this.hideDeleteModal();
+            }
+        });
+
         // Pagination
         document.getElementById('prev-page')?.addEventListener('click', () => {
             if (this.currentPage > 1) {
@@ -84,9 +90,11 @@ class AdminUsersManager {
             }
         });
 
-        document.getElementById('delete-modal')?.addEventListener('click', (e) => {
-            if (e.target.classList.contains('admin-modal')) {
-                this.hideDeleteModal();
+        window.addEventListener("popstate", (event) => {
+            const page = getCurrentPage();
+            if (page !== this.currentPage) {
+                this.currentPage = page;
+                this.renderTable();
             }
         });
     }
@@ -215,6 +223,9 @@ class AdminUsersManager {
 
             numbersContainer.innerHTML = numbers.join('');
         }
+
+        // Update current page in URL
+        setCurrentPage(this.currentPage);
     }
 
     goToPage(page) {

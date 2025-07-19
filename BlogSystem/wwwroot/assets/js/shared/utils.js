@@ -51,3 +51,19 @@ function generateSlug(title) {
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+function getCurrentPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return parseInt(urlParams.get('page')) || 1;
+}
+
+function getItemsPerPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return parseInt(urlParams.get('items')) || 10;
+}
+
+function setCurrentPage(page) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('page', page);
+    window.history.pushState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+}

@@ -4,8 +4,8 @@ class AdminPostsManager {
         this.posts = [];
         this.categories = [];
         this.authors = [];
-        this.currentPage = 1;
-        this.itemsPerPage = 10;
+        this.currentPage = getCurrentPage();
+        this.itemsPerPage = getItemsPerPage();
         this.filteredPosts = [];
         this.editingPostId = null;
 
@@ -65,6 +65,14 @@ class AdminPostsManager {
             const totalPages = Math.ceil(this.filteredPosts.length / this.itemsPerPage);
             if (this.currentPage < totalPages) {
                 this.currentPage++;
+                this.renderTable();
+            }
+        });
+
+        window.addEventListener("popstate", (event) => {
+            const page = getCurrentPage();
+            if (page !== this.currentPage) {
+                this.currentPage = page;
                 this.renderTable();
             }
         });
@@ -244,6 +252,9 @@ class AdminPostsManager {
 
             numbersContainer.innerHTML = numbers.join('');
         }
+
+        // Update current page in URL
+        setCurrentPage(this.currentPage);
     }
 
     goToPage(page) {
