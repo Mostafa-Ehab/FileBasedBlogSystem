@@ -11,6 +11,10 @@ class EditTagManager {
     }
 
     setupEventListeners() {
+        document.getElementById('back-btn')?.addEventListener('click', () => {
+            goBack();
+        });
+
         document.getElementById('tag-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             this.saveTag();

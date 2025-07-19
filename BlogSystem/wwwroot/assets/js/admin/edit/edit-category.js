@@ -11,6 +11,10 @@ class EditCategoryManager {
     }
 
     setupEventListeners() {
+        document.getElementById('back-btn')?.addEventListener('click', () => {
+            goBack();
+        });
+
         document.getElementById('category-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             this.saveCategory();

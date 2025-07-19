@@ -297,5 +297,5 @@ class AdminTags {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new AdminTags();
+    window.adminTags = new AdminTags();
 });

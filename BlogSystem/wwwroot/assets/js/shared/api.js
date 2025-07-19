@@ -75,3 +75,7 @@ function showLoading() {
 function hideLoading() {
     document.getElementById('loading-overlay')?.classList.remove('active');
 }
+
+function goBack() {
+    window.history.back();
+}

@@ -11,6 +11,10 @@ class EditUserManager {
     }
 
     setupEventListeners() {
+        document.getElementById('back-btn')?.addEventListener('click', () => {
+            goBack();
+        });
+
         document.getElementById('user-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             await this.saveUser();

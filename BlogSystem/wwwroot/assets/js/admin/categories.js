@@ -297,5 +297,5 @@ class AdminCategories {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new AdminCategories();
+    window.adminCategories = new AdminCategories();
 });
