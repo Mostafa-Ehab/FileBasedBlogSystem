@@ -30,6 +30,13 @@ public class GetCategoryHandler : IGetCategoryHandler
         {
             throw new CategoryNotFoundException(slug);
         }
+
+        category.Posts = category.Posts.Where(postId =>
+        {
+            Post? post = _postRepository.GetPostById(postId);
+            return post != null && post.Status == PostStatus.Published;
+        }).ToList();
+
         return Task.FromResult(category);
     }
 
@@ -55,6 +62,14 @@ public class GetCategoryHandler : IGetCategoryHandler
     public Task<CategoryDTO[]> GetAllCategoriesAsync()
     {
         Category[] categories = _categoryRepository.GetAllCategories();
+        foreach (var category in categories)
+        {
+            category.Posts = category.Posts.Where(postId =>
+            {
+                Post? post = _postRepository.GetPostById(postId);
+                return post != null && post.Status == PostStatus.Published;
+            }).ToList();
+        }
         return Task.FromResult(
             categories.Select(c => c.MapToCategoryDTO()).ToArray()
         );

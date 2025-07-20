@@ -3,7 +3,8 @@ async function loadSidebarTags() {
 
     // Fetch and load the tags
     const response = await fetch("/api/tags");
-    const tags = await response.json();
+    let tags = await response.json();
+    tags = tags.filter(tag => tag.posts.length > 0);
     tags.sort((a, b) => a.name.localeCompare(b.name));
 
     tags.forEach((tag) => {
@@ -20,7 +21,8 @@ async function loadSidebarCategories() {
 
     // Fetch and load the categories
     const response = await fetch("/api/categories");
-    const categories = await response.json();
+    let categories = await response.json();
+    categories = categories.filter(category => category.posts.length > 0);
     categories.sort((a, b) => a.name.localeCompare(b.name));
 
     categories.forEach((category) => {

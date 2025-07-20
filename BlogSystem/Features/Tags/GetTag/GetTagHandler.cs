@@ -29,12 +29,27 @@ public class GetTagHandler : IGetTagHandler
         {
             throw new TagNotFoundException(slug);
         }
+
+        tag.Posts = tag.Posts.Where(postId =>
+        {
+            Post? post = _postRepository.GetPostById(postId);
+            return post != null && post.Status == PostStatus.Published;
+        }).ToList();
+
         return Task.FromResult(tag);
     }
 
     public Task<Tag[]> GetAllTagsAsync()
     {
         Tag[] tags = _tagRepository.GetAllTags();
+        foreach (var tag in tags)
+        {
+            tag.Posts = tag.Posts.Where(postId =>
+            {
+                Post? post = _postRepository.GetPostById(postId);
+                return post != null && post.Status == PostStatus.Published;
+            }).ToList();
+        }
         return Task.FromResult(tags);
     }
 
