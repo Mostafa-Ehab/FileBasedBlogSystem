@@ -78,7 +78,7 @@ public class PublishedState
                     });
                 }
             });
-post.Tags = post.Tags.Select(tag => SlugHelper.GenerateSlug(tag)).ToList();
+            post.Tags = post.Tags.Select(tag => SlugHelper.GenerateSlug(tag)).ToList();
         }
     }
 
@@ -89,7 +89,7 @@ post.Tags = post.Tags.Select(tag => SlugHelper.GenerateSlug(tag)).ToList();
             throw new ValidationErrorException("Image cannot be null or empty.");
         }
 
-        post.ImageUrl = string.IsNullOrWhiteSpace(post.ImageUrl) ?
+        post.ImageUrl = image != null ?
             await SavePostImageAsync(image!, post.Id) : post.ImageUrl;
     }
 

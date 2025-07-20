@@ -106,7 +106,7 @@ public class ScheduledState
             throw new ValidationErrorException("Image cannot be null or empty.");
         }
 
-        post.ImageUrl = string.IsNullOrWhiteSpace(post.ImageUrl) ?
+        post.ImageUrl = image != null ?
             await SavePostImageAsync(image!, post.Id) : post.ImageUrl;
     }
 
