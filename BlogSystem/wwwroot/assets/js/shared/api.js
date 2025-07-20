@@ -12,6 +12,12 @@ function getRequest(url, params = {}) {
             throw new RequestError(await response.json());
         }
         return response.json();
+    }).catch(error => {
+        if (error?.data?.errorCode == 40101) {
+            return goToLogin();
+        } else {
+            throw error;
+        }
     });
 }
 
@@ -30,6 +36,12 @@ function postRequest(url, data = {}, params = {}) {
             throw new RequestError(await response.json());
         }
         return response.json();
+    }).catch(error => {
+        if (error?.data?.errorCode == 40101) {
+            return goToLogin();
+        } else {
+            throw error;
+        }
     });
 }
 
@@ -48,6 +60,12 @@ function putRequest(url, data = {}, params = {}) {
             throw new RequestError(await response.json());
         }
         return response.json();
+    }).catch(error => {
+        if (error?.data?.errorCode == 40101) {
+            return goToLogin();
+        } else {
+            throw error;
+        }
     });
 }
 
@@ -65,6 +83,12 @@ function deleteRequest(url, params = {}) {
             throw new RequestError(await response.json());
         }
         return;
+    }).catch(error => {
+        if (error?.data?.errorCode == 40101) {
+            return goToLogin();
+        } else {
+            throw error;
+        }
     });
 }
 
@@ -78,4 +102,11 @@ function hideLoading() {
 
 function goBack() {
     window.history.back();
+}
+
+function goToLogin() {
+    if (window.location.pathname !== '/admin/login.html') {
+        clearUser();
+        window.location.href = '/admin/login.html';
+    }
 }

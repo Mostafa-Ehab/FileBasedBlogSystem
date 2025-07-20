@@ -28,7 +28,7 @@ public class LoginHandler : ILoginHandler
 
         if (user == null || !_authHelper.ValidatePassword(loginRequestDTO.Password, user.HashedPassword))
         {
-            throw new NotAuthenticatedException("Incorrect username or password", 401);
+            throw new NotAuthorizedException("Incorrect username or password", 401);
         }
 
         return Task.FromResult(new LoginResponseDTO

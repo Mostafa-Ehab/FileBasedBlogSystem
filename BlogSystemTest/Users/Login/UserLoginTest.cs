@@ -41,6 +41,6 @@ public class UserLoginTest : UnitTestBase
         };
 
         // Act & Assert
-        await Assert.ThrowsAsync<NotAuthenticatedException>(() => loginHandler.LoginAsync(loginRequest));
+        await Assert.ThrowsAsync<NotAuthorizedException>(() => loginHandler.LoginAsync(loginRequest));
     }
 }

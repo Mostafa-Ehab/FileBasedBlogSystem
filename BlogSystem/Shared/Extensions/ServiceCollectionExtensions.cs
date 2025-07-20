@@ -32,6 +32,7 @@ using BlogSystem.Features.Users.UpdateUser.Validators;
 using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Infrastructure.MarkdownService;
 using BlogSystem.Infrastructure.Scheduling;
+using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Helpers;
 using FluentValidation;
 using Hangfire;
@@ -78,6 +79,28 @@ public static class ServiceCollectionExtensions
                                 throw new InvalidOperationException("JWT_SecretKey is not configured")
                         )
                     ),
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.Exception is SecurityTokenExpiredException)
+                        {
+                            throw new NotAuthorizedException("Token has expired", 40101);
+                        }
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        if (!context.Response.HasStarted)
+                        {
+                            context.HandleResponse();
+                            throw new NotAuthorizedException("Unauthorized access");
+                        }
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
