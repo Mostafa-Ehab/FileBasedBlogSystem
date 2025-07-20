@@ -20,8 +20,10 @@
             <a href="index.html">Blog</a>
         </div>
         <div class="search-container">
-            <input type="text" placeholder="Search posts..." class="search-input">
-            <button class="search-btn">
+            <label for="search-input" class="visually-hidden">Search posts</label>
+            <input type="text" id="search-input" placeholder="Search posts..." class="search-input"
+                aria-label="Search posts">
+            <button class="search-btn" aria-label="Search button">
                 <i class="fas fa-search"></i>
             </button>
         </div>

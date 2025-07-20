@@ -50,6 +50,10 @@ a:hover {
   color: var(--link-hover-color);
 }
 
+.visually-hidden {
+  display: none;
+}
+
 /* Message Styles */
 .error-message,
 .success-message {
