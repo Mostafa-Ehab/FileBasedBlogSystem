@@ -68,6 +68,7 @@ public class DraftState
                     });
                 }
             });
+            post.Tags = post.Tags.Select(tag => SlugHelper.GenerateSlug(tag)).ToList();
         }
     }
 

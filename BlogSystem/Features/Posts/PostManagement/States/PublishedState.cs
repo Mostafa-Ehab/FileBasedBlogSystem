@@ -78,6 +78,7 @@ public class PublishedState
                     });
                 }
             });
+post.Tags = post.Tags.Select(tag => SlugHelper.GenerateSlug(tag)).ToList();
         }
     }
 
