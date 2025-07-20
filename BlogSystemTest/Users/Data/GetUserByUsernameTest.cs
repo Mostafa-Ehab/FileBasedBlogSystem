@@ -23,7 +23,7 @@ public class GetUserByUsernameTest : UnitTestBase
         Assert.Equal("jane.doe@example.com", user.Email);
         Assert.Equal("Jane Doe", user.FullName);
         Assert.Equal("This is Jane's profile. They love blogging about technology and travel.", user.Bio);
-        Assert.Equal("https://example.com/images/jane-doe.jpg", user.ProfilePicture);
+        Assert.Equal("https://example.com/images/jane-doe.jpg", user.ProfilePictureUrl);
         Assert.Equal(["2025-06-09-first-post"], user.Posts);
     }
 

@@ -34,7 +34,8 @@ public class UnitTestBase
     public UserRepository CreateUserRepository()
     {
         var userResolver = new UserResolver(_jsonSerializerOptions);
-        return new UserRepository(_jsonSerializerOptions, userResolver);
+        var postRepository = CreatePostRepository();
+        return new UserRepository(_jsonSerializerOptions, userResolver, postRepository);
     }
 
     public PostRepository CreatePostRepository()

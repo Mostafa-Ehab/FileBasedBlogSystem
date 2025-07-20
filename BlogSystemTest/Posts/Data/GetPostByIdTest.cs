@@ -28,7 +28,7 @@ public class GetPostByIdTest : UnitTestBase
         Assert.Equal(expectedTitle, post.Title);
         Assert.Equal(expectedDescription, post.Description);
         Assert.Equivalent(expectedTags, post.Tags);
-        Assert.Equal(expectedAuthor, post.Author);
+        Assert.Equal(expectedAuthor, post.AuthorId);
         Assert.Equal(expectedSlug, post.Slug);
     }
 
