@@ -9,16 +9,16 @@ public class AuthHelper
 {
     private readonly int _hashWorkFactor = 10;
     private readonly SymmetricSecurityKey? _securityKey = null;
-    public AuthHelper(IConfiguration configuration)
+    public AuthHelper()
     {
-        var jwtSecretKey = configuration["JWT_SecretKey"];
+        var jwtSecretKey = Environment.GetEnvironmentVariable("JWT_SecretKey");
         if (string.IsNullOrWhiteSpace(jwtSecretKey))
         {
             throw new InvalidOperationException("JWT_SecretKey is not configured");
         }
-
-        _hashWorkFactor = int.Parse(configuration["BC_HashWorkFactor"] ?? "10");
-        _securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey));
+        _securityKey = new SymmetricSecurityKey(
+            Encoding.ASCII.GetBytes(jwtSecretKey)
+        );
     }
 
     public static string HashPassword(string password, int workFactor = 10) =>
