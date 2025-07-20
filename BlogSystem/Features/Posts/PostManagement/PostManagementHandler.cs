@@ -176,12 +176,6 @@ public class PostManagementHandler : IPostManagementHandler
             throw new UnauthorizedAccessException("You do not have permission to delete this post.");
         }
 
-        // Validate the user's ownership of the post
-        if (post.AuthorId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have permission to delete this post.");
-        }
-
         // Delete the post
         _postRepository.DeletePost(post);
         await Task.CompletedTask;
