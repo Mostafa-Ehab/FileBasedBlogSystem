@@ -39,6 +39,8 @@ Each role has specific permissions to manage blog posts, users, and access the a
   Create, read, update, and delete any Markdown-based blog posts.
 - **User Management**
   Create, read and update users with role-based access control.
+- **Tag and Category Management**
+  Create, read, update, and delete tags and categories.
 
 ### Editor Role
 
@@ -61,7 +63,6 @@ Each role has specific permissions to manage blog posts, users, and access the a
 
 ## 🚀 Future Enhancements
 
-- A separate page for managing tags and categories.
 - Implement server side pagination for admin panel instead of client-side pagination.
 - Implement paginations for the viewing public posts.
 - Implement search functionality for posts, tags, and categories.

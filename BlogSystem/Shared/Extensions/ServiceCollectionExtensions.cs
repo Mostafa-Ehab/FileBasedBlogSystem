@@ -73,7 +73,10 @@ public static class ServiceCollectionExtensions
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(services.BuildServiceProvider().GetRequiredService<IConfiguration>()["JWT_SecretKey"] ?? throw new InvalidOperationException("JWT_SecretKey is not configured"))
+                        Encoding.ASCII.GetBytes(
+                            Environment.GetEnvironmentVariable("JWT_SecretKey") ??
+                                throw new InvalidOperationException("JWT_SecretKey is not configured")
+                        )
                     ),
                 };
             });

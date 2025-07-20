@@ -64,3 +64,5 @@ nunit-*.xml
 Content/
 
 dev-data/
+
+.env

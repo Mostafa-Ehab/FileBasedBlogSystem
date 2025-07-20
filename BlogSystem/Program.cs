@@ -1,5 +1,8 @@
 using BlogSystem.Shared.Extensions;
+using DotNetEnv;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
