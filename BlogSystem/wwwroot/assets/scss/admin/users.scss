@@ -85,8 +85,7 @@
         justify-content: center;
 
         &:hover {
-            background: var(--background-light);
-            color: var(--text-color);
+            color: var(--secondary-color);
         }
 
         &:first-of-type {

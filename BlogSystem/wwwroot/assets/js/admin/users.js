@@ -168,9 +168,9 @@ class AdminUsersManager {
                 <td>${new Date(user.createdAt).toLocaleDateString()}</td>
                 <td>
                     <div class="action-buttons">
-                        <a class="action-btn edit" href="/admin/users/${user.id}/edit">
+                        <!-- <a class="action-btn edit" href="/admin/users/${user.id}/edit">
                             <i class="fas fa-edit"></i>
-                        </a>
+                        </a> -->
                         <button class="action-btn delete" onclick="adminUsers.confirmDeleteUser('${user.id}')" title="Delete User">
                             <i class="fas fa-trash"></i>
                         </button>
