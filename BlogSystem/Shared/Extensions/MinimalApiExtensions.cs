@@ -76,6 +76,7 @@ public static class MinimalApiExtensions
         app.MapUpdateUserEndpoints();
         app.MapUpdateProfileEndpoint();
         app.MapChangePasswordEndpoint();
+        app.MapUpdateProfilePictureEndpoint();
         app.MapDeleteUserEndpoint();
 
         return app;

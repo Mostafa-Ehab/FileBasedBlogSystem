@@ -57,16 +57,6 @@ class ProfilePageManager {
             });
         }
 
-        // // Name field updates
-        // const firstNameInput = document.getElementById('first-name');
-        // const lastNameInput = document.getElementById('last-name');
-        // const fullNameInput = document.getElementById('full-name');
-
-        // if (firstNameInput && lastNameInput && fullNameInput) {
-        //     firstNameInput.addEventListener('input', this.updateFullName);
-        //     lastNameInput.addEventListener('input', this.updateFullName);
-        // }
-
         // Bio character counter
         const bioTextarea = document.getElementById('bio');
         const bioCounter = document.getElementById('bio-count');
@@ -152,44 +142,32 @@ class ProfilePageManager {
             return;
         }
 
-        // Preview the image
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const preview = document.getElementById('profile-preview');
-            if (preview) {
-                preview.src = e.target.result;
-            }
-        };
-        reader.readAsDataURL(file);
+        // Prepare form data
+        const formData = new FormData();
+        formData.append('profilePicture', file);
 
         // Upload the image
-        this.uploadProfilePicture(file);
-    }
-
-    async uploadProfilePicture(file) {
         try {
-            showLoading(true);
-
-            const formData = new FormData();
-            formData.append('profilePicture', file);
-
-            const currentUser = getCurrentUser();
-            const response = await putRequest(`/api/users/${currentUser.id}/profile-picture`,
+            showLoading();
+            const response = await putRequest(`/api/users/me/profile-picture`,
                 formData
             );
 
-            const result = await response.json();
-
-            if (result.success) {
-                showMessage('Profile picture updated successfully', 'success');
-            } else {
-                showMessage(result.message || 'Failed to update profile picture', 'error');
+            const preview = document.getElementById('profile-preview');
+            if (preview) {
+                preview.src = response.profilePictureUrl;
             }
+            showSuccess('Profile picture updated successfully');
+            setUser({ ...getUser(), ...response });
         } catch (error) {
-            console.error('Error uploading profile picture:', error);
-            showMessage('Error uploading profile picture', 'error');
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error updating profile picture');
+            } else {
+                console.error('Error updating profile picture:', error);
+                showError('Error updating profile picture');
+            }
         } finally {
-            showLoading(false);
+            hideLoading();
         }
     }
 
@@ -432,225 +410,3 @@ class ProfilePageManager {
 document.addEventListener('DOMContentLoaded', () => {
     window.profilePageManager = new ProfilePageManager();
 });
-
-
-// document.addEventListener('DOMContentLoaded', function () {
-//     initializeProfilePage();
-// });
-
-// function initializeProfilePage() {
-//     loadUserProfile();
-//     setupEventListeners();
-//     setupPasswordValidation();
-//     setupFormValidation();
-// }
-
-// // Event Listeners
-// function setupEventListeners() {
-//     // Profile picture upload
-//     const uploadInput = document.getElementById('profile-picture-upload');
-//     const removeBtn = document.getElementById('remove-picture-btn');
-//     const preview = document.getElementById('profile-preview');
-
-//     if (uploadInput) {
-//         uploadInput.addEventListener('change', handleProfilePictureUpload);
-//     }
-
-//     if (removeBtn) {
-//         removeBtn.addEventListener('click', removeProfilePicture);
-//     }
-
-//     // Form submissions
-//     const personalInfoForm = document.getElementById('personal-info-form');
-//     const securityForm = document.getElementById('security-form');
-
-//     if (personalInfoForm) {
-//         personalInfoForm.addEventListener('submit', handlePersonalInfoSubmit);
-//     }
-
-//     if (securityForm) {
-//         securityForm.addEventListener('submit', handleSecuritySubmit);
-//     }
-
-//     // Reset buttons
-//     const resetPersonalInfo = document.getElementById('reset-personal-info');
-//     const cancelPasswordChange = document.getElementById('cancel-password-change');
-
-//     if (resetPersonalInfo) {
-//         resetPersonalInfo.addEventListener('click', resetPersonalInfoForm);
-//     }
-
-//     if (cancelPasswordChange) {
-//         cancelPasswordChange.addEventListener('click', resetSecurityForm);
-//     }
-
-//     // Name field updates
-//     const firstNameInput = document.getElementById('first-name');
-//     const lastNameInput = document.getElementById('last-name');
-//     const fullNameInput = document.getElementById('full-name');
-
-//     if (firstNameInput && lastNameInput && fullNameInput) {
-//         firstNameInput.addEventListener('input', updateFullName);
-//         lastNameInput.addEventListener('input', updateFullName);
-//     }
-
-//     // Bio character counter
-//     const bioTextarea = document.getElementById('bio');
-//     const bioCounter = document.getElementById('bio-count');
-
-//     if (bioTextarea && bioCounter) {
-//         bioTextarea.addEventListener('input', updateBioCounter);
-//     }
-
-//     // Password toggle buttons
-//     const passwordToggles = document.querySelectorAll('.password-toggle');
-//     passwordToggles.forEach(toggle => {
-//         toggle.addEventListener('click', togglePasswordVisibility);
-//     });
-
-//     // Security options
-//     const setup2faBtn = document.getElementById('setup-2fa');
-//     const manageSessionsBtn = document.getElementById('manage-sessions');
-
-//     if (setup2faBtn) {
-//         setup2faBtn.addEventListener('click', setup2FA);
-//     }
-
-//     if (manageSessionsBtn) {
-//         manageSessionsBtn.addEventListener('click', manageSessions);
-//     }
-// }
-
-// // Load user profile data
-// async function loadUserProfile() {
-//     try {
-//         showLoading(true);
-
-//         // Get current user from auth
-//         const currentUser = getCurrentUser();
-//         if (!currentUser) {
-//             window.location.href = '/admin/login.html';
-//             return;
-//         }
-
-//         // Load user data
-//         const response = await apiRequest(`/api/users/${currentUser.id}`, {
-//             method: 'GET'
-//         });
-
-//         if (response.success) {
-//             populateProfileForm(response.data);
-//             updateLastLoginDisplay();
-//         } else {
-//             showMessage('Failed to load profile data', 'error');
-//         }
-//     } catch (error) {
-//         console.error('Error loading profile:', error);
-//         showMessage('Error loading profile data', 'error');
-//     } finally {
-//         showLoading(false);
-//     }
-// }
-
-// // Populate form with user data
-// function populateProfileForm(userData) {
-//     // Personal information
-//     setFieldValue('username', userData.username || '');
-//     setFieldValue('email', userData.email || '');
-//     setFieldValue('first-name', userData.firstName || '');
-//     setFieldValue('last-name', userData.lastName || '');
-//     setFieldValue('full-name', userData.fullName || '');
-//     setFieldValue('bio', userData.bio || '');
-//     setFieldValue('website', userData.website || '');
-
-//     // Profile picture
-//     if (userData.profilePicture) {
-//         const preview = document.getElementById('profile-preview');
-//         if (preview) {
-//             preview.src = userData.profilePicture;
-//         }
-//     }
-
-//     // Update bio counter
-//     updateBioCounter();
-
-//     // Update full name
-//     updateFullName();
-// }
-
-// // Helper function to set field values
-// function setFieldValue(fieldId, value) {
-//     const field = document.getElementById(fieldId);
-//     if (field) {
-//         field.value = value;
-//     }
-// }
-
-// // Profile picture handling
-// function handleProfilePictureUpload(event) {
-//     const file = event.target.files[0];
-//     if (!file) return;
-
-//     // Validate file
-//     if (!validateProfilePicture(file)) {
-//         return;
-//     }
-
-//     // Preview the image
-//     const reader = new FileReader();
-//     reader.onload = function (e) {
-//         const preview = document.getElementById('profile-preview');
-//         if (preview) {
-//             preview.src = e.target.result;
-//         }
-//     };
-//     reader.readAsDataURL(file);
-
-//     // Upload the image
-//     uploadProfilePicture(file);
-// }
-
-
-
-// async function uploadProfilePicture(file) {
-//     try {
-//         showLoading(true);
-
-//         const formData = new FormData();
-//         formData.append('profilePicture', file);
-
-//         const currentUser = getCurrentUser();
-//         const response = await fetch(`/api/users/${currentUser.id}/profile-picture`, {
-//             method: 'POST',
-//             body: formData,
-//             headers: {
-//                 'Authorization': `Bearer ${getAuthToken()}`
-//             }
-//         });
-
-//         const result = await response.json();
-
-//         if (result.success) {
-//             showMessage('Profile picture updated successfully', 'success');
-//         } else {
-//             showMessage(result.message || 'Failed to update profile picture', 'error');
-//         }
-//     } catch (error) {
-//         console.error('Error uploading profile picture:', error);
-//         showMessage('Error uploading profile picture', 'error');
-//     } finally {
-//         showLoading(false);
-//     }
-// }
-
-// function removeProfilePicture() {
-//     if (confirm('Are you sure you want to remove your profile picture?')) {
-//         const preview = document.getElementById('profile-preview');
-//         if (preview) {
-//             preview.src = 'https://picsum.photos/150/150?random=default';
-//         }
-
-//         // TODO: Make API call to remove profile picture
-//         showMessage('Profile picture removed', 'success');
-//     }
-// }

@@ -35,6 +35,22 @@ public static class UpdateUserEndpoint
         .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 
+    public static void MapUpdateProfilePictureEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapPut("/me/profile-picture", async (IUpdateUserHandler handler, [FromForm] UpdateProfilePictureRequestDTO request, ClaimsPrincipal user) =>
+        {
+            var userId = user.FindFirstValue("Id")!;
+            var updatedUser = await handler.ChangeProfilePictureAsync(request, userId);
+            return Results.Ok(updatedUser);
+        })
+        .RequireAuthorization()
+        .DisableAntiforgery()
+        .WithName("UpdateProfilePicture")
+        .WithTags("Users")
+        .Produces<UpdatedUserDTO>()
+        .ProducesProblem(StatusCodes.Status400BadRequest);
+    }
+
     public static void MapChangePasswordEndpoint(this IEndpointRouteBuilder app)
     {
         app.MapPut("/me/change-password", async (IUpdateUserHandler handler, [FromBody] ChangePasswordRequestDTO changePasswordRequest, ClaimsPrincipal user) =>

@@ -117,6 +117,7 @@ public static class ServiceCollectionExtensions
         // Register ImageSharp services
         services.AddImageSharp()
             .AddProvider<PostImageProvider>()
+            .AddProvider<UserImageProvider>()
             .RemoveProvider<PhysicalFileSystemProvider>()
             .AddProvider<PhysicalFileSystemProvider>()
             .Configure<PhysicalFileSystemCacheOptions>(options =>
@@ -160,6 +161,7 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<MarkdownService>();
         services.AddSingleton<PostImageProvider>();
+        services.AddSingleton<UserImageProvider>();
         services.AddSingleton<IScheduler, HangfireScheduler>();
 
         services.AddCategoryServices();

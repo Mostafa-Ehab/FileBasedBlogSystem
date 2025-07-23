@@ -1,6 +1,7 @@
 using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.UpdateUser.DTOs;
+using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Helpers;
@@ -15,18 +16,21 @@ public class UpdateUserHandler : IUpdateUserHandler
     private readonly AuthHelper _authHelper;
     private readonly IValidator<UpdateUserRequestDTO> _updateUserRequestValidator;
     private readonly IValidator<UpdateProfileInfoRequestDTO> _updateProfileInfoRequestValidator;
+    private readonly UserImageProvider _imageProvider;
 
     public UpdateUserHandler(
         IUserRepository userRepository,
         AuthHelper authHelper,
         IValidator<UpdateUserRequestDTO> updateUserRequestValidator,
-        IValidator<UpdateProfileInfoRequestDTO> updateProfileInfoRequestValidator
+        IValidator<UpdateProfileInfoRequestDTO> updateProfileInfoRequestValidator,
+        UserImageProvider imageProvider
     )
     {
         _userRepository = userRepository;
         _authHelper = authHelper;
         _updateUserRequestValidator = updateUserRequestValidator;
         _updateProfileInfoRequestValidator = updateProfileInfoRequestValidator;
+        _imageProvider = imageProvider;
     }
 
     public Task<UpdatedUserDTO> UpdateUserAsync(UpdateUserRequestDTO request, string userId)
@@ -88,9 +92,20 @@ public class UpdateUserHandler : IUpdateUserHandler
         return Task.FromResult(updatedUser.MapToUpdatedUserDTO());
     }
 
-    public Task<UpdatedUserDTO> ChangeProfilePictureAsync(UpdateProfilePictureRequestDTO request, string userId)
+    public async Task<UpdatedUserDTO> ChangeProfilePictureAsync(UpdateProfilePictureRequestDTO request, string userId)
     {
-        throw new NotImplementedException("ChangeProfilePictureAsync is not implemented yet.");
+        var existingUser = _userRepository.GetUserById(userId) ?? throw new UserNotFoundException(userId);
+
+        if (request.ProfilePicture == null || request.ProfilePicture.Length == 0)
+        {
+            throw new ValidationErrorException("Profile picture cannot be empty.");
+        }
+
+        existingUser.ProfilePictureUrl = await SaveProfileImage(request.ProfilePicture, userId);
+        existingUser.UpdatedAt = DateTime.UtcNow;
+
+        var updatedUser = _userRepository.UpdateUser(existingUser);
+        return updatedUser.MapToUpdatedUserDTO();
     }
 
     public Task<UpdatedUserDTO> ChangePasswordAsync(ChangePasswordRequestDTO request, string userId)
@@ -111,5 +126,15 @@ public class UpdateUserHandler : IUpdateUserHandler
 
         var updatedUser = _userRepository.UpdateUser(existingUser);
         return Task.FromResult(updatedUser.MapToUpdatedUserDTO());
+    }
+
+    private async Task<string> SaveProfileImage(IFormFile image, string userId)
+    {
+        if (ImageHelper.IsValidImage(image) == false)
+        {
+            throw new ValidationErrorException("Invalid image format. Only JPEG, PNG, and GIF are allowed.");
+        }
+
+        return await _imageProvider.SaveImageAsync(image, userId);
     }
 }
