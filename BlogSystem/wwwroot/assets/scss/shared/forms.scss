@@ -57,6 +57,14 @@
     margin-top: 0.25rem;
     font-size: 0.75rem;
     color: var(--text-muted);
+
+    &.success-text {
+        color: #28a745;
+    }
+
+    &.error-text {
+        color: #dc3545;
+    }
 }
 
 @media (max-width: 768px) {

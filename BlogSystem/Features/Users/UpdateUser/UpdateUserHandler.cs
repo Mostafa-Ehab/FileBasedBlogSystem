@@ -1,6 +1,7 @@
 using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.UpdateUser.DTOs;
+using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Helpers;
 using BlogSystem.Shared.Mappings;
@@ -61,15 +62,54 @@ public class UpdateUserHandler : IUpdateUserHandler
         return Task.FromResult(updatedUser.MapToUpdatedUserDTO());
     }
 
-    public Task<UpdatedUserDTO> UpdateProfileAsync(UpdateProfileInfoRequestDTO profile, string userId)
+    public Task<UpdatedUserDTO> UpdateProfileAsync(UpdateProfileInfoRequestDTO request, string userId)
     {
-        // Implementation for updating user profile
-        throw new NotImplementedException();
+        ValidationHelper.Validate(request, _updateProfileInfoRequestValidator);
+        var existingUser = _userRepository.GetUserById(userId) ?? throw new UserNotFoundException(userId);
+
+        if (existingUser.Email != request.Email && _userRepository.UserExistsByEmail(request.Email))
+        {
+            throw new EmailAlreadyExistException(request.Email);
+        }
+
+        if (existingUser.Username != request.Username && _userRepository.UserExistsByUsername(request.Username))
+        {
+            throw new UsernameAlreadyExistException(request.Username);
+        }
+
+        existingUser.Username = request.Username;
+        existingUser.Email = request.Email;
+        existingUser.FullName = request.FullName;
+        existingUser.Bio = request.Bio ?? string.Empty;
+        existingUser.UpdatedAt = DateTime.UtcNow;
+
+        var updatedUser = _userRepository.UpdateUser(existingUser);
+
+        return Task.FromResult(updatedUser.MapToUpdatedUserDTO());
     }
 
-    public Task<UpdatedUserDTO> ChangePasswordAsync(ChangePasswordRequestDTO changePasswordRequest, string userId)
+    public Task<UpdatedUserDTO> ChangeProfilePictureAsync(UpdateProfilePictureRequestDTO request, string userId)
     {
-        // Implementation for changing user password
-        throw new NotImplementedException();
+        throw new NotImplementedException("ChangeProfilePictureAsync is not implemented yet.");
+    }
+
+    public Task<UpdatedUserDTO> ChangePasswordAsync(ChangePasswordRequestDTO request, string userId)
+    {
+        var existingUser = _userRepository.GetUserById(userId) ?? throw new UserNotFoundException(userId);
+        if (!_authHelper.ValidatePassword(request.CurrentPassword, existingUser.HashedPassword))
+        {
+            throw new ValidationErrorException("Old password is incorrect.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.NewPassword))
+        {
+            throw new ValidationErrorException("New password must be provided.");
+        }
+
+        existingUser.HashedPassword = _authHelper.HashPassword(request.NewPassword);
+        existingUser.UpdatedAt = DateTime.UtcNow;
+
+        var updatedUser = _userRepository.UpdateUser(existingUser);
+        return Task.FromResult(updatedUser.MapToUpdatedUserDTO());
     }
 }

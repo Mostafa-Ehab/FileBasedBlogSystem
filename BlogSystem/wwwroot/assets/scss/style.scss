@@ -12,6 +12,7 @@
 @use "admin/layout" as admin-layout;
 @use "admin/posts";
 @use "admin/users";
+@use "admin/profile";
 
 @use "blog/components/navbar" as blog-navbar;
 @use "blog/components/carousel" as blog-carousel;
