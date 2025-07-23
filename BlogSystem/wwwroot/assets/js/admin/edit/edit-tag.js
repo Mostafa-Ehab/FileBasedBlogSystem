@@ -74,13 +74,13 @@ class EditTagManager {
         document.title = `Edit Tag - ${this.tag.name} - Admin Dashboard`;
 
         const title = document.getElementById('form-title');
-        title?.textContent = "Edit Tag";
+        title.textContent = "Edit Tag";
 
         const desc = document.getElementById('form-desc');
-        desc?.textContent = "Update the details of this tag.";
+        desc.textContent = "Update the details of this tag.";
 
         const saveButton = document.getElementById('save-tag');
-        saveButton?.textContent = "Save Changes";
+        saveButton.textContent = "Save Changes";
     }
 
     async saveTag() {

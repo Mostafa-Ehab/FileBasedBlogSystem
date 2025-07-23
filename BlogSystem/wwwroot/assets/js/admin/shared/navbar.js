@@ -2,25 +2,25 @@ class AdminNavbarController {
     constructor() {
         this.navConfig = {
             'posts': {
-                href: '/admin/posts.html',
+                href: '/admin/posts',
                 icon: 'fas fa-file-alt',
                 text: 'Posts',
                 roles: ['Admin', 'Author']
             },
             'users': {
-                href: '/admin/users.html',
+                href: '/admin/users',
                 icon: 'fas fa-users',
                 text: 'Users',
                 roles: ['Admin']
             },
             'categories': {
-                href: '/admin/categories.html',
+                href: '/admin/categories',
                 icon: 'fas fa-folder',
                 text: 'Categories',
                 roles: ['Admin']
             },
             'tags': {
-                href: '/admin/tags.html',
+                href: '/admin/tags',
                 icon: 'fas fa-tags',
                 text: 'Tags',
                 roles: ['Admin']

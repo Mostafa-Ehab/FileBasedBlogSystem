@@ -48,11 +48,6 @@ class AdminPostsManager {
             this.deletePost();
         });
 
-        // Export posts
-        document.getElementById('export-posts-btn')?.addEventListener('click', () => {
-            this.exportPosts();
-        });
-
         // Pagination
         document.getElementById('prev-page')?.addEventListener('click', () => {
             if (this.currentPage > 1) {
@@ -316,39 +311,6 @@ class AdminPostsManager {
             this.updateStats();
             hideLoading();
         }
-    }
-
-    exportPosts() {
-        const csvContent = this.generateCSV();
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `posts_export_${new Date().toISOString().split('T')[0]}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-
-        showSuccess('Posts exported successfully');
-    }
-
-    generateCSV() {
-        const headers = ['Title', 'Slug', 'Author', 'Category', 'Status', 'Date', 'Views', 'Tags'];
-        const rows = this.posts.map(post => [
-            post.title,
-            post.slug,
-            post.authorName,
-            post.category,
-            post.status,
-            new Date(post.date).toLocaleDateString(),
-            post.views,
-            post.tags.join('; ')
-        ]);
-
-        return [headers, ...rows]
-            .map(row => row.map(field => `"${field}"`).join(','))
-            .join('\n');
     }
 }
 

@@ -45,16 +45,6 @@ class AdminUsersManager {
             this.filterUsers();
         });
 
-        // Select all checkbox
-        document.getElementById('select-all-users')?.addEventListener('change', (e) => {
-            this.toggleSelectAll(e.target.checked);
-        });
-
-        // Export users
-        document.getElementById('export-users-btn')?.addEventListener('click', () => {
-            this.exportUsers();
-        });
-
         // Delete modal controls
         document.getElementById('close-delete-modal')?.addEventListener('click', () => {
             this.hideDeleteModal();
@@ -283,46 +273,6 @@ class AdminUsersManager {
             this.updateStats();
             hideLoading();
         }
-    }
-
-    toggleSelectAll(checked) {
-        const checkboxes = document.querySelectorAll('.user-checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = checked;
-        });
-    }
-
-    exportUsers() {
-        const csvContent = this.generateCSV();
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `users_export_${new Date().toISOString().split('T')[0]}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-
-        showSuccess('Users exported successfully');
-    }
-
-    generateCSV() {
-        const headers = ['Username', 'Email', 'Full Name', 'Role', 'Posts', 'Created At'];
-        const rows = this.users.map(user => [
-            user.username,
-            user.email,
-            user.fullName,
-            user.role,
-            user.posts,
-            new Date(user.createdAt).toLocaleDateString()
-        ]);
-
-        const csvContent = [headers, ...rows]
-            .map(row => row.map(field => `"${field}"`).join(','))
-            .join('\n');
-
-        return csvContent;
     }
 }
 

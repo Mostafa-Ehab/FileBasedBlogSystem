@@ -40,11 +40,6 @@ class AdminCategories {
             this.deleteCategory();
         });
 
-        // Export
-        document.getElementById('export-categories-btn')?.addEventListener('click', () => {
-            this.exportCategories();
-        });
-
         // Pagination
         document.getElementById('prev-page')?.addEventListener('click', () => {
             if (this.currentPage > 1) {
@@ -284,25 +279,6 @@ class AdminCategories {
             this.renderTable();
             this.updateStats();
             hideLoading();
-        }
-    }
-
-    async exportCategories() {
-        try {
-            const dataStr = JSON.stringify(this.categories, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `categories-export-${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-
-            URL.revokeObjectURL(url);
-            showSuccess('Categories exported successfully');
-        } catch (error) {
-            console.error('Error exporting categories:', error);
-            showError('Failed to export categories');
         }
     }
 }

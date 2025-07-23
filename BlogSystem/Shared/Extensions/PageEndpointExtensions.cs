@@ -117,6 +117,13 @@ static class PageEndpointExtension
         });
         #endregion
 
+        app.MapGet("/admin/profile", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "admin", "profile.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
         return app;
     }
 }

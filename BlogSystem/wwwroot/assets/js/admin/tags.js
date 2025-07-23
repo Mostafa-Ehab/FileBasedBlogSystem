@@ -40,11 +40,6 @@ class AdminTags {
             this.deleteTag();
         });
 
-        // Export
-        document.getElementById('export-tags-btn')?.addEventListener('click', () => {
-            this.exportTags();
-        });
-
         // Pagination
         document.getElementById('prev-page')?.addEventListener('click', () => {
             if (this.currentPage > 1) {
@@ -284,25 +279,6 @@ class AdminTags {
             this.renderTable();
             this.updateStats();
             hideLoading();
-        }
-    }
-
-    async exportTags() {
-        try {
-            const dataStr = JSON.stringify(this.tags, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `tags-export-${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-
-            URL.revokeObjectURL(url);
-            showSuccess('Tags exported successfully');
-        } catch (error) {
-            console.error('Error exporting tags:', error);
-            showError('Failed to export tags');
         }
     }
 }
