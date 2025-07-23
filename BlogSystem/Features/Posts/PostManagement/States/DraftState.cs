@@ -87,7 +87,6 @@ public class DraftState
             throw new ValidationErrorException("Invalid image format. Only JPEG, PNG, and GIF are allowed.");
         }
 
-        var imageUrl = await _imageProvider.SaveImageAsync(image, postId);
-        return $"/images/posts/{postId}/{imageUrl}";
+        return await _imageProvider.SaveImageAsync(image, postId);
     }
 }

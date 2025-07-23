@@ -72,13 +72,14 @@ public class PostImageProvider : IImageProvider
 
         while (File.Exists(fullPath))
         {
-            fullPath = Path.Combine(postDirectory, ImageHelper.GetRandomFileName(fileExtension));
+            randomName = ImageHelper.GetRandomFileName(fileExtension);
+            fullPath = Path.Combine(postDirectory, randomName);
         }
 
         using var stream = new FileStream(fullPath, FileMode.Create);
         await imageFile.CopyToAsync(stream);
 
-        return randomName;
+        return $"/images/posts/{postSlug}/{randomName}";
     }
     #endregion
 
