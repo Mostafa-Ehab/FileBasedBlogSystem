@@ -121,7 +121,7 @@ public class ScheduledState
 
     private async Task<string> SavePostImageAsync(IFormFile image, string postId)
     {
-        if (_imageProvider.IsValidImage(image) == false)
+        if (ImageHelper.IsValidImage(image) == false)
         {
             throw new ValidationErrorException("Invalid image format. Only JPEG, PNG, and GIF are allowed.");
         }

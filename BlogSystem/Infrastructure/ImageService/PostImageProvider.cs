@@ -17,6 +17,7 @@ public class PostImageProvider : IImageProvider
         _fileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
     }
 
+    #region IImageProvider Implementation
     public ProcessingBehavior ProcessingBehavior => ProcessingBehavior.All;
 
     public Func<HttpContext, bool> Match { get; set; } = context =>
@@ -47,7 +48,9 @@ public class PostImageProvider : IImageProvider
         return TryExtractImageInfo(context.Request.Path.Value, out var postSlug, out _) &&
                SlugHelper.ValidateSlug(postSlug);
     }
+    #endregion
 
+    #region Image Saving
     public async Task<string> SaveImageAsync(IFormFile imageFile, string postSlug)
     {
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
@@ -58,7 +61,7 @@ public class PostImageProvider : IImageProvider
             throw new ValidationErrorException("Invalid image file type. Allowed types are: " + string.Join(", ", allowedExtensions));
         }
 
-        var randomName = $"{Path.GetRandomFileName()}{fileExtension}";
+        var randomName = ImageHelper.GetRandomFileName(fileExtension);
         var postDirectory = Path.Combine("Content", "posts", postSlug, "assets");
         var fullPath = Path.Combine(postDirectory, randomName);
 
@@ -69,7 +72,7 @@ public class PostImageProvider : IImageProvider
 
         while (File.Exists(fullPath))
         {
-            fullPath = Path.Combine(postDirectory, $"{Path.GetRandomFileName()}{fileExtension}");
+            fullPath = Path.Combine(postDirectory, ImageHelper.GetRandomFileName(fileExtension));
         }
 
         using var stream = new FileStream(fullPath, FileMode.Create);
@@ -77,22 +80,9 @@ public class PostImageProvider : IImageProvider
 
         return randomName;
     }
+    #endregion
 
-    public bool IsValidImage(IFormFile file)
-    {
-        try
-        {
-            using (Image newImage = Image.Load(file.OpenReadStream()))
-            {
-                return true;
-            }
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-    }
-
+    #region Helper Methods
     private static bool TryExtractImageInfo(string? path, out string postSlug, out string imageName)
     {
         postSlug = string.Empty;
@@ -114,4 +104,5 @@ public class PostImageProvider : IImageProvider
         imageName = segments[3];
         return true;
     }
+    #endregion
 }
