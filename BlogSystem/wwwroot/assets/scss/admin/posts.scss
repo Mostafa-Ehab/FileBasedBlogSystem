@@ -6,16 +6,6 @@
     font-weight: 600;
     text-transform: uppercase;
 
-    // &.active {
-    //     background: #d4edda;
-    //     color: #155724;
-    // }
-
-    // &.inactive {
-    //     background: #f8d7da;
-    //     color: #721c24;
-    // }
-
     &.published {
         background: #d4edda;
         color: #155724;
@@ -226,6 +216,116 @@
     }
 }
 
+// Post editors section styles
+.post-editors-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color-light);
+}
+
+.admin-table-container {
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.admin-table {
+
+    // Editor cell styles
+    .editor-info-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        .editor-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .editor-details {
+            h4 {
+                margin: 0;
+                font-size: 0.875rem;
+                font-weight: 600;
+                color: var(--text-color);
+            }
+
+            p {
+                margin: 0;
+                font-size: 0.75rem;
+                color: var(--text-muted);
+            }
+        }
+    }
+}
+
+// No editors message styles
+.no-editors-message {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+
+    .empty-state {
+        color: var(--text-muted);
+
+        i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        p {
+            font-size: 1rem;
+            margin: 0;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+    }
+}
+
+// Remove editor modal styles
+#remove-editor-modal {
+    .editor-info {
+        background: var(--background-light);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .editor-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .editor-details h4 {
+            font-size: 1rem;
+        }
+
+        .editor-details p {
+            font-size: 0.875rem;
+        }
+    }
+}
+
+
+
 @media (max-width: 768px) {
 
     // Editor toolbar
@@ -236,6 +336,33 @@
             width: 28px;
             height: 28px;
             font-size: 0.75rem;
+        }
+    }
+
+    // Posts table styles
+    .admin-table {
+        .editor-info-cell {
+            gap: 0.5rem;
+
+            .editor-avatar {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    }
+
+    // No editors message styles
+    .no-editors-message {
+        padding: 2rem 1rem;
+
+        .empty-state {
+            i {
+                font-size: 2.5rem;
+            }
+
+            h3 {
+                font-size: 1.125rem;
+            }
         }
     }
 }
@@ -249,5 +376,11 @@
         .post-title-cell {
             max-width: 200px;
         }
+    }
+
+    // Post editors section styles
+    .post-editors-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
     }
 }

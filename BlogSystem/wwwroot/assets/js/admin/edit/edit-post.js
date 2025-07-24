@@ -2,6 +2,9 @@ class EditPostManager {
     constructor() {
         this.post = null;
         this.categories = [];
+        this.editors = [];
+        this.availableEditors = [];
+        this.editorToRemove = null;
 
         this.init();
     }
@@ -89,6 +92,36 @@ class EditPostManager {
         document.getElementById('remove-image')?.addEventListener('click', () => {
             this.removeImage();
         });
+
+        // Editor management
+        document.getElementById('add-editor-btn')?.addEventListener('click', () => {
+            this.showAddEditorModal();
+        });
+
+        document.getElementById('close-editor-modal')?.addEventListener('click', () => {
+            this.hideAddEditorModal();
+        });
+
+        document.getElementById('cancel-editor')?.addEventListener('click', () => {
+            this.hideAddEditorModal();
+        });
+
+        document.getElementById('save-editor')?.addEventListener('click', () => {
+            this.saveEditor();
+        });
+
+        // Remove editor modal
+        document.getElementById('close-remove-modal')?.addEventListener('click', () => {
+            this.hideRemoveEditorModal();
+        });
+
+        document.getElementById('cancel-remove')?.addEventListener('click', () => {
+            this.hideRemoveEditorModal();
+        });
+
+        document.getElementById('confirm-remove')?.addEventListener('click', () => {
+            this.confirmRemoveEditor();
+        });
     }
 
     async loadData() {
@@ -99,12 +132,24 @@ class EditPostManager {
             if (action == 'edit') {
                 const postId = currentUrl.pop();
                 this.post = await getRequest(`/api/posts/${postId}`);
+                if (this.post.authorId === getUser().userId) {
+                    this.editors = await getRequest(`/api/posts/${postId}/editors`) || [];
+                } else {
+                    this.editors = [];
+                    document.getElementById('add-editor-btn').style.display = 'none';
+                    document.getElementById('no-editors-message').innerText = 'Only the author can add editors to this post';
+                }
             }
 
             const categories = await getRequest('/api/categories');
             this.categories = categories || [];
 
+            // Load available editors
+            const users = await getRequest('/api/users');
+            this.availableEditors = users.filter(user => user.id != getUser().userId) || [];
+
             this.renderForm();
+            this.renderEditorsTable();
         } catch (error) {
             if (error instanceof RequestError) {
                 showError(error?.data?.message || 'Error loading data');
@@ -255,6 +300,165 @@ class EditPostManager {
         preview.style.display = 'none';
     }
 
+    renderEditorsTable() {
+        const tbody = document.getElementById('editors-table-body');
+        const noEditorsMessage = document.getElementById('no-editors-message');
+
+        if (!tbody) return;
+
+        if (this.editors.length === 0) {
+            tbody.innerHTML = '';
+            noEditorsMessage.style.display = 'block';
+            return;
+        }
+
+        noEditorsMessage.style.display = 'none';
+
+        tbody.innerHTML = this.editors.map(editor => `
+            <tr>
+                <td>
+                    <div class="editor-info-cell">
+                        <img src="${editor.profilePictureUrl + '?width=100' || 'https://picsum.photos/32/32?random=' + editor.id}"
+                             alt="${editor.fullName}" class="editor-avatar">
+                        <div class="editor-details">
+                            <h4>${editor.fullName}</h4>
+                            <p>${editor.email}</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="action-btn delete" onclick="editPost.showRemoveEditorModal('${editor.id}')" title="Remove Editor">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    showAddEditorModal() {
+        const modal = document.getElementById('add-editor-modal');
+        const editorSelect = document.getElementById('editor-select');
+
+        // Clear previous options
+        editorSelect.innerHTML = '<option value="">Choose an editor...</option>';
+
+        // Add available editors (exclude already assigned ones)
+        const assignedEditorIds = this.editors.map(e => e.id);
+        const availableEditors = this.availableEditors.filter(e => !assignedEditorIds.includes(e.id));
+
+        availableEditors.forEach(editor => {
+            const option = document.createElement('option');
+            option.value = editor.id;
+            option.textContent = `${editor.fullName} (${editor.username})`;
+            editorSelect.appendChild(option);
+        });
+
+        modal.classList.add('active');
+    }
+
+    hideAddEditorModal() {
+        document.getElementById('add-editor-modal').classList.remove('active');
+    }
+
+    async saveEditor() {
+        const editorId = document.getElementById('editor-select').value;
+
+        if (!editorId) {
+            showError('Please select an editor');
+            return;
+        }
+
+        try {
+            showLoading();
+
+            if (this.post) {
+                await postRequest(`/api/posts/${this.post.id}/editors`, {
+                    editorId: editorId
+                });
+
+                // Reload editors
+                this.editors = await getRequest(`/api/posts/${this.post.id}/editors`) || [];
+            } else {
+                // For new posts, store temporarily
+                const selectedEditor = this.availableEditors.find(e => e.id === editorId);
+                if (selectedEditor) {
+                    this.editors.push({
+                        ...selectedEditor
+                    });
+                }
+            }
+
+            this.renderEditorsTable();
+            this.hideAddEditorModal();
+            showSuccess('Editor added successfully');
+        } catch (error) {
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error adding editor');
+            } else {
+                console.error('Error adding editor:', error);
+                showError('Error adding editor');
+            }
+        } finally {
+            hideLoading();
+        }
+    }
+
+    showRemoveEditorModal(editorId) {
+        const editor = this.editors.find(e => e.id === editorId);
+        if (!editor) return;
+
+        this.editorToRemove = editor;
+
+        document.getElementById('remove-editor-info').innerHTML = `
+            <div class="editor-info">
+                <img src="${editor.profilePictureUrl + '?width=100' || 'https://picsum.photos/40/40?random=' + editor.id}"
+                     alt="${editor.fullName}" class="editor-avatar">
+                <div class="editor-details">
+                    <h4>${editor.fullName}</h4>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('remove-editor-modal').classList.add('active');
+    }
+
+    hideRemoveEditorModal() {
+        document.getElementById('remove-editor-modal').classList.remove('active');
+        this.editorToRemove = null;
+    }
+
+    async confirmRemoveEditor() {
+        if (!this.editorToRemove) return;
+
+        try {
+            showLoading();
+
+            if (this.post) {
+                await deleteRequest(`/api/posts/${this.post.id}/editors/${this.editorToRemove.id}`);
+                // Reload editors
+                this.editors = await getRequest(`/api/posts/${this.post.id}/editors`) || [];
+            } else {
+                // For new posts, remove from temporary array
+                this.editors = this.editors.filter(e => e.id !== this.editorToRemove.id);
+            }
+
+            this.renderEditorsTable();
+            this.hideRemoveEditorModal();
+            showSuccess('Editor removed successfully');
+        } catch (error) {
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error removing editor');
+            } else {
+                console.error('Error removing editor:', error);
+                showError('Error removing editor');
+            }
+        } finally {
+            hideLoading();
+        }
+    }
+
     async savePost(forceStatus = null) {
         const formData = new FormData(document.getElementById('post-form'));
         const postData = Object.fromEntries(formData.entries());
@@ -270,7 +474,16 @@ class EditPostManager {
             tag => formData.append('tags', tag)
         );
 
+        // Add editors data for new posts
+        if (!this.post && this.editors.length > 0) {
+            this.editors.forEach(editor => {
+                formData.append('editors', editor.id);
+            });
+        }
+
         try {
+            showLoading();
+
             if (this.post) {
                 // Update existing post
                 await putRequest(`/api/posts/${this.post.id}`, formData);

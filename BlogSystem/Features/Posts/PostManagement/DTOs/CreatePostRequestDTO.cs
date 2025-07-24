@@ -13,4 +13,5 @@ public class CreatePostRequestDTO
     public PostStatus Status { get; set; } = PostStatus.Draft;
     public DateTime? ScheduledAt { get; set; }
     public string[] Tags { get; set; } = [];
+    public string[] Editors { get; set; } = [];
 }

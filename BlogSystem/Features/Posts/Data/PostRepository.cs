@@ -171,6 +171,7 @@ public class PostRepository : IPostRepository
         UpdateCategoryFile(post);
         UpdateTagFile(post);
         AddPostToUser(post.AuthorId, post.Id);
+        UpdateEditors(post);
 
         return post.Id;
     }
@@ -191,6 +192,7 @@ public class PostRepository : IPostRepository
 
         UpdateCategoryFile(existingPost, post);
         UpdateTagFile(existingPost, post);
+        UpdateEditors(existingPost, post);
 
         return post.Id;
     }
@@ -202,7 +204,8 @@ public class PostRepository : IPostRepository
 
         UpdateCategoryFile(existingPost, new Post { Id = post.Id });
         UpdateTagFile(existingPost, new Post { Id = post.Id });
-        RemovePostFromUser(existingPost?.AuthorId ?? string.Empty, post.Id);
+        RemovePostFromUser(existingPost.AuthorId ?? string.Empty, post.Id);
+        UpdateEditors(existingPost, new Post { Id = post.Id });
 
         Directory.Delete(postPath, true);
         _slugResolver.RemoveSlug(post.Slug);
@@ -336,6 +339,80 @@ public class PostRepository : IPostRepository
                     existingTag.Posts.Add(newPost.Id);
                     File.WriteAllText(tagPath, JsonSerializer.Serialize(existingTag, _jsonSerializerOptions));
                 }
+            }
+        }
+    }
+
+    private void UpdateEditors(Post post)
+    {
+        // Ensure editors are initialized
+        if (post.Editors == null || post.Editors.Count == 0)
+        {
+            return;
+        }
+
+        // Add editors to the post
+        foreach (var editorId in post.Editors)
+        {
+            var editorPath = Path.Combine("Content", "users", editorId, "profile.json");
+            if (!File.Exists(editorPath))
+            {
+                continue;
+            }
+
+            string json = File.ReadAllText(editorPath);
+            User editor = JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions)!;
+
+            if (!editor.Posts.Contains(post.Id))
+            {
+                editor.Posts = [.. editor.Posts, post.Id];
+                File.WriteAllText(editorPath, JsonSerializer.Serialize(editor, _jsonSerializerOptions));
+            }
+        }
+    }
+
+    private void UpdateEditors(Post oldPost, Post newPost)
+    {
+        if (oldPost.Editors == null || oldPost.Editors.Count == 0)
+        {
+            oldPost.Editors = [];
+        }
+
+        // Remove editors from old post
+        foreach (var editorId in oldPost.Editors)
+        {
+            var editorPath = Path.Combine("Content", "users", editorId, "profile.json");
+            if (!File.Exists(editorPath))
+            {
+                continue;
+            }
+
+            string json = File.ReadAllText(editorPath);
+            User editor = JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions)!;
+
+            if (editor.Posts.Contains(oldPost.Id))
+            {
+                editor.Posts = editor.Posts.Where(id => id != oldPost.Id).ToArray();
+                File.WriteAllText(editorPath, JsonSerializer.Serialize(editor, _jsonSerializerOptions));
+            }
+        }
+
+        // Add editors to new post
+        foreach (var editorId in newPost.Editors)
+        {
+            var editorPath = Path.Combine("Content", "users", editorId, "profile.json");
+            if (!File.Exists(editorPath))
+            {
+                continue;
+            }
+
+            string json = File.ReadAllText(editorPath);
+            User editor = JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions)!;
+
+            if (!editor.Posts.Contains(newPost.Id))
+            {
+                editor.Posts = [.. editor.Posts, newPost.Id];
+                File.WriteAllText(editorPath, JsonSerializer.Serialize(editor, _jsonSerializerOptions));
             }
         }
     }

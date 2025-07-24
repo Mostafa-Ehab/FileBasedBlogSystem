@@ -42,7 +42,8 @@ public static class PostMappingProfile
             Status = post.Status,
             ScheduledAt = post.ScheduledAt,
             PublishedAt = post.PublishedAt,
-            Tags = post.Tags ?? []
+            Tags = post.Tags ?? [],
+            Editors = post.Editors ?? []
         };
     }
 

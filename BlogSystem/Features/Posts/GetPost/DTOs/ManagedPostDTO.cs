@@ -18,4 +18,5 @@ public class ManagedPostDTO
     public DateTime? ScheduledAt { get; set; }
     public DateTime? PublishedAt { get; set; }
     public List<string> Tags { get; set; } = [];
+    public List<string> Editors { get; set; } = [];
 }

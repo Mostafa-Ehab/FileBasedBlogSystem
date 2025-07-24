@@ -13,6 +13,10 @@ class ProfilePageManager {
     }
 
     setupEventListeners() {
+        document.getElementById('back-btn')?.addEventListener('click', () => {
+            goBack();
+        });
+
         // Profile picture upload
         const uploadInput = document.getElementById('profile-picture-upload');
         const preview = document.getElementById('profile-preview');

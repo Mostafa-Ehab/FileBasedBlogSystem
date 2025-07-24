@@ -3,6 +3,7 @@ using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.GetPost.DTOs;
 using BlogSystem.Features.Users.Data;
+using BlogSystem.Features.Users.GetUser.DTOs;
 using BlogSystem.Infrastructure.MarkdownService;
 using BlogSystem.Shared.Exceptions.Posts;
 using BlogSystem.Shared.Exceptions.Users;
@@ -80,7 +81,7 @@ public class GetPostHandler : IGetPostHandler
         if (user.Role == UserRole.Admin)
         {
             posts = _postRepository.GetAllPosts()
-                .Where(p => p.Status != PostStatus.Draft || p.AuthorId == user.Id)
+                .Where(p => p.Status != PostStatus.Draft || p.AuthorId == user.Id || p.Editors.Contains(user.Id))
                 .ToList();
         }
         else
@@ -90,6 +91,22 @@ public class GetPostHandler : IGetPostHandler
 
         return Task.FromResult(
             posts.Select(p => p.MapToManagedPostDTO(_userRepository)).ToArray()
+        );
+    }
+
+    public Task<GetUserDTO[]> GetPostEditorsAsync(string postId, string userId)
+    {
+        var post = _postRepository.GetPostById(postId) ?? throw new PostNotFoundException(postId);
+        var user = _userRepository.GetUserById(userId)!;
+        if (user.Id != post.AuthorId)
+        {
+            throw new NotAuthorizedException("You don't have access to this content");
+        }
+
+        var editors = post.Editors.Select(_userRepository.GetUserById);
+
+        return Task.FromResult(
+            editors.Select(editor => editor!.MapToGetUserDTO()).ToArray()
         );
     }
 }

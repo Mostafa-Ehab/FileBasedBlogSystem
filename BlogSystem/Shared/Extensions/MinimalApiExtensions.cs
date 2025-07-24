@@ -34,11 +34,8 @@ public static class MinimalApiExtensions
 
     private static IEndpointRouteBuilder MapPostEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGetPostEndpoint();
+        app.MapGetPostEndpoints();
         app.MapPostManagementEndpoints();
-        app.MapGetAllPostsEndpoint();
-        app.MapUpdatePostEndpoint();
-        app.MapDeletePostEndpoint();
 
         return app;
     }

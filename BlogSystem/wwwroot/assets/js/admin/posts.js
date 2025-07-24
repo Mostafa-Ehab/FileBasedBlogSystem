@@ -82,22 +82,12 @@ class AdminPostsManager {
             const categories = await getRequest('/api/categories');
             this.categories = categories || [];
 
-            if (getUser().role === 'Author') {
-                const userData = getUser();
-                this.authors = [
-                    {
-                        id: userData.userId,
-                        name: userData.fullName
-                    }
-                ]
-            } else {
-                // For editors and admins, load all authors
-                const authors = await getRequest('/api/users');
-                this.authors = authors.map(author => ({
-                    id: author.id,
-                    name: author.fullName
-                }))
-            }
+            // Load all authors only once
+            const authors = await getRequest('/api/users');
+            this.authors = authors.map(author => ({
+                id: author.id,
+                name: author.fullName
+            }));
 
             this.filteredPosts = [...this.posts];
             this.populateDropdowns();
@@ -194,7 +184,7 @@ class AdminPostsManager {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        ${post.authorId === getUser().userId ? `
+                        ${post.authorId === getUser().userId || post.editors.includes(getUser().userId) ? `
                         <a class="action-btn edit" href="/admin/posts/${post.id}/edit">
                             <i class="fas fa-edit"></i>
                         </a>` : `

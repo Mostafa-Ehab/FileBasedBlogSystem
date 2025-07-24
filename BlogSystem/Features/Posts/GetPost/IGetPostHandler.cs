@@ -1,4 +1,5 @@
 ﻿using BlogSystem.Features.Posts.GetPost.DTOs;
+using BlogSystem.Features.Users.GetUser.DTOs;
 
 namespace BlogSystem.Features.Posts.GetPost;
 
@@ -11,4 +12,5 @@ public interface IGetPostHandler
     // Editor Routes
     Task<ManagedPostDTO> GetManagedPostAsync(string postId, string userId);
     Task<ManagedPostDTO[]> GetManagedPostsAsync(string userId);
+    Task<GetUserDTO[]> GetPostEditorsAsync(string postId, string userId);
 }

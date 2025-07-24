@@ -18,10 +18,7 @@ public static class PostManagementEndpoint
         .DisableAntiforgery()
         .WithTags("Posts")
         .WithSummary("Create a new post.");
-    }
 
-    public static void MapUpdatePostEndpoint(this IEndpointRouteBuilder app)
-    {
         app.MapPut("/{postId}", async (IPostManagementHandler handler, ClaimsPrincipal user, string postId, [FromForm] UpdatePostRequestDTO request) =>
         {
             var userId = user.FindFirstValue("Id")!;
@@ -32,10 +29,7 @@ public static class PostManagementEndpoint
         .DisableAntiforgery()
         .WithTags("Posts")
         .WithSummary("Update an existing post by its id.");
-    }
 
-    public static void MapDeletePostEndpoint(this IEndpointRouteBuilder app)
-    {
         app.MapDelete("/{postId}", async (IPostManagementHandler handler, ClaimsPrincipal user, string postId) =>
         {
             var userId = user.FindFirstValue("Id")!;
@@ -45,5 +39,25 @@ public static class PostManagementEndpoint
         .RequireAuthorization()
         .WithTags("Posts")
         .WithSummary("Delete a post by its id.");
+
+        app.MapPost("/{postId}/editors/", async (IPostManagementHandler handler, ClaimsPrincipal user, string postId, [FromBody] AddEditorRequestDTO request) =>
+        {
+            var userId = user.FindFirstValue("Id")!;
+            var result = await handler.AddEditorToPostAsync(postId, request.EditorId, userId);
+            return Results.Ok(result);
+        })
+        .RequireAuthorization()
+        .WithTags("Posts")
+        .WithSummary("Add an editor to a post by its id.");
+
+        app.MapDelete("/{postId}/editors/{editorId}", async (IPostManagementHandler handler, ClaimsPrincipal user, string postId, string editorId) =>
+        {
+            var userId = user.FindFirstValue("Id")!;
+            await handler.RemoveEditorFromPostAsync(postId, editorId, userId);
+            return Results.NoContent();
+        })
+        .RequireAuthorization()
+        .WithTags("Posts")
+        .WithSummary("Remove an editor from a post by its id.");
     }
 }

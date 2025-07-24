@@ -1,11 +1,13 @@
 using BlogSystem.Domain.Entities;
 using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Posts.Data;
+using BlogSystem.Features.Posts.GetPost.DTOs;
 using BlogSystem.Features.Posts.PostManagement.DTOs;
 using BlogSystem.Features.Posts.PostManagement.States;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Posts;
+using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Helpers;
 using BlogSystem.Shared.Mappings;
 
@@ -64,8 +66,23 @@ public class PostManagementHandler : IPostManagementHandler
             ScheduledAt = request.ScheduledAt,
             Tags = (request.Tags ?? []).Where(tag => !string.IsNullOrWhiteSpace(tag))
                 .Select(tag => tag.Trim())
+                .ToList(),
+            Editors = (request.Editors ?? []).Where(editor => !string.IsNullOrWhiteSpace(editor))
+                .Select(editor => editor.Trim())
                 .ToList()
         };
+
+        post.Editors.ForEach(editorId =>
+        {
+            if (_userRepository.GetUserById(editorId) == null)
+            {
+                throw new ValidationErrorException($"User with Id {editorId} doesnt exist.");
+            }
+            if (editorId == userId)
+            {
+                throw new ValidationErrorException("You can't be assigned as an editor for your posts.");
+            }
+        });
 
         // Validate the post based on its status
         if (post.Status == PostStatus.Draft)
@@ -180,4 +197,63 @@ public class PostManagementHandler : IPostManagementHandler
         _postRepository.DeletePost(post);
         await Task.CompletedTask;
     }
+
+    public Task<PostAuthorDTO> AddEditorToPostAsync(string postId, string editorId, string userId)
+    {
+        // Fetch the existing post
+        var post = _postRepository.GetPostById(postId);
+        if (post == null)
+        {
+            throw new PostNotFoundException(postId);
+        }
+
+        // Validate the user permissions
+        var user = _userRepository.GetUserById(userId)!;
+        if (user.Id != post.AuthorId)
+        {
+            throw new UnauthorizedAccessException("You do not have permission to add editors to this post.");
+        }
+
+        // Validate the editor
+        var editor = _userRepository.GetUserById(editorId);
+        if (editor == null)
+        {
+            throw new UserNotFoundException(editorId);
+        }
+
+        // Add the editor to the post
+        post.Editors.Add(editor.Id);
+        _postRepository.UpdatePost(post);
+        return Task.FromResult(editor.MapToPostAuthorDTO());
+    }
+
+    public async Task RemoveEditorFromPostAsync(string postId, string editorId, string userId)
+    {
+        // Fetch the existing post
+        var post = _postRepository.GetPostById(postId);
+        if (post == null)
+        {
+            throw new PostNotFoundException(postId);
+        }
+
+        // Validate the user permissions
+        var user = _userRepository.GetUserById(userId)!;
+        if (user.Id != post.AuthorId)
+        {
+            throw new UnauthorizedAccessException("You do not have permission to remove editors from this post.");
+        }
+
+        // Validate the editor
+        var editor = _userRepository.GetUserById(editorId);
+        if (editor == null || !post.Editors.Contains(editor.Id))
+        {
+            throw new UserNotFoundException(editorId);
+        }
+
+        // Remove the editor from the post
+        post.Editors.Remove(editor.Id);
+        _postRepository.UpdatePost(post);
+        await Task.CompletedTask;
+    }
+
 }

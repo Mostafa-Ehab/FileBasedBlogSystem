@@ -66,7 +66,7 @@ public class GetUserHandler : IGetUserHandler
         }
 
         var posts = _postRepository.GetAuthorPosts(user.Id)
-            .Where(post => post.Status == PostStatus.Published)
+            .Where(post => post.Status == PostStatus.Published && post.AuthorId == user.Id)
             .Select(post => post.MapToPublicPostDTO(_userRepository))
             .ToArray();
 

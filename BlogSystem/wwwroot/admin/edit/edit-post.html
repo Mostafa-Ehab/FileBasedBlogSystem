@@ -144,7 +144,92 @@
                 <button type="submit" form="post-form" class="btn btn-primary" id="save-post">Publish Post</button>
             </div>
         </form>
+
+        <!-- Post Editors Section -->
+        <section class="post-editors-section">
+            <div class="admin-section-header">
+                <h2>
+                    <i class="fas fa-users"></i>
+                    Post Editors
+                </h2>
+                <button class="btn btn-primary" id="add-editor-btn">
+                    <i class="fas fa-plus"></i>
+                    Add Editor
+                </button>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table" id="editors-table">
+                    <thead>
+                        <tr>
+                            <th>Editor</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="editors-table-body">
+                        <!-- Editors will be loaded here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- No Editors Message -->
+            <div class="no-editors-message" style="display: none;" id="no-editors-message">
+                <div class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <h3>No Editors Assigned</h3>
+                    <p>This post doesn't have any editors assigned yet. Click "Add Editor" to assign editors to this
+                        post.</p>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <!-- Add Editor Modal -->
+    <div class="admin-modal" id="add-editor-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Editor to Post</h3>
+                <button class="modal-close" id="close-editor-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editor-select">Select Editor</label>
+                    <select id="editor-select" class="admin-select">
+                        <option value="">Choose an editor...</option>
+                        <!-- Options will be loaded dynamically -->
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancel-editor">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-editor">Add Editor</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Remove Editor Modal -->
+    <div class="admin-modal" id="remove-editor-modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3>Remove Editor</h3>
+                <button class="modal-close" id="close-remove-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove this editor from the post?</p>
+                <div class="editor-info" id="remove-editor-info">
+                    <!-- Editor info will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancel-remove">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-remove">Remove Editor</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading-overlay">

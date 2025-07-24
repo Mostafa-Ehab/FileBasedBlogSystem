@@ -121,9 +121,16 @@ public class UserRepository : IUserRepository
 
         foreach (var postId in existingUser.Posts)
         {
-            _postRepository.DeletePost(
-                _postRepository.GetPostById(postId)!
-            );
+            var post = _postRepository.GetPostById(postId);
+            if (post != null && post.AuthorId == user.Id)
+            {
+                _postRepository.DeletePost(post);
+            }
+            else if (post != null)
+            {
+                post.Editors.Remove(user.Id);
+                _postRepository.UpdatePost(post);
+            }
         }
 
         Directory.Delete(path, true);
