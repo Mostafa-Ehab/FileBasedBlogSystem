@@ -1966,7 +1966,7 @@ a:hover {
   text-decoration: none;
 }
 .post-card .post-card-meta .post-card-author:hover {
-  text-decoration: underline;
+  color: var(--secondary-color);
 }
 .post-card .post-card-description {
   color: var(--text-color);
@@ -2632,6 +2632,13 @@ a:hover {
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: var(--text-color);
+}
+.sidebar .author-bio .author-bio-name a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+.sidebar .author-bio .author-bio-name a:hover {
+  color: var(--secondary-color);
 }
 .sidebar .author-bio .author-bio-description {
   font-size: 0.875rem;

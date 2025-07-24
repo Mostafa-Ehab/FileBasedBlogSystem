@@ -69,7 +69,11 @@ function setAuthorInfo(author) {
             <div class="author-bio">
                 <img src="${author.profilePictureUrl}?width=200" alt="Author Avatar"
                     class="author-bio-avatar">
-                <h4 class="author-bio-name">${author.fullName}</h4>
+                <h4 class="author-bio-name">
+                    <a href="/users/${author.username}" class="author-bio-link">
+                        ${author.fullName}
+                    </a>
+                </h4>
                 <p class="author-bio-description">
                     ${author.bio || 'This author has not provided a bio yet.'}
                 </p>
