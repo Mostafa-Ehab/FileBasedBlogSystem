@@ -143,7 +143,7 @@ class AdminUsersManager {
                 </td>
                 <td>
                     <div class="user-info">
-                        <img src="${user.profilePictureUrl}" alt="${user.fullName}" class="user-avatar">
+                        <img src="${user.profilePictureUrl}?width=100" alt="${user.fullName}" class="user-avatar">
                         <div class="user-details">
                             <h4>${user.fullName}</h4>
                             <p>@${user.username}</p>

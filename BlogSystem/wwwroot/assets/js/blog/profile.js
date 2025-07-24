@@ -13,7 +13,7 @@ async function loadUserProfile() {
         <div class="author-info">
             <div class="author-details-container">
                 <div class="author-avatar-large">
-                    <img id="author-avatar" src="${data.profilePictureUrl}" alt="Author Avatar">
+                    <img id="author-avatar" src="${data.profilePictureUrl}?width=300" alt="Author Avatar">
                 </div>
                 <div class="author-details">
                     <h1 class="author-name" id="author-name">${data.fullName}</h1>

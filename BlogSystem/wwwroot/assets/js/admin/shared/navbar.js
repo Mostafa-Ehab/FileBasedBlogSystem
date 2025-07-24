@@ -107,7 +107,7 @@ class AdminNavbarController {
                 </div>
                 <div class="mobile-nav-section mobile-user-section">
                     <div class="mobile-user-info">
-                        <img src="${user.profilePictureUrl || 'https://picsum.photos/40/40?random=admin'}" alt="${user.fullName}" class="admin-avatar">
+                        <img src="${user.profilePictureUrl + '?width=100' || 'https://picsum.photos/40/40?random=admin'}" alt="${user.fullName}" class="admin-avatar">
                         <div class="user-details">
                             <p class="user-name">${user.fullName || 'Admin User'}</p>
                             <p class="user-role">${user.role}</p>

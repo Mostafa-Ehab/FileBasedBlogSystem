@@ -180,7 +180,7 @@ class AdminPostsManager {
                 </td>
                 <td>
                     <div class="author-cell">
-                        <img src="${post.author.profilePictureUrl}" class="author-avatar-small" alt="${post.author.fullName}">
+                        <img src="${post.author.profilePictureUrl}?width=100" class="author-avatar-small" alt="${post.author.fullName}">
                         <span class="author-name">${post.author.fullName}</span>
                     </div>
                 </td>

@@ -33,7 +33,7 @@ function setArticleHeader(post) {
             <h1 class="post-title">${post.title}</h1>
             <div class="post-meta-info">
                 <div class="post-author">
-                    <img src="${post.author.profilePictureUrl}" alt="Author Avatar" class="author-avatar">
+                    <img src="${post.author.profilePictureUrl}?width=200" alt="Author Avatar" class="author-avatar">
                     <a href="/users/${post.author.username}" class="author-link">
                         <span class="author-name">${post.author.fullName}</span>
                     </a>
@@ -67,7 +67,7 @@ function setAuthorInfo(author) {
         </div>
         <div class="sidebar-widget-content">
             <div class="author-bio">
-                <img src="${author.profilePictureUrl}" alt="Author Avatar"
+                <img src="${author.profilePictureUrl}?width=200" alt="Author Avatar"
                     class="author-bio-avatar">
                 <h4 class="author-bio-name">${author.fullName}</h4>
                 <p class="author-bio-description">
@@ -98,17 +98,16 @@ async function setRelatedPosts(postSlug, category) {
 
     posts = posts.filter(p => p.slug !== postSlug).slice(0, 3);
 
-    relatedPostsContainer.innerHTML = posts.map(post => `
-        <article class="related-post">
-            <img src="${post.imageUrl}" alt="${post.title}" class="related-post-image">
-            <div class="related-post-content">
-                <h4><a href="/posts/${post.slug}" class="related-post-title">${post.title}</a></h4>
-                <div class="related-post-meta">
-                    <span class="related-post-date">${formatReadableDate(post.publishedAt)}</span>
-                </div>
-            </div>
-        </article>
-    `).join('');
+    relatedPostsContainer.innerHTML = '';
+    if (posts.length === 0) {
+        relatedPostsContainer.innerHTML = '<p>No related posts found.</p>';
+    } else {
+        posts.forEach(post => {
+            relatedPostsContainer.appendChild(
+                createSidebarRelatedPostCard(post)
+            );
+        });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
