@@ -51,6 +51,7 @@ public static class PostMappingProfile
         return new PostAuthorDTO
         {
             Id = user.Id,
+            Username = user.Username,
             FullName = user.FullName,
             Email = user.Email,
             ProfilePictureUrl = user.ProfilePictureUrl ?? string.Empty,

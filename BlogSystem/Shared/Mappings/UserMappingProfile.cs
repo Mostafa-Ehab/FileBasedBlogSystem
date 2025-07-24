@@ -19,7 +19,8 @@ public static class UserMappingProfile
             ProfilePictureUrl = user.ProfilePictureUrl,
             Role = user.Role,
             CreatedAt = user.CreatedAt,
-            Posts = user.Posts
+            Posts = user.Posts,
+            SocialLinks = user.SocialLinks?.ToDictionary(kv => kv.Key, kv => kv.Value) ?? []
         };
     }
 

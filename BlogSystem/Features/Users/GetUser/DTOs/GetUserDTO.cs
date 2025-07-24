@@ -13,4 +13,5 @@ public class GetUserDTO
     public UserRole Role { get; set; } = UserRole.Author;
     public DateTime CreatedAt { get; set; }
     public string[] Posts { get; set; } = [];
+    public Dictionary<string, string> SocialLinks { get; set; } = [];
 }

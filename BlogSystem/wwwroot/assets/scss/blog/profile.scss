@@ -1,0 +1,202 @@
+.profile-header {
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1rem;
+    margin-bottom: 2rem;
+
+    .author-info {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        max-width: 1200px;
+    }
+
+    // Author avatar and details container
+    .author-details-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    // Author Avatar
+    .author-avatar-large {
+        flex-shrink: 0;
+        align-self: center;
+
+        img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--border-color);
+        }
+    }
+
+    // Author Details
+    .author-details {
+        .author-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .author-title {
+            font-size: 1.125rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin: 0 0 1rem 0;
+        }
+
+        .author-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .author-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+
+            i {
+                color: var(--secondary-color);
+            }
+        }
+
+        .author-bio {
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            opacity: 0.8;
+        }
+    }
+
+    // Author Contact
+    .author-contact-container {
+        min-width: 300px;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0 0 1rem 0;
+            background: var(--background-light, #f8f9fa);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color, #dee2e6);
+        }
+    }
+
+    .author-contact {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+
+    .contact-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        color: var(--text-color);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+        font-size: 0.875rem;
+
+        i {
+            font-size: 1rem;
+            width: 16px;
+            text-align: center;
+        }
+
+        &:hover {
+            background: var(--background-light);
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            text-decoration: none;
+        }
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 968px) {
+    .profile-header {
+        .author-info {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+
+        // Author Details
+        .author-details {
+            .author-name {
+                font-size: 1.75rem;
+            }
+
+            .author-meta {
+                gap: 1rem;
+            }
+        }
+
+        // Author Contact
+        .author-contact {
+            gap: 0.5rem;
+        }
+
+        .contact-link {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-header {
+
+        // Author avatar and details container
+        .author-details-container {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        // Author Details
+        .author-details {
+            text-align: center;
+            margin: 0 auto;
+
+            .author-name {
+                font-size: 1.5rem;
+            }
+
+            .author-meta {
+                justify-content: center;
+                gap: 0.5rem;
+            }
+        }
+
+        // Author Contact
+        .author-contact-container {
+            min-width: auto;
+        }
+
+        .contact-link {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+        }
+    }
+}

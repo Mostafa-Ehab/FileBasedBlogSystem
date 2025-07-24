@@ -117,12 +117,21 @@ static class PageEndpointExtension
         });
         #endregion
 
+        #region Author Pages
         app.MapGet("/admin/profile", async context =>
         {
             var filePath = Path.Combine("wwwroot", "admin", "profile.html");
             context.Response.ContentType = "text/html";
             await context.Response.SendFileAsync(filePath);
         });
+
+        app.MapGet("/users/{username}", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "blog", "profile.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+        #endregion
 
         return app;
     }

@@ -1,4 +1,8 @@
-﻿using BlogSystem.Features.Users.Data;
+﻿using BlogSystem.Domain.Entities;
+using BlogSystem.Domain.Enums;
+using BlogSystem.Features.Posts.Data;
+using BlogSystem.Features.Posts.GetPost.DTOs;
+using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.GetUser.DTOs;
 using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Mappings;
@@ -8,10 +12,12 @@ namespace BlogSystem.Features.Users.GetUser;
 public class GetUserHandler : IGetUserHandler
 {
     private readonly IUserRepository _userRepository;
+    private readonly IPostRepository _postRepository;
 
-    public GetUserHandler(IUserRepository userRepository)
+    public GetUserHandler(IUserRepository userRepository, IPostRepository postRepository)
     {
         _userRepository = userRepository;
+        _postRepository = postRepository;
     }
 
     public Task<GetUserDTO[]> GetAllUsers()
@@ -36,11 +42,34 @@ public class GetUserHandler : IGetUserHandler
 
     public Task<GetUserDTO> GetUser(string userId)
     {
-        var user = _userRepository.GetUserById(userId);
+        var user = _userRepository.GetUserByUsername(userId);
         if (user == null)
         {
             throw new UserNotFoundException(userId);
         }
+
+        user.Posts = user.Posts.Where(postId =>
+        {
+            Post? post = _postRepository.GetPostById(postId);
+            return post != null && post.Status == PostStatus.Published;
+        }).ToArray();
+
         return Task.FromResult(user.MapToGetUserDTO());
+    }
+
+    public Task<PublicPostDTO[]> GetPublicPostsByUserAsync(string username)
+    {
+        var user = _userRepository.GetUserByUsername(username);
+        if (user == null)
+        {
+            throw new UserNotFoundException(username);
+        }
+
+        var posts = _postRepository.GetAuthorPosts(user.Id)
+            .Where(post => post.Status == PostStatus.Published)
+            .Select(post => post.MapToPublicPostDTO(_userRepository))
+            .ToArray();
+
+        return Task.FromResult(posts);
     }
 }
