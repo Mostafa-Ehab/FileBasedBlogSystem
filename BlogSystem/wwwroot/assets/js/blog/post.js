@@ -34,7 +34,9 @@ function setArticleHeader(post) {
             <div class="post-meta-info">
                 <div class="post-author">
                     <img src="${post.author.profilePictureUrl}" alt="Author Avatar" class="author-avatar">
-                    <span class="author-name">${post.author.fullName}</span>
+                    <a href="/users/${post.author.username}" class="author-link">
+                        <span class="author-name">${post.author.fullName}</span>
+                    </a>
                 </div>
                 <div class="post-meta-details">
                     <span class="post-date">${formatReadableDate(post.publishedAt)}</span>
