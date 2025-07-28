@@ -1,3 +1,4 @@
+using BlogSystem.Domain.Entities;
 using BlogSystem.Features.Categories.CreateCategory;
 using BlogSystem.Features.Categories.CreateCategory.DTOs;
 using BlogSystem.Features.Categories.CreateCategory.Validators;
@@ -32,6 +33,7 @@ using BlogSystem.Features.Users.UpdateUser.Validators;
 using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Infrastructure.MarkdownService;
 using BlogSystem.Infrastructure.Scheduling;
+using BlogSystem.Infrastructure.SearchEngineService;
 using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Helpers;
 using FluentValidation;
@@ -162,6 +164,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<MarkdownService>();
         services.AddSingleton<PostImageProvider>();
         services.AddSingleton<UserImageProvider>();
+        services.AddSingleton<ISearchEngineService<Post>, PostSearchEngineService>();
         services.AddSingleton<IScheduler, HangfireScheduler>();
 
         services.AddCategoryServices();

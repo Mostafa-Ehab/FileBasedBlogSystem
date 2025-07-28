@@ -5,6 +5,7 @@ using BlogSystem.Features.Posts.GetPost.DTOs;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.GetUser.DTOs;
 using BlogSystem.Infrastructure.MarkdownService;
+using BlogSystem.Infrastructure.SearchEngineService;
 using BlogSystem.Shared.Exceptions.Posts;
 using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Mappings;
@@ -16,12 +17,14 @@ public class GetPostHandler : IGetPostHandler
     private readonly IPostRepository _postRepository;
     private readonly IUserRepository _userRepository;
     private readonly MarkdownService _markdownService;
+    private readonly ISearchEngineService<Post> _postSearchEngineService;
 
-    public GetPostHandler(IPostRepository postRepository, IUserRepository userRepository, MarkdownService markdownService)
+    public GetPostHandler(IPostRepository postRepository, IUserRepository userRepository, MarkdownService markdownService, ISearchEngineService<Post> postSearchEngineService)
     {
         _postRepository = postRepository;
         _userRepository = userRepository;
         _markdownService = markdownService;
+        _postSearchEngineService = postSearchEngineService;
     }
 
     public Task<PublicPostDTO> GetPostAsync(string postSlug)
@@ -53,11 +56,11 @@ public class GetPostHandler : IGetPostHandler
 
         if (!string.IsNullOrWhiteSpace(query))
         {
-            posts = posts.Where(p => p.Content!.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                   p.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                   p.Tags.Any(t => t.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
-                   p.Description.Contains(query, StringComparison.OrdinalIgnoreCase)
-                ).ToArray();
+            posts = _postSearchEngineService.SearchDocumentsAsync(query).Result.ToArray();
+            posts = posts.Select(p => _postRepository.GetPostById(p.Id))
+                        .Where(p => p != null && p.Status == PostStatus.Published)
+                        .Select(p => p!)
+                        .ToArray();
         }
 
         return Task.FromResult(
