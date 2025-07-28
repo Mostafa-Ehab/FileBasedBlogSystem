@@ -11,16 +11,11 @@ using System.Text.Json;
 
 public class UnitTestBase
 {
-    private readonly IConfiguration _configurationBuilder;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly AuthHelper _authHelper;
 
     public UnitTestBase()
     {
-        _configurationBuilder = new ConfigurationBuilder()
-            .AddUserSecrets<UnitTestBase>()
-            .Build();
-
         _jsonSerializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -28,7 +23,7 @@ public class UnitTestBase
             WriteIndented = true
         };
 
-        _authHelper = new AuthHelper(_configurationBuilder);
+        _authHelper = new AuthHelper();
     }
 
     public UserRepository CreateUserRepository()

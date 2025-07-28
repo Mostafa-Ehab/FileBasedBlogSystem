@@ -8,10 +8,7 @@ public class PasswordHashTest
     private readonly AuthHelper _authHelper;
     public PasswordHashTest()
     {
-        var builder = new ConfigurationBuilder()
-            .AddUserSecrets<PasswordHashTest>();
-        var configuration = builder.Build();
-        _authHelper = new AuthHelper(configuration);
+        _authHelper = new AuthHelper();
     }
 
     [Fact]
