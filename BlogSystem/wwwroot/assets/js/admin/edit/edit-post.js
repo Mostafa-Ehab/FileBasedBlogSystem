@@ -25,7 +25,7 @@ class EditPostManager {
             uploadImage: true,
             imageUploadFunction: (file, onSuccess, onError) => {
                 const formData = new FormData();
-                formData.append('image', file);
+                formData.append('file', file);
 
                 postRequest('/api/posts/upload-image', formData)
                     .then(response => {

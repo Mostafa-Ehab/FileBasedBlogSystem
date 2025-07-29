@@ -17,12 +17,12 @@ public class PublishedState
     private readonly IPostRepository _postRepository;
     private readonly ITagRepository _tagRepository;
     private readonly ICategoryRepository _categoryRepository;
-    private readonly PostImageProvider _imageProvider;
+    private readonly PostBannerImageProvider _imageProvider;
     public PublishedState(
         IPostRepository postRepository,
         ITagRepository tagRepository,
         ICategoryRepository categoryRepository,
-        PostImageProvider imageProvider
+        PostBannerImageProvider imageProvider
     )
     {
         _postRepository = postRepository;
@@ -90,10 +90,10 @@ public class PublishedState
         }
 
         post.ImageUrl = image != null ?
-            await SavePostImageAsync(image!, post.Id) : post.ImageUrl;
+            await SavePostBannerImageAsync(image!, post.Id) : post.ImageUrl;
     }
 
-    private async Task<string> SavePostImageAsync(IFormFile image, string postId)
+    private async Task<string> SavePostBannerImageAsync(IFormFile image, string postId)
     {
         if (ImageHelper.IsValidImage(image) == false)
         {

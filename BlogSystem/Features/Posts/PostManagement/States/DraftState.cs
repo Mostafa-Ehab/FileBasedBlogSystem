@@ -15,20 +15,22 @@ public class DraftState
     private readonly IPostRepository _postRepository;
     private readonly ITagRepository _tagRepository;
     private readonly ICategoryRepository _categoryRepository;
-    private readonly PostImageProvider _imageProvider;
+    private readonly PostBannerImageProvider _bannerImageProvider;
+    private readonly PostContentImageProvider _contentImageProvider;
 
     public DraftState(
         IPostRepository postRepository,
         ITagRepository tagRepository,
         ICategoryRepository categoryRepository,
-        PostImageProvider imageProvider
+        PostBannerImageProvider bannerImageProvider,
+        PostContentImageProvider contentImageProvider
     )
     {
         _postRepository = postRepository;
         _tagRepository = tagRepository;
         _categoryRepository = categoryRepository;
-        _imageProvider = imageProvider;
-        _imageProvider = imageProvider;
+        _bannerImageProvider = bannerImageProvider;
+        _contentImageProvider = contentImageProvider;
     }
 
     public async Task ValidateAndCreatePost(Post post, IFormFile? image)
@@ -43,6 +45,16 @@ public class DraftState
         ValidatePostData(post);
         await ValidateAndSaveImage(image, post);
         _postRepository.UpdatePost(post);
+    }
+
+    public async Task<string> UploadContentImageAsync(IFormFile file, string userId)
+    {
+        if (file == null || file.Length == 0)
+        {
+            throw new ValidationErrorException("Image file is required.");
+        }
+
+        return await _contentImageProvider.SaveImageAsync(file);
     }
 
     private void ValidatePostData(Post post)
@@ -76,17 +88,27 @@ public class DraftState
     {
         if (image != null && image.Length > 0)
         {
-            post.ImageUrl = await SavePostImageAsync(image, post.Id);
+            post.ImageUrl = await SavePostBannerImageAsync(image, post.Id);
         }
     }
 
-    private async Task<string> SavePostImageAsync(IFormFile image, string postId)
+    private async Task<string> SavePostBannerImageAsync(IFormFile image, string postId)
     {
         if (ImageHelper.IsValidImage(image) == false)
         {
             throw new ValidationErrorException("Invalid image format. Only JPEG, PNG, and GIF are allowed.");
         }
 
-        return await _imageProvider.SaveImageAsync(image, postId);
+        return await _bannerImageProvider.SaveImageAsync(image, postId);
+    }
+
+    private async Task<string> SavePostContentImageAsync(IFormFile image)
+    {
+        if (ImageHelper.IsValidImage(image) == false)
+        {
+            throw new ValidationErrorException("Invalid image format. Only JPEG, PNG, and GIF are allowed.");
+        }
+
+        return await _contentImageProvider.SaveImageAsync(image);
     }
 }

@@ -294,4 +294,28 @@ public class PostManagementHandler : IPostManagementHandler
         await Task.CompletedTask;
     }
 
+    public async Task<UploadPostContentImageDTO> UploadImageAsync(IFormFile file, string userId)
+    {
+        // Validate the file
+        if (file == null || file.Length == 0)
+        {
+            throw new ValidationErrorException("File cannot be null or empty.");
+        }
+
+        // Validate the user
+        var user = _userRepository.GetUserById(userId);
+        if (user == null)
+        {
+            throw new UserNotFoundException(userId);
+        }
+
+        // Upload the image and return the URL
+        var imageUrl = await _draftState.UploadContentImageAsync(file, userId);
+        return await Task.FromResult(new UploadPostContentImageDTO
+        {
+            ImageUrl = imageUrl,
+            Message = "Image uploaded successfully."
+        });
+    }
+
 }

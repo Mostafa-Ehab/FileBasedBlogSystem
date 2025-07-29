@@ -59,5 +59,16 @@ public static class PostManagementEndpoint
         .RequireAuthorization()
         .WithTags("Posts")
         .WithSummary("Remove an editor from a post by its id.");
+
+        app.MapPost("/upload-image", async (IPostManagementHandler handler, ClaimsPrincipal user, IFormFile file) =>
+        {
+            var userId = user.FindFirstValue("Id")!;
+            var result = await handler.UploadImageAsync(file, userId);
+            return Results.Ok(result);
+        })
+        .RequireAuthorization()
+        .DisableAntiforgery()
+        .WithTags("Posts")
+        .WithSummary("Upload an image for a post.");
     }
 }

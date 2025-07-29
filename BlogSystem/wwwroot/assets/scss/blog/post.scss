@@ -387,6 +387,8 @@
 
             &.copy-link {
                 background: var(--text-muted, #6c757d);
+                border: none;
+                cursor: pointer;
             }
         }
     }

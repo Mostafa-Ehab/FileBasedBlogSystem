@@ -16,14 +16,14 @@ public class ScheduledState
     private readonly IPostRepository _postRepository;
     private readonly ITagRepository _tagRepository;
     private readonly ICategoryRepository _categoryRepository;
-    private readonly PostImageProvider _imageProvider;
+    private readonly PostBannerImageProvider _imageProvider;
     private readonly IScheduler _postScheduler;
 
     public ScheduledState(
         IPostRepository postRepository,
         ITagRepository tagRepository,
         ICategoryRepository categoryRepository,
-        PostImageProvider imageProvider,
+        PostBannerImageProvider imageProvider,
         IScheduler postScheduler
     )
     {
@@ -107,7 +107,7 @@ public class ScheduledState
         }
 
         post.ImageUrl = image != null ?
-            await SavePostImageAsync(image!, post.Id) : post.ImageUrl;
+            await SavePostBannerImageAsync(image!, post.Id) : post.ImageUrl;
     }
 
     private void SchedulePost(Post post)
@@ -119,7 +119,7 @@ public class ScheduledState
         post.ScheduledAt = post.ScheduledAt.Value;
     }
 
-    private async Task<string> SavePostImageAsync(IFormFile image, string postId)
+    private async Task<string> SavePostBannerImageAsync(IFormFile image, string postId)
     {
         if (ImageHelper.IsValidImage(image) == false)
         {

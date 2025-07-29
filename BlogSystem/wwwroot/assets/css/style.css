@@ -2880,6 +2880,8 @@ a:hover {
 }
 .post-article .post-footer .share-btn.copy-link {
   background: var(--text-muted, #6c757d);
+  border: none;
+  cursor: pointer;
 }
 
 /* Author Bio Section */

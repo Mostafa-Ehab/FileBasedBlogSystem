@@ -118,7 +118,8 @@ public static class ServiceCollectionExtensions
 
         // Register ImageSharp services
         services.AddImageSharp()
-            .AddProvider<PostImageProvider>()
+            .AddProvider<PostBannerImageProvider>()
+            .AddProvider<PostContentImageProvider>()
             .AddProvider<UserImageProvider>()
             .RemoveProvider<PhysicalFileSystemProvider>()
             .AddProvider<PhysicalFileSystemProvider>()
@@ -162,7 +163,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<UserResolver>();
 
         services.AddSingleton<MarkdownService>();
-        services.AddSingleton<PostImageProvider>();
+        services.AddSingleton<PostBannerImageProvider>();
+        services.AddSingleton<PostContentImageProvider>();
         services.AddSingleton<UserImageProvider>();
         services.AddSingleton<ISearchEngineService<Post>, PostSearchEngineService>();
         services.AddSingleton<IScheduler, HangfireScheduler>();

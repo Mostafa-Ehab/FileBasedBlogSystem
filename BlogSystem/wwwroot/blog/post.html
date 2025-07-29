@@ -17,6 +17,7 @@
     <script src="/assets/js/blog/shared/search.js" defer></script>
     <script src="/assets/js/blog/post.js" defer></script>
     <script src="/assets/js/shared/utils.js" defer></script>
+    <script src="/assets/js/shared/errors.js" defer></script>
 </head>
 
 <body>
@@ -54,10 +55,10 @@
                                 onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(window.location.href) + '&title=' + encodeURIComponent(document.title), '_blank'); return false;">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
-                            <a href="#" class="share-btn copy-link" title="Copy Link"
-                                onclick="navigator.clipboard.writeText(window.location.href); alert('Link copied!'); return false;">
+                            <button class="share-btn copy-link" title="Copy Link"
+                                onclick="navigator.clipboard.writeText(window.location.href); showSuccess('Link copied!'); return false;">
                                 <i class="fas fa-link"></i>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </footer>
@@ -100,6 +101,18 @@
     <footer class="footer">
         <p>&copy; 2025 Blog. All rights reserved.</p>
     </footer>
+
+    <!-- Error Message -->
+    <div class="error-message" id="error-message" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="error-text"></span>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="success-message" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        <span id="success-text"></span>
+    </div>
 </body>
 
 </html>

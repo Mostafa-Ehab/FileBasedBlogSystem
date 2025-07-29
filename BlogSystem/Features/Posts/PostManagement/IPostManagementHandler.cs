@@ -10,4 +10,5 @@ public interface IPostManagementHandler
     Task DeletePostAsync(string postId, string userId);
     Task<PostAuthorDTO> AddEditorToPostAsync(string postId, string editorId, string userId);
     Task RemoveEditorFromPostAsync(string postId, string editorId, string userId);
+    Task<UploadPostContentImageDTO> UploadImageAsync(IFormFile file, string userId);
 }
