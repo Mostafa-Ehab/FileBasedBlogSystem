@@ -5,6 +5,7 @@ using BlogSystem.Features.Posts.GetPost.DTOs;
 using BlogSystem.Features.Posts.PostManagement.DTOs;
 using BlogSystem.Features.Posts.PostManagement.States;
 using BlogSystem.Features.Users.Data;
+using BlogSystem.Infrastructure.SearchEngineService;
 using BlogSystem.Shared.Exceptions;
 using BlogSystem.Shared.Exceptions.Posts;
 using BlogSystem.Shared.Exceptions.Users;
@@ -20,13 +21,15 @@ public class PostManagementHandler : IPostManagementHandler
     private readonly DraftState _draftState;
     private readonly ScheduledState _scheduledState;
     private readonly PublishedState _publishedState;
+    private readonly ISearchEngineService<Post> _postSearchEngineService;
 
     public PostManagementHandler(
         IPostRepository postRepository,
         IUserRepository userRepository,
         DraftState draftState,
         ScheduledState scheduledState,
-        PublishedState publishedState
+        PublishedState publishedState,
+        ISearchEngineService<Post> postSearchEngineService
     )
     {
         _postRepository = postRepository;
@@ -34,6 +37,7 @@ public class PostManagementHandler : IPostManagementHandler
         _draftState = draftState;
         _scheduledState = scheduledState;
         _publishedState = publishedState;
+        _postSearchEngineService = postSearchEngineService;
     }
 
     public async Task<PostResponseDTO> CreatePostAsync(CreatePostRequestDTO request, string userId)
@@ -97,6 +101,22 @@ public class PostManagementHandler : IPostManagementHandler
         {
             await _publishedState.ValidateAndCreatePost(post, request.Image);
         }
+
+        await _postSearchEngineService.IndexDocumentAsync(new Post()
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Description = post.Description,
+            Content = post.Content,
+            AuthorId = post.AuthorId,
+            Category = post.Category,
+            Slug = post.Slug,
+            CreatedAt = post.CreatedAt,
+            UpdatedAt = post.UpdatedAt,
+            Status = post.Status,
+            ScheduledAt = post.ScheduledAt,
+            Tags = post.Tags
+        });
 
         return post.MapToPostResponseDTO(_userRepository);
     }
@@ -174,6 +194,22 @@ public class PostManagementHandler : IPostManagementHandler
             await _publishedState.ValidateAndUpdatePost(post, previousStatus, request.Image);
         }
 
+        await _postSearchEngineService.UpdateDocumentAsync(new Post()
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Description = post.Description,
+            Content = post.Content,
+            AuthorId = post.AuthorId,
+            Category = post.Category,
+            Slug = post.Slug,
+            CreatedAt = post.CreatedAt,
+            UpdatedAt = post.UpdatedAt,
+            Status = post.Status,
+            ScheduledAt = post.ScheduledAt,
+            Tags = post.Tags
+        });
+
         return post.MapToPostResponseDTO(_userRepository);
     }
 
@@ -192,6 +228,8 @@ public class PostManagementHandler : IPostManagementHandler
         {
             throw new UnauthorizedAccessException("You do not have permission to delete this post.");
         }
+
+        await _postSearchEngineService.DeleteDocumentAsync(post.Id);
 
         // Delete the post
         _postRepository.DeletePost(post);

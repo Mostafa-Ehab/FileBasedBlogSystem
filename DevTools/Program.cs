@@ -125,6 +125,12 @@ internal class Program
             Console.WriteLine("Indexing content...");
             Directory.SetCurrentDirectory("BlogSystem");
 
+            var indexPath = Path.Combine("Content", "index");
+            if (Directory.Exists(indexPath))
+            {
+                Directory.Delete(indexPath, true);
+            }
+
             var postSearchEngineService = new PostSearchEngineService();
             var path = Path.Combine("Content", "posts");
             var postFiles = Directory.GetDirectories(path)
@@ -144,6 +150,7 @@ internal class Program
 
             foreach (var post in posts)
             {
+                Console.WriteLine($"Indexing post: {post.Title}");
                 postSearchEngineService.IndexDocumentAsync(post);
             }
 
