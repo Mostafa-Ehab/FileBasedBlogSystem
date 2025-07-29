@@ -15,9 +15,9 @@ public class PostSearchEngineService : ISearchEngineService<Post>
     private readonly FSDirectory _indexDirectory;
     private readonly IndexWriter _indexWriter;
     private readonly StandardAnalyzer _standardAnalyzer;
-    private IndexReader _indexReader = null!;
-    private IndexSearcher _searcher = null!;
-    private MultiFieldQueryParser _parser = null!;
+    private readonly MultiFieldQueryParser _parser;
+    private readonly IndexReader _indexReader;
+    private readonly IndexSearcher _searcher;
     public PostSearchEngineService()
     {
         var indexPath = Path.Combine(Environment.CurrentDirectory, "Content", "index");
@@ -25,18 +25,13 @@ public class PostSearchEngineService : ISearchEngineService<Post>
         _standardAnalyzer = new StandardAnalyzer(_luceneVersion);
 
         // Create an index writer
-        var indexConfig = new IndexWriterConfig(_luceneVersion, _standardAnalyzer);                          // create/overwrite index
+        var indexConfig = new IndexWriterConfig(_luceneVersion, _standardAnalyzer);
         _indexWriter = new IndexWriter(_indexDirectory, indexConfig);
-    }
 
-    private void InitializeIndexReader()
-    {
-        if (_indexReader == null)
-        {
-            _indexReader = DirectoryReader.Open(_indexDirectory);
-            _searcher = new IndexSearcher(_indexReader);
-            _parser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, ["title", "content", "description"], _standardAnalyzer);
-        }
+        // Initialize the parser for searching
+        _parser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, ["title", "content", "description", "slug"], _standardAnalyzer);
+        _indexReader = _indexWriter.GetReader(applyAllDeletes: true);
+        _searcher = new IndexSearcher(_indexReader);
     }
 
     public Task IndexDocumentAsync(Post document)
@@ -80,8 +75,6 @@ public class PostSearchEngineService : ISearchEngineService<Post>
 
     public Task<IEnumerable<Post>> SearchDocumentsAsync(string query)
     {
-        InitializeIndexReader();
-
         var hits = _searcher.Search(
             _parser.Parse(query.Trim() + "*"), 10, new Sort(
                 new SortField("title", SortFieldType.STRING)
@@ -97,6 +90,5 @@ public class PostSearchEngineService : ISearchEngineService<Post>
     {
         _indexWriter.Dispose();
         _indexDirectory.Dispose();
-        _indexReader.Dispose();
     }
 }
