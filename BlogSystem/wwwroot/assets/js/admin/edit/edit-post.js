@@ -215,7 +215,7 @@ class EditPostManager {
             // Handle existing image
             if (this.post.imageUrl) {
                 const previewImg = document.getElementById('preview-img');
-                previewImg.src = this.post.imageUrl;
+                previewImg.src = this.post.imageUrl + "?width=400";
                 preview.style.display = 'flex';
             } else {
                 preview.style.display = 'none';
