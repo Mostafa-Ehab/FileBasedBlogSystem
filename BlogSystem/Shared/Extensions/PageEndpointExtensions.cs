@@ -1,5 +1,8 @@
+using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.GetPost;
+using BlogSystem.Features.Tags.GetTag;
+using BlogSystem.Features.Users.GetUser;
 using DotNetEnv;
 
 namespace BlogSystem.Shared.Extensions;
@@ -8,6 +11,18 @@ static class PageEndpointExtension
 {
     public static IEndpointRouteBuilder MapStaticPagesEndpoints(this IEndpointRouteBuilder app)
     {
+        #region Home Page
+        app.MapGet("/", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "index.html");
+            var htmlTemplate = await File.ReadAllTextAsync(filePath);
+
+            var finalHtml = htmlTemplate.Replace("{{WEBSITE_URL}}", Environment.GetEnvironmentVariable("WEBSITE_URL") ?? "http://localhost:5000");
+            context.Response.ContentType = "text/html";
+            await context.Response.WriteAsync(finalHtml);
+        });
+        #endregion
+
         #region User Pages
         app.MapGet("/admin/users", async context =>
         {
@@ -38,9 +53,9 @@ static class PageEndpointExtension
             {
                 // Fetch the post by slug
                 var post = await postHandler.GetPostAsync(slug);
-                var filePath = Path.Combine("wwwroot", "blog", "post.html");
 
                 // Load the HTML template
+                var filePath = Path.Combine("wwwroot", "blog", "post.html");
                 var htmlTemplate = await File.ReadAllTextAsync(filePath);
 
                 // Generate meta tags based on the slug
@@ -90,11 +105,40 @@ static class PageEndpointExtension
         #endregion
 
         #region Category Pages
-        app.MapGet("/categories/{slug}", async context =>
+        app.MapGet("/categories/{slug}", async (HttpContext context, string slug, IGetCategoryHandler categoryHandler) =>
         {
-            var filePath = Path.Combine("wwwroot", "blog", "category.html");
-            context.Response.ContentType = "text/html";
-            await context.Response.SendFileAsync(filePath);
+            try
+            {
+                // Fetch the category by slug
+                var category = await categoryHandler.GetCategoryAsync(slug);
+
+
+                // Load the HTML template
+                var filePath = Path.Combine("wwwroot", "blog", "category.html");
+                var htmlTemplate = await File.ReadAllTextAsync(filePath);
+
+                // Generate meta tags based on the slug
+                var ogTags = $@"
+                    <meta property=""og:title"" content=""{category.Name}"" />
+                    <meta property=""og:url"" content=""{Environment.GetEnvironmentVariable("WEBSITE_URL")}/categories/{slug}"" />
+                    <meta property=""og:type"" content=""website"" />
+                    <meta property=""og:description"" content=""{category.Description}"" />
+                    <meta property=""og:image"" content=""/assets/images/blog-thumbnail.png"" />
+                ";
+
+                // Replace a placeholder in HTML (e.g., <!--OG_META-->)
+                var finalHtml = htmlTemplate.Replace("<!--OG_META-->", ogTags);
+
+                context.Response.ContentType = "text/html";
+                await context.Response.WriteAsync(finalHtml);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                var filePath = Path.Combine("wwwroot", "error", "404.html");
+                context.Response.ContentType = "text/html";
+                await context.Response.SendFileAsync(filePath);
+            }
         });
 
         app.MapGet("/admin/categories", async context =>
@@ -120,11 +164,39 @@ static class PageEndpointExtension
         #endregion
 
         #region Tag Pages
-        app.MapGet("/tags/{slug}", async context =>
+        app.MapGet("/tags/{slug}", async (HttpContext context, string slug, IGetTagHandler tagHandler) =>
         {
-            var filePath = Path.Combine("wwwroot", "blog", "tag.html");
-            context.Response.ContentType = "text/html";
-            await context.Response.SendFileAsync(filePath);
+            try
+            {
+                // Fetch the tag by slug
+                var tag = await tagHandler.GetTagAsync(slug);
+
+                // Load the HTML template
+                var filePath = Path.Combine("wwwroot", "blog", "tag.html");
+                var htmlTemplate = await File.ReadAllTextAsync(filePath);
+
+                // Generate meta tags based on the slug
+                var ogTags = $@"
+                    <meta property=""og:title"" content=""{tag.Name}"" />
+                    <meta property=""og:url"" content=""{Environment.GetEnvironmentVariable("WEBSITE_URL")}/tags/{slug}"" />
+                    <meta property=""og:type"" content=""website"" />
+                    <meta property=""og:description"" content=""{tag.Description}"" />
+                    <meta property=""og:image"" content=""/assets/images/blog-thumbnail.png"" />
+                ";
+
+                // Replace a placeholder in HTML (e.g., <!--OG_META-->)
+                var finalHtml = htmlTemplate.Replace("<!--OG_META-->", ogTags);
+
+                context.Response.ContentType = "text/html";
+                await context.Response.WriteAsync(finalHtml);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                var filePath = Path.Combine("wwwroot", "error", "404.html");
+                context.Response.ContentType = "text/html";
+                await context.Response.SendFileAsync(filePath);
+            }
         });
 
         app.MapGet("/admin/tags", async context =>
@@ -165,7 +237,7 @@ static class PageEndpointExtension
                 var userProfile = await userProfileHandler.GetUserAsync(username);
 
                 // Load the HTML template
-            var filePath = Path.Combine("wwwroot", "blog", "profile.html");
+                var filePath = Path.Combine("wwwroot", "blog", "profile.html");
                 var htmlTemplate = await File.ReadAllTextAsync(filePath);
 
                 // Generate meta tags based on the username
@@ -187,8 +259,8 @@ static class PageEndpointExtension
             {
                 // Handle the exception
                 var filePath = Path.Combine("wwwroot", "error", "404.html");
-            context.Response.ContentType = "text/html";
-            await context.Response.SendFileAsync(filePath);
+                context.Response.ContentType = "text/html";
+                await context.Response.SendFileAsync(filePath);
             }
         });
         #endregion
