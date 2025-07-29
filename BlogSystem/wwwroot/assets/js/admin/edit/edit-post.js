@@ -134,6 +134,7 @@ class EditPostManager {
                 this.post = await getRequest(`/api/posts/${postId}`);
                 if (this.post.authorId === getUser().userId) {
                     this.editors = await getRequest(`/api/posts/${postId}/editors`) || [];
+                    this.editors = this.editors.sort((a, b) => a.fullName.localeCompare(b.fullName));
                 } else {
                     this.editors = [];
                     document.getElementById('add-editor-btn').style.display = 'none';
@@ -347,6 +348,7 @@ class EditPostManager {
         // Add available editors (exclude already assigned ones)
         const assignedEditorIds = this.editors.map(e => e.id);
         const availableEditors = this.availableEditors.filter(e => !assignedEditorIds.includes(e.id));
+        availableEditors.sort((a, b) => a.fullName.localeCompare(b.fullName));
 
         availableEditors.forEach(editor => {
             const option = document.createElement('option');
