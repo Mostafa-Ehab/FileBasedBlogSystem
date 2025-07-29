@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!navbar) return;
     navbar.innerHTML = `
         <div class="logo">
-            <a href="/">Blog</a>
+            <a href="/">ME Blog</a>
         </div>
         <div class="search-container">
             <label for="search-input" class="visually-hidden">Search posts</label>
