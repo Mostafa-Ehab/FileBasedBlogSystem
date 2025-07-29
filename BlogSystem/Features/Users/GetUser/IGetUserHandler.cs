@@ -5,8 +5,8 @@ namespace BlogSystem.Features.Users.GetUser;
 
 public interface IGetUserHandler
 {
-    public Task<GetUserDTO[]> GetAllUsers();
-    public Task<GetMyProfileDTO> GetMyProfile(string userId);
-    public Task<GetUserDTO> GetUser(string userId);
+    public Task<GetUserDTO[]> GetAllUsersAsync();
+    public Task<GetMyProfileDTO> GetMyProfileAsync(string userId);
+    public Task<GetUserDTO> GetUserAsync(string userId);
     public Task<PublicPostDTO[]> GetPublicPostsByUserAsync(string username);
 }

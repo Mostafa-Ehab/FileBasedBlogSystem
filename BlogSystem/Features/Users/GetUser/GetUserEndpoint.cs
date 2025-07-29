@@ -10,7 +10,7 @@ public static class GetUserEndpoint
     {
         app.MapGet("/", async (IGetUserHandler handler) =>
         {
-            var response = await handler.GetAllUsers();
+            var response = await handler.GetAllUsersAsync();
             return Results.Ok(response);
         })
         .RequireAuthorization()
@@ -24,7 +24,7 @@ public static class GetUserEndpoint
         app.MapGet("/me", async (IGetUserHandler handler, ClaimsPrincipal user) =>
         {
             var userId = user.FindFirstValue("Id")!;
-            var response = await handler.GetMyProfile(userId);
+            var response = await handler.GetMyProfileAsync(userId);
             return Results.Ok(response);
         })
         .RequireAuthorization()
@@ -37,7 +37,7 @@ public static class GetUserEndpoint
     {
         app.MapGet("/{username}", async (IGetUserHandler handler, ClaimsPrincipal user, string username) =>
         {
-            var response = await handler.GetUser(username);
+            var response = await handler.GetUserAsync(username);
             return Results.Ok(response);
         })
         .WithName("GetUser")

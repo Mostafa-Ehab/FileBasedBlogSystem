@@ -20,7 +20,7 @@ public class GetUserHandler : IGetUserHandler
         _postRepository = postRepository;
     }
 
-    public Task<GetUserDTO[]> GetAllUsers()
+    public Task<GetUserDTO[]> GetAllUsersAsync()
     {
         var users = _userRepository.GetAllUsers();
         return Task.FromResult(
@@ -30,7 +30,7 @@ public class GetUserHandler : IGetUserHandler
         );
     }
 
-    public Task<GetMyProfileDTO> GetMyProfile(string userId)
+    public Task<GetMyProfileDTO> GetMyProfileAsync(string userId)
     {
         var user = _userRepository.GetUserById(userId);
         if (user == null)
@@ -40,7 +40,7 @@ public class GetUserHandler : IGetUserHandler
         return Task.FromResult(user.MapToGetMyProfileDTO());
     }
 
-    public Task<GetUserDTO> GetUser(string userId)
+    public Task<GetUserDTO> GetUserAsync(string userId)
     {
         var user = _userRepository.GetUserByUsername(userId);
         if (user == null)

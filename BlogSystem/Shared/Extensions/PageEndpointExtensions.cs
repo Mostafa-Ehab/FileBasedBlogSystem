@@ -157,11 +157,39 @@ static class PageEndpointExtension
             await context.Response.SendFileAsync(filePath);
         });
 
-        app.MapGet("/users/{username}", async context =>
+        app.MapGet("/users/{username}", async (HttpContext context, string username, IGetUserHandler userProfileHandler) =>
         {
+            try
+            {
+                // Fetch the user profile by username
+                var userProfile = await userProfileHandler.GetUserAsync(username);
+
+                // Load the HTML template
             var filePath = Path.Combine("wwwroot", "blog", "profile.html");
+                var htmlTemplate = await File.ReadAllTextAsync(filePath);
+
+                // Generate meta tags based on the username
+                var ogTags = $@"
+                    <meta property=""og:title"" content=""{userProfile.FullName}"" />
+                    <meta property=""og:url"" content=""{Environment.GetEnvironmentVariable("WEBSITE_URL")}/users/{username}"" />
+                    <meta property=""og:type"" content=""profile"" />
+                    <meta property=""og:description"" content=""Profile of {userProfile.FullName}"" />
+                    <meta property=""og:image"" content=""{userProfile.ProfilePictureUrl}"" />
+                ";
+
+                // Replace a placeholder in HTML (e.g., <!--OG_META-->)
+                var finalHtml = htmlTemplate.Replace("<!--OG_META-->", ogTags);
+
+                context.Response.ContentType = "text/html";
+                await context.Response.WriteAsync(finalHtml);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                var filePath = Path.Combine("wwwroot", "error", "404.html");
             context.Response.ContentType = "text/html";
             await context.Response.SendFileAsync(filePath);
+            }
         });
         #endregion
 
