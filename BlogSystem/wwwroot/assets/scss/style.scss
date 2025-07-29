@@ -18,6 +18,7 @@
 @use "blog/components/carousel" as blog-carousel;
 @use "blog/components/post-card" as blog-post-card;
 @use "blog/components/sidebar" as blog-sidebar;
+@use "blog/components/search-overlay" as blog-search-overlay;
 @use "blog/layout" as blog-layout;
 @use "blog/home" as blog-home;
 @use "blog/post" as blog-post;
