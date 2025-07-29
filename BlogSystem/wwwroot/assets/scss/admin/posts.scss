@@ -94,6 +94,261 @@
 
 // Post form styles
 #post-form {
+
+    // Post Content
+    .editor-preview {
+        padding: 0 2rem 2rem;
+        font-size: 1.125rem;
+        line-height: 1.7;
+        color: var(--text-color);
+
+        /* Typography using semantic tags */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--text-color);
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text-color);
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+            color: var(--text-color);
+            line-height: 1.4;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: var(--text-color);
+        }
+
+        h5 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: var(--text-color);
+        }
+
+        h6 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+
+            &:first-of-type {
+                font-size: 1.25rem;
+                font-weight: 500;
+                color: var(--text-muted, #6c757d);
+                font-style: italic;
+                margin-bottom: 2rem;
+                padding-bottom: 1.5rem;
+                border-bottom: 1px solid var(--border-color-light, #f1f3f4);
+            }
+        }
+
+        /* Lists */
+        ul,
+        ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        ul li {
+            list-style-type: disc;
+        }
+
+        ol li {
+            list-style-type: decimal;
+        }
+
+        ul ul,
+        ol ol,
+        ul ol,
+        ol ul {
+            margin: 0.5rem 0;
+        }
+
+        /* Blockquotes */
+        blockquote {
+            background: var(--background-light, #f8f9fa);
+            border-left: 4px solid var(--secondary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-size: 1.25rem;
+            font-style: italic;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            position: relative;
+
+            &::before {
+                content: '"';
+                font-size: 4rem;
+                color: var(--secondary-color);
+                position: absolute;
+                top: -0.5rem;
+                left: 1rem;
+                opacity: 0.3;
+            }
+
+            p:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Code blocks */
+        pre {
+            background: var(--background-light, #f8f9fa);
+            border: 1px solid var(--border-color, #dee2e6);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+
+            code {
+                background: none;
+                padding: 0;
+                color: inherit;
+            }
+        }
+
+        code {
+            background: var(--background-light, #f8f9fa);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 1rem;
+        }
+
+        th,
+        td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color, #dee2e6);
+        }
+
+        th {
+            background: var(--background-light, #f8f9fa);
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        tr:hover {
+            background: var(--background-light, #f8f9fa);
+        }
+
+        /* Images */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+            display: block;
+            box-shadow: var(--box-shadow);
+        }
+
+        figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        figcaption {
+            font-size: 0.875rem;
+            color: var(--text-muted, #6c757d);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        /* Links */
+        a {
+            color: var(--secondary-color);
+            text-decoration: underline;
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: var(--primary-color);
+                text-decoration: none;
+            }
+        }
+
+        /* Emphasis */
+        strong,
+        b {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        em,
+        i {
+            font-style: italic;
+        }
+
+        mark {
+            background: var(--accent-color);
+            padding: 0.125rem 0.25rem;
+            border-radius: 2px;
+        }
+
+        /* Horizontal rules */
+        hr {
+            border: none;
+            height: 1px;
+            background: var(--border-color, #dee2e6);
+            margin: 3rem 0;
+        }
+
+        /* Definition lists */
+        dl {
+            margin: 1.5rem 0;
+        }
+
+        dt {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        dd {
+            margin-left: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted, #6c757d);
+        }
+    }
+
     .image-preview {
         display: flex;
         align-items: center;
