@@ -1,0 +1,69 @@
+.error-404-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+
+    .error-404-content {
+        text-align: center;
+        max-width: 600px;
+        padding: 0 1rem;
+    }
+
+    .error-number {
+        font-size: 8rem;
+        font-weight: 900;
+        color: var(--secondary-color);
+        line-height: 1;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    .error-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        margin-bottom: 1rem;
+    }
+
+    .error-description {
+        font-size: 1.125rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .error-404-container {
+        .error-number {
+            font-size: 6rem;
+        }
+
+        .error-title {
+            font-size: 2rem;
+        }
+
+        .error-description {
+            font-size: 1rem;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .error-404-container {
+        min-height: 60vh;
+        padding: 1rem 0;
+
+        .error-number {
+            font-size: 4rem;
+        }
+
+        .error-title {
+            font-size: 1.75rem;
+        }
+    }
+}

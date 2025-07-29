@@ -1,3 +1,7 @@
+using BlogSystem.Features.Posts.Data;
+using BlogSystem.Features.Posts.GetPost;
+using DotNetEnv;
+
 namespace BlogSystem.Shared.Extensions;
 
 static class PageEndpointExtension
@@ -28,11 +32,39 @@ static class PageEndpointExtension
         #endregion
 
         #region Post Pages
-        app.MapGet("/posts/{slug}", async context =>
+        app.MapGet("/posts/{slug}", async (HttpContext context, string slug, IGetPostHandler postHandler) =>
         {
-            var filePath = Path.Combine("wwwroot", "blog", "post.html");
-            context.Response.ContentType = "text/html";
-            await context.Response.SendFileAsync(filePath);
+            try
+            {
+                // Fetch the post by slug
+                var post = await postHandler.GetPostAsync(slug);
+                var filePath = Path.Combine("wwwroot", "blog", "post.html");
+
+                // Load the HTML template
+                var htmlTemplate = await File.ReadAllTextAsync(filePath);
+
+                // Generate meta tags based on the slug
+                var ogTags = $@"
+                    <meta property=""og:title"" content=""{post.Title}"" />
+                    <meta property=""og:url"" content=""{Environment.GetEnvironmentVariable("WEBSITE_URL")}/posts/{slug}"" />
+                    <meta property=""og:type"" content=""article"" />
+                    <meta property=""og:description"" content=""{post.Description}"" />
+                    <meta property=""og:image"" content=""{post.ImageUrl}"" />
+                ";
+
+                // Replace a placeholder in HTML (e.g., <!--OG_META-->)
+                var finalHtml = htmlTemplate.Replace("<!--OG_META-->", ogTags);
+
+                context.Response.ContentType = "text/html";
+                await context.Response.WriteAsync(finalHtml);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                var filePath = Path.Combine("wwwroot", "error", "404.html");
+                context.Response.ContentType = "text/html";
+                await context.Response.SendFileAsync(filePath);
+            }
         });
 
         app.MapGet("/admin/posts", async context =>

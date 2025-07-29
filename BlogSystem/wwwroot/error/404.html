@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="/assets/js/blog/shared/navbar.js" defer></script>
+    <script src="/assets/js/blog/shared/sidebar.js" defer></script>
+    <script src="/assets/js/blog/shared/search.js" defer></script>
+    <script src="/assets/js/shared/utils.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <!-- Navigation will be populated by navbar.js -->
+    </nav>
+
+    <main class="content">
+        <div class="main-content">
+            <div class="error-404-container">
+                <div class="error-404-content">
+                    <!-- Large 404 -->
+                    <div class="error-number">404</div>
+
+                    <!-- Error Message -->
+                    <h1 class="error-title">Page Not Found</h1>
+                    <p class="error-description">
+                        Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or you
+                        entered
+                        the wrong URL.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Categories Widget -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-widget-header">
+                        <h3 class="sidebar-widget-title">Categories</h3>
+                    </div>
+                    <div class="sidebar-widget-content">
+                        <ul class="category-list" id="category-list">
+
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Related Tags -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-widget-header">
+                        <h3 class="sidebar-widget-title">Tags</h3>
+                    </div>
+                    <div class="sidebar-widget-content">
+                        <div class="tags-cloud" id="tags-cloud">
+
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Blog. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSidebarTags();
+            loadSidebarCategories();
+        });
+    </script>
+</body>
+
+</html>
