@@ -5,6 +5,7 @@ class EditPostManager {
         this.editors = [];
         this.availableEditors = [];
         this.editorToRemove = null;
+        this.easyMDE = null;
 
         this.init();
     }
@@ -12,6 +13,34 @@ class EditPostManager {
     init() {
         this.loadData();
         this.setupEventListeners();
+
+        this.easyMDE = new EasyMDE({
+            element: document.getElementById('post-content'),
+            toolbar: [
+                'bold', 'italic', 'heading', '|',
+                'quote', 'unordered-list', 'ordered-list', '|',
+                'link', 'upload-image', '|',
+                'preview', 'side-by-side', 'fullscreen'
+            ],
+            uploadImage: true,
+            imageUploadFunction: (file, onSuccess, onError) => {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                postRequest('/api/posts/upload-image', formData)
+                    .then(response => {
+                        onSuccess(response.imageUrl);
+                    })
+                    .catch(error => {
+                        console.error('Image upload failed:', error);
+                        onError('Image upload failed');
+                    });
+            },
+            errorCallback: (error) => {
+                console.error('EasyMDE error:', error);
+                showError('An error occurred while processing the content');
+            }
+        });
     }
 
     setupEventListeners() {
@@ -45,12 +74,10 @@ class EditPostManager {
             if (e.target.value === 'Draft') {
                 document.getElementById('post-description').required = false;
                 document.getElementById('post-category').required = false;
-                document.getElementById('post-content').required = false;
                 document.getElementById('post-image').required = false;
             } else {
                 document.getElementById('post-description').required = true;
                 document.getElementById('post-category').required = true;
-                document.getElementById('post-content').required = true;
 
                 // Show/hide image upload based on status
                 const preview = document.getElementById('image-preview');
@@ -74,14 +101,6 @@ class EditPostManager {
         document.getElementById('post-title')?.addEventListener('input', (e) => {
             const slugField = document.getElementById('post-slug');
             slugField.value = generateSlug(e.target.value);
-        });
-
-        // Editor toolbar
-        document.querySelectorAll('.editor-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.handleEditorAction(btn.dataset.action);
-            });
         });
 
         // Image upload and preview
@@ -186,8 +205,8 @@ class EditPostManager {
             document.getElementById('post-description').value = this.post.description;
             document.getElementById('post-category').value = this.post.category.toLowerCase();
             document.getElementById('post-tags').value = this.post.tags.join(', ');
-            document.getElementById('post-content').value = this.post.content || '';
             document.getElementById('post-status').value = this.post.status;
+            this.easyMDE.value(this.post.content || '');
 
             if (this.post.scheduledAt && this.post.status === 'Scheduled') {
                 document.getElementById('post-scheduled-date').value = this.post.scheduledAt;
@@ -202,69 +221,6 @@ class EditPostManager {
                 preview.style.display = 'none';
             }
         }
-    }
-
-    handleEditorAction(action) {
-        const textarea = document.getElementById('post-content');
-        const preview = document.getElementById('content-preview');
-
-        if (!textarea) return;
-
-        switch (action) {
-            case 'bold':
-                this.insertMarkdown(textarea, '**', '**');
-                break;
-            case 'italic':
-                this.insertMarkdown(textarea, '*', '*');
-                break;
-            case 'heading':
-                this.insertMarkdown(textarea, '## ', '');
-                break;
-            case 'link':
-                this.insertMarkdown(textarea, '[', '](url)');
-                break;
-            case 'image':
-                this.insertMarkdown(textarea, '![', '](image-url)');
-                break;
-            case 'code':
-                this.insertMarkdown(textarea, '`', '`');
-                break;
-            case 'preview':
-                if (preview.style.display === 'none') {
-                    preview.style.display = 'block';
-                    textarea.style.display = 'none';
-                    this.renderMarkdownPreview(textarea.value, preview);
-                } else {
-                    preview.style.display = 'none';
-                    textarea.style.display = 'block';
-                }
-                break;
-        }
-    }
-
-    insertMarkdown(textarea, before, after) {
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const text = textarea.value;
-        const selectedText = text.substring(start, end);
-
-        const newText = text.substring(0, start) + before + selectedText + after + text.substring(end);
-        textarea.value = newText;
-        textarea.focus();
-        textarea.setSelectionRange(start + before.length, end + before.length);
-    }
-
-    renderMarkdownPreview(markdown, container) {
-        // Simple markdown to HTML conversion
-        let html = markdown
-            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-            .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-            .replace(/\*(.*)\*/gim, '<em>$1</em>')
-            .replace(/`(.*)`/gim, '<code>$1</code>')
-            .replace(/\n/gim, '<br>');
-
-        container.innerHTML = html;
     }
 
     handleImageUpload(event) {
@@ -463,6 +419,7 @@ class EditPostManager {
 
     async savePost(forceStatus = null) {
         const formData = new FormData(document.getElementById('post-form'));
+        formData.set("content", this.easyMDE.value())
         const postData = Object.fromEntries(formData.entries());
 
         if (forceStatus) {
@@ -482,6 +439,8 @@ class EditPostManager {
                 formData.append('editors', editor.id);
             });
         }
+
+        console.log(postData);
 
         try {
             showLoading();

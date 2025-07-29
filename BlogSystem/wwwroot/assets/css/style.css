@@ -1359,42 +1359,6 @@ a:hover {
   color: var(--text-color);
 }
 
-.editor-toolbar {
-  border: 1px solid var(--border-color);
-  border-bottom: none;
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-  padding: 0.5rem;
-  background: var(--background-light);
-  display: flex;
-  gap: 0.25rem;
-  flex-wrap: wrap;
-}
-.editor-toolbar .editor-btn {
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: none;
-  color: var(--text-muted);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.editor-toolbar .editor-btn:hover, .editor-toolbar .editor-btn.active {
-  background: var(--primary-color);
-  color: white;
-}
-
-.form-group textarea#post-content {
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
-  border-top: none;
-  resize: vertical;
-  font-family: "Courier New", monospace;
-  line-height: 1.5;
-}
-
 #post-form .image-preview {
   display: flex;
   align-items: center;
@@ -1422,48 +1386,6 @@ a:hover {
 }
 #post-form .btn-remove-image:hover {
   background: #c82333;
-}
-#post-form .content-preview {
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  padding: 1rem;
-  background: var(--background-color);
-  max-height: 400px;
-  overflow-y: auto;
-}
-#post-form .content-preview h1,
-#post-form .content-preview h2,
-#post-form .content-preview h3 {
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-}
-#post-form .content-preview h1:first-child,
-#post-form .content-preview h2:first-child,
-#post-form .content-preview h3:first-child {
-  margin-top: 0;
-}
-#post-form .content-preview p {
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-#post-form .content-preview pre {
-  background: var(--background-light);
-  padding: 1rem;
-  border-radius: 4px;
-  overflow-x: auto;
-}
-#post-form .content-preview code {
-  background: var(--background-light);
-  padding: 0.125rem 0.25rem;
-  border-radius: 2px;
-  font-family: "Courier New", monospace;
-}
-#post-form .content-preview blockquote {
-  border-left: 4px solid var(--primary-color);
-  padding-left: 1rem;
-  margin: 1rem 0;
-  font-style: italic;
-  color: var(--text-muted);
 }
 
 .post-editors-section {
