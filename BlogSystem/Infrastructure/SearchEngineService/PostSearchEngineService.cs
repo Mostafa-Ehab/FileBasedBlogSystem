@@ -16,8 +16,6 @@ public class PostSearchEngineService : ISearchEngineService<Post>
     private readonly IndexWriter _indexWriter;
     private readonly StandardAnalyzer _standardAnalyzer;
     private readonly MultiFieldQueryParser _parser;
-    private readonly IndexReader _indexReader;
-    private readonly IndexSearcher _searcher;
     public PostSearchEngineService()
     {
         var indexPath = Path.Combine(Environment.CurrentDirectory, "Content", "index");
@@ -30,8 +28,6 @@ public class PostSearchEngineService : ISearchEngineService<Post>
 
         // Initialize the parser for searching
         _parser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, ["title", "content", "description", "slug"], _standardAnalyzer);
-        _indexReader = _indexWriter.GetReader(applyAllDeletes: true);
-        _searcher = new IndexSearcher(_indexReader);
     }
 
     public Task IndexDocumentAsync(Post document)
@@ -75,14 +71,15 @@ public class PostSearchEngineService : ISearchEngineService<Post>
 
     public Task<IEnumerable<Post>> SearchDocumentsAsync(string query)
     {
-        var hits = _searcher.Search(
+        var searcher = new IndexSearcher(_indexWriter.GetReader(applyAllDeletes: true));
+        var hits = searcher.Search(
             _parser.Parse(query.Trim() + "*"), 10, new Sort(
                 new SortField("title", SortFieldType.STRING)
             )
         );
         return Task.FromResult(hits.ScoreDocs.Select(hit => new Post
         {
-            Id = _searcher.Doc(hit.Doc).Get("id")
+            Id = searcher.Doc(hit.Doc).Get("id")
         }));
     }
 
