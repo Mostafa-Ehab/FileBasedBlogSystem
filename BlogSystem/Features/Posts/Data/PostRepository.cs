@@ -173,6 +173,7 @@ public class PostRepository : IPostRepository
         AddPostToUser(post.AuthorId, post.Id);
         UpdateEditors(post);
 
+        post.Content = content; // Restore content for return
         return post.Id;
     }
 
@@ -194,6 +195,7 @@ public class PostRepository : IPostRepository
         UpdateTagFile(existingPost, post);
         UpdateEditors(existingPost, post);
 
+        post.Content = content; // Restore content for return
         return post.Id;
     }
 
