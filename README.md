@@ -45,7 +45,7 @@ Each role has specific permissions to manage blog posts, users, and access the a
 ### Editor Role
 
 - **Post Management**
-  Create, read, update, and delete any Markdown-based blog posts.
+  Create, read, update, and delete a Markdown-based blog post.
 
 ### Author Role
 
@@ -85,33 +85,13 @@ git clone https://github.com/Mostafa-Ehab/FileBasedBlogSystem.git
 cd FileBasedBlogSystem
 ```
 
-### 2. Configure JWT Secret
+### 2. Configure Environment Variables
 
-The application requires a JWT secret key for authentication. You need to configure this in the user secrets file:
+The application requires a JWT secret key for authentication and website URL. You need to configure this in `.env` file located in the root directory of the project. Create a `.env` file if it doesn't exist and add the following lines:
 
-**Location**: `%APPDATA%\Microsoft\UserSecrets\e2cfae03-2dbf-4911-838a-c6cf548020c6\secrets.json`
-
-**Windows Path Example**: `C:\Users\{YourUsername}\AppData\Roaming\Microsoft\UserSecrets\e2cfae03-2dbf-4911-838a-c6cf548020c6\secrets.json`
-
-Create the `secrets.json` file with the following content:
-
-```json
-{
-  "JWT_SecretKey": "your-super-secret-jwt-key-here-make-it-long-and-secure"
-}
-```
-
-> ⚠️ **Important**:
->
-> - Replace `your-super-secret-jwt-key-here-make-it-long-and-secure` with a strong, unique secret key
-> - The secret key should be at least 32 characters long for security
-> - Never commit this secret to version control
-
-**Alternative method using .NET CLI**:
-
-```bash
-cd FileBasedBlogSystem
-dotnet user-secrets set "JWT_SecretKey" "your-super-secret-jwt-key-here-make-it-long-and-secure"
+```plaintext
+JWT_SecretKey=your-super-secret-jwt-key-here-make-it-long-and-secure
+WEBSITE_URL=http://localhost:5000
 ```
 
 ### 3. Restore Dependencies
@@ -128,7 +108,15 @@ The application uses a file-based approach for posts, tags, and categories. To s
 dotnet run --project DevTools -- seed
 ```
 
-### 5. Run the Application
+### 5. Index the Content Directory
+
+To ensure the application can serve posts and images correctly, you need to index the content directory. This step is crucial for the application to recognize existing posts and their assets.
+
+```bash
+dotnet run --project DevTools -- index
+```
+
+### 6. Run the Application
 
 ```bash
 dotnet run --project BlogSystem
