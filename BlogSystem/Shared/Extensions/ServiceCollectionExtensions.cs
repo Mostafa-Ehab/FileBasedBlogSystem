@@ -41,6 +41,7 @@ using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using OpenTelemetry.Trace;
 using SixLabors.ImageSharp.Web.Caching;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using SixLabors.ImageSharp.Web.Middleware;
@@ -151,6 +152,15 @@ public static class ServiceCollectionExtensions
             {
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
             }
+        });
+
+        // Register OpenTelemetry for tracing
+        services.AddOpenTelemetry().WithTracing(static builder =>
+        {
+            builder
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddOtlpExporter();
         });
 
 #if DEBUG
