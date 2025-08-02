@@ -7,12 +7,12 @@ namespace BlogSystem.Features.Posts.Data;
 public class PostRepository : IPostRepository
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions;
-    private readonly SlugResolver _slugResolver;
+    private readonly PostResolver _postResolver;
 
-    public PostRepository(JsonSerializerOptions jsonSerializerOptions, SlugResolver slugResolver)
+    public PostRepository(JsonSerializerOptions jsonSerializerOptions, PostResolver postResolver)
     {
         _jsonSerializerOptions = jsonSerializerOptions;
-        _slugResolver = slugResolver;
+        _postResolver = postResolver;
     }
 
     public Post? GetPostById(string id)
@@ -36,7 +36,7 @@ public class PostRepository : IPostRepository
 
     public Post? GetPostBySlug(string slug)
     {
-        var id = _slugResolver.ResolveSlug(slug);
+        var id = _postResolver.ResolveSlug(slug);
         return !string.IsNullOrWhiteSpace(id) ? GetPostById(id) : null;
     }
 
@@ -106,7 +106,7 @@ public class PostRepository : IPostRepository
             .ToArray();
     }
 
-    public Post[] GetPublicPosts()
+    public Post[] GetPublicPosts(int page = 1, int pageSize = 10)
     {
         var path = Path.Combine("Content", "posts");
         if (!Directory.Exists(path))
@@ -117,11 +117,15 @@ public class PostRepository : IPostRepository
         var postFiles = Directory.GetDirectories(path)
             .Select(dir => Path.Combine(dir, "meta.json"))
             .Where(File.Exists)
-            .OrderByDescending(File.GetLastWriteTime);
+            .OrderByDescending(File.GetLastWriteTime)
+            .Where(file => _postResolver.GetStatusById(
+                Path.GetDirectoryName(file)?.Split(Path.DirectorySeparatorChar).Last() ?? string.Empty
+            ) == PostStatus.Published)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize);
 
         return postFiles
             .Select(file => JsonSerializer.Deserialize<Post>(File.ReadAllText(file), _jsonSerializerOptions))
-            .Where(post => post != null && post.Status == PostStatus.Published)
             .Select(post =>
             {
                 post!.Content = File.ReadAllText(Path.Combine(path, post.Id, "content.md"));
@@ -166,7 +170,7 @@ public class PostRepository : IPostRepository
         File.WriteAllText(Path.Combine(postPath, "meta.json"), JsonSerializer.Serialize(post, _jsonSerializerOptions));
         File.WriteAllText(Path.Combine(postPath, "content.md"), content);
 
-        _slugResolver.AddSlug(post.Slug, post.Id);
+        _postResolver.AddPost(post.Slug, post.Id, post.Status);
 
         UpdateCategoryFile(post);
         UpdateTagFile(post);
@@ -189,7 +193,7 @@ public class PostRepository : IPostRepository
         File.WriteAllText(Path.Combine(postPath, "meta.json"), JsonSerializer.Serialize(post, _jsonSerializerOptions));
         File.WriteAllText(Path.Combine(postPath, "content.md"), content);
 
-        _slugResolver.UpdateSlug(existingPost.Slug, post.Slug, post.Id);
+        _postResolver.UpdatePost(existingPost.Slug, post.Slug, post.Id, post.Status);
 
         UpdateCategoryFile(existingPost, post);
         UpdateTagFile(existingPost, post);
@@ -210,7 +214,7 @@ public class PostRepository : IPostRepository
         UpdateEditors(existingPost, new Post { Id = post.Id });
 
         Directory.Delete(postPath, true);
-        _slugResolver.RemoveSlug(post.Slug);
+        _postResolver.RemoveSlug(post.Slug);
     }
 
     public bool PostExists(string id)

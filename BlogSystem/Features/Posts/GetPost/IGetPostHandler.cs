@@ -7,7 +7,7 @@ public interface IGetPostHandler
 {
     // Public Routes
     Task<PublicPostDTO> GetPostAsync(string slug);
-    Task<PublicPostDTO[]> GetPublicPostsAsync(string? query = null);
+    Task<PublicPostDTO[]> GetPublicPostsAsync(string? query = null, int page = 1, int pageSize = 10);
 
     // Editor Routes
     Task<ManagedPostDTO> GetManagedPostAsync(string postId, string userId);

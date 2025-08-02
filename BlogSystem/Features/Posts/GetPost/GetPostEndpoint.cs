@@ -28,12 +28,12 @@ public static class GetPostEndpoint
         .Produces<Post>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound);
 
-        app.MapGet("/", async (IGetPostHandler handler, ClaimsPrincipal user, [FromQuery] string? query) =>
+        app.MapGet("/", async (IGetPostHandler handler, ClaimsPrincipal user, [FromQuery] string? query, [FromQuery] int page = 1, [FromQuery] int pageSize = 10) =>
         {
             var userId = user.FindFirstValue("Id");
             if (string.IsNullOrWhiteSpace(userId))
             {
-                var posts = await handler.GetPublicPostsAsync(query);
+                var posts = await handler.GetPublicPostsAsync(query, page, pageSize);
                 return Results.Ok(posts);
             }
             else

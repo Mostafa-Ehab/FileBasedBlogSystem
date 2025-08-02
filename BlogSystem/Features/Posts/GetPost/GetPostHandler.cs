@@ -50,9 +50,9 @@ public class GetPostHandler : IGetPostHandler
         );
     }
 
-    public Task<PublicPostDTO[]> GetPublicPostsAsync(string? query)
+    public Task<PublicPostDTO[]> GetPublicPostsAsync(string? query, int page = 1, int pageSize = 10)
     {
-        var posts = _postRepository.GetPublicPosts();
+        var posts = _postRepository.GetPublicPosts(page, pageSize);
 
         if (!string.IsNullOrWhiteSpace(query))
         {

@@ -1,3 +1,4 @@
+using BlogSystem.Infrastructure.Migrations;
 using BlogSystem.Shared.Extensions;
 using DotNetEnv;
 using SixLabors.ImageSharp.Web.DependencyInjection;
@@ -30,6 +31,10 @@ if (!Directory.Exists("Content"))
 {
     Directory.CreateDirectory("Content");
 }
+
+// Ensure migrations directory exists
+app.Services.GetRequiredService<MigrationRunner>()
+    .RunMigrations();
 
 app.UseImageSharp();
 app.UseFileServer();

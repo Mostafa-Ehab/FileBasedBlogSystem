@@ -9,7 +9,7 @@ public interface IPostRepository
     public Post[] GetPostsByCategory(string categorySlug);
     public Post[] GetPostsByTag(string tagSlug);
     public Post[] GetAllPosts();
-    public Post[] GetPublicPosts();
+    public Post[] GetPublicPosts(int page = 1, int pageSize = 10);
     public Post[] GetAuthorPosts(string authorId);
     public bool PostExists(string id);
     public bool PostSlugExists(string slug, string postId);

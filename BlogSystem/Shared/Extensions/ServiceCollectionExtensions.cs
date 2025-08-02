@@ -32,6 +32,7 @@ using BlogSystem.Features.Users.UpdateUser.DTOs;
 using BlogSystem.Features.Users.UpdateUser.Validators;
 using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Infrastructure.MarkdownService;
+using BlogSystem.Infrastructure.Migrations;
 using BlogSystem.Infrastructure.Scheduling;
 using BlogSystem.Infrastructure.SearchEngineService;
 using BlogSystem.Shared.Exceptions.Users;
@@ -167,9 +168,11 @@ public static class ServiceCollectionExtensions
         services.AddSassCompiler();
 #endif
 
+        services.AddSingleton<MigrationRunner>();
+
         services.AddSingleton<AuthHelper>();
 
-        services.AddSingleton<SlugResolver>();
+        services.AddSingleton<PostResolver>();
         services.AddSingleton<UserResolver>();
 
         services.AddSingleton<MarkdownService>();
