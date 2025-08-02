@@ -2602,6 +2602,25 @@ a:hover {
 .content .posts-section {
   min-width: 0;
 }
+.content .load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.content .load-more .btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: var(--background-color);
+  color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  transition: background-color 0.3s ease;
+}
+.content .load-more .btn:hover {
+  background-color: var(--background-muted);
+  transform: translateY(-3px);
+  text-decoration: none;
+}
 .content .sidebar {
   min-width: 300px;
 }

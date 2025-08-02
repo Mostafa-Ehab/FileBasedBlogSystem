@@ -1,39 +1,64 @@
-async function loadSliderContent() {
-    const postSlider = document.getElementById("post-slider");
+class HomePage {
+    constructor() {
+        this.init();
 
-    // Fetch and load the slider content
-    const response = await fetch("/api/posts");
-    const data = await response.json();
+        this.currentPage = 1;
+    }
 
-    data.forEach((post) => {
-        postSlider.appendChild(
-            createSliderPostCard(post)
-        );
-    });
-}
+    init() {
+        this.loadSliderContent();
+        this.loadMainContent();
+        this.setupEventListeners();
+        loadSidebarTags();
+        loadSidebarCategories();
+    }
 
-async function loadMainContent() {
-    const mainContent = document.getElementById("posts-section");
+    setupEventListeners() {
+        document.querySelector('.load-more button')?.addEventListener('click', async () => {
+            this.currentPage++;
+            const mainContent = document.getElementById("posts-section");
+            const response = await fetch(`/api/posts?page=${this.currentPage}`);
+            const data = await response.json();
 
-    // Fetch and load the main content
-    const response = await fetch("/api/posts");
-    const data = await response.json();
+            data.forEach((post) => {
+                mainContent.appendChild(
+                    createPostCard(post)
+                );
+            });
+        });
+    }
 
-    data.forEach((post) => {
-        mainContent.appendChild(
-            createPostCard(post)
-        );
-    });
+    async loadSliderContent() {
+        const postSlider = document.getElementById("post-slider");
+        const response = await fetch("/api/posts?pageSize=5");
+        const data = await response.json();
+
+        console.log("Slider data:", data);
+
+        data.forEach((post) => {
+            console.log("Creating slider card for post:", post);
+            postSlider.appendChild(
+                createSliderPostCard(post)
+            );
+        });
+        await initOwlCarousel();
+    }
+
+    async loadMainContent() {
+        const mainContent = document.getElementById("posts-section");
+        const response = await fetch("/api/posts");
+        const data = await response.json();
+
+        data.forEach((post) => {
+            mainContent.appendChild(
+                createPostCard(post)
+            );
+        });
+    }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    loadSliderContent()
-        .then(() => {
-            initOwlCarousel();
-        });
-    loadMainContent();
-    loadSidebarTags();
-    loadSidebarCategories();
+    window.homePage = new HomePage();
 });
 
 
