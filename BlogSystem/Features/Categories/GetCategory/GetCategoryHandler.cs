@@ -40,17 +40,11 @@ public class GetCategoryHandler : IGetCategoryHandler
         return Task.FromResult(category);
     }
 
-    public Task<PostResponseDTO[]> GetPostsByCategoryAsync(string categorySlug)
+    public Task<PostResponseDTO[]> GetPostsByCategoryAsync(string categorySlug, int page = 1, int pageSize = 10)
     {
         Post[] posts = _postRepository
-                    .GetPostsByCategory(categorySlug)
-                    .Where(post => post.Status == PostStatus.Published)
+                    .GetPublicPostsByCategory(categorySlug, page, pageSize)
                     .ToArray();
-
-        if (posts == null || posts.Length == 0)
-        {
-            throw new CategoryNotFoundException(categorySlug);
-        }
 
         return Task.FromResult(
             posts.Select(

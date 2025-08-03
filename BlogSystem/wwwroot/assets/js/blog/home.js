@@ -9,16 +9,23 @@ class HomePage {
         this.loadSliderContent();
         this.loadMainContent();
         this.setupEventListeners();
-        loadSidebarTags();
+
         loadSidebarCategories();
+        loadSidebarTags();
     }
 
     setupEventListeners() {
         document.querySelector('.load-more button')?.addEventListener('click', async () => {
-            this.currentPage++;
             const mainContent = document.getElementById("posts-section");
-            const response = await fetch(`/api/posts?page=${this.currentPage}`);
+            const response = await fetch(`/api/posts?page=${++this.currentPage}`);
             const data = await response.json();
+
+            if (data.length < 10) {
+                const loadMoreButton = document.querySelector('.load-more');
+                if (loadMoreButton) {
+                    loadMoreButton.remove();
+                }
+            }
 
             data.forEach((post) => {
                 mainContent.appendChild(

@@ -47,9 +47,9 @@ public static class GetUserEndpoint
 
     public static void MapGetPublicPostsByUserEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/{username}/posts", async (IGetUserHandler handler, string username) =>
+        app.MapGet("/{username}/posts", async (IGetUserHandler handler, string username, int page = 1, int pageSize = 10) =>
         {
-            var response = await handler.GetPublicPostsByUserAsync(username);
+            var response = await handler.GetPublicPostsByUserAsync(username, page, pageSize);
             return Results.Ok(response);
         })
         .WithName("GetPublicPostsByUser")

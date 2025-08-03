@@ -53,16 +53,11 @@ public class GetTagHandler : IGetTagHandler
         return Task.FromResult(tags);
     }
 
-    public Task<PostResponseDTO[]> GetPostsByTagAsync(string tagSlug)
+    public Task<PostResponseDTO[]> GetPostsByTagAsync(string tagSlug, int page = 1, int pageSize = 10)
     {
-        Post[] posts = _postRepository.GetPostsByTag(tagSlug)
-                    .Where(post => post.Status == PostStatus.Published)
+        Post[] posts = _postRepository
+                    .GetPublicPostsByTag(tagSlug, page, pageSize)
                     .ToArray();
-
-        if (posts == null || posts.Length == 0)
-        {
-            throw new TagNotFoundException(tagSlug);
-        }
 
         return Task.FromResult(
             posts.Select(

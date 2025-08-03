@@ -29,9 +29,9 @@ public static class GetTagEndpoint
 
     public static void MapGetPostsByTagEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/{slug}/posts", async (string slug, IGetTagHandler handler) =>
+        endpoints.MapGet("/{slug}/posts", async (string slug, IGetTagHandler handler, int page = 1, int pageSize = 10) =>
         {
-            return Results.Ok(await handler.GetPostsByTagAsync(slug));
+            return Results.Ok(await handler.GetPostsByTagAsync(slug, page, pageSize));
         })
         .WithName("GetPostsByTag")
         .WithTags("Tags")

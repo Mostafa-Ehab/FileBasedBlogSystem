@@ -57,7 +57,7 @@ public class GetUserHandler : IGetUserHandler
         return Task.FromResult(user.MapToGetUserDTO());
     }
 
-    public Task<PublicPostDTO[]> GetPublicPostsByUserAsync(string username)
+    public Task<PublicPostDTO[]> GetPublicPostsByUserAsync(string username, int page = 1, int pageSize = 10)
     {
         var user = _userRepository.GetUserByUsername(username);
         if (user == null)
@@ -65,8 +65,7 @@ public class GetUserHandler : IGetUserHandler
             throw new UserNotFoundException(username);
         }
 
-        var posts = _postRepository.GetAuthorPosts(user.Id)
-            .Where(post => post.Status == PostStatus.Published && post.AuthorId == user.Id)
+        var posts = _postRepository.GetAuthorPublicPosts(user.Id, page, pageSize)
             .Select(post => post.MapToPublicPostDTO(_userRepository))
             .ToArray();
 

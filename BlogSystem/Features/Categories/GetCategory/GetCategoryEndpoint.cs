@@ -31,9 +31,9 @@ public static class GetCategoryEndpoint
 
     public static void MapGetPostsByCategoryEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/{slug}/posts", async (string slug, IGetCategoryHandler handler) =>
+        app.MapGet("/{slug}/posts", async (string slug, IGetCategoryHandler handler, int page = 1, int pageSize = 10) =>
         {
-            var posts = await handler.GetPostsByCategoryAsync(slug);
+            var posts = await handler.GetPostsByCategoryAsync(slug, page, pageSize);
             return Results.Ok(posts);
         })
         .WithName("GetPostsByCategory")

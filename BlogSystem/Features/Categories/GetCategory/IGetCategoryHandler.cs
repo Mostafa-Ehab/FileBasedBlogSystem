@@ -7,6 +7,6 @@ namespace BlogSystem.Features.Categories.GetCategory;
 public interface IGetCategoryHandler
 {
     Task<Category> GetCategoryAsync(string slug);
-    Task<PostResponseDTO[]> GetPostsByCategoryAsync(string categorySlug);
+    Task<PostResponseDTO[]> GetPostsByCategoryAsync(string categorySlug, int page = 1, int pageSize = 10);
     Task<CategoryDTO[]> GetAllCategoriesAsync();
 }

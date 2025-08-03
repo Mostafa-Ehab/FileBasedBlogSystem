@@ -15,6 +15,7 @@ public class PostRepository : IPostRepository
         _postResolver = postResolver;
     }
 
+    #region Get single post methods
     public Post? GetPostById(string id)
     {
         var path = Path.Combine("Content", "posts", id);
@@ -39,73 +40,9 @@ public class PostRepository : IPostRepository
         var id = _postResolver.ResolveSlug(slug);
         return !string.IsNullOrWhiteSpace(id) ? GetPostById(id) : null;
     }
+    #endregion
 
-    public Post[] GetPostsByCategory(string categorySlug)
-    {
-        var path = Path.Combine("Content", "categories", $"{categorySlug}.json");
-        if (!File.Exists(path))
-        {
-            return [];
-        }
-
-        string json = File.ReadAllText(path);
-        Category? category = JsonSerializer.Deserialize<Category>(json, _jsonSerializerOptions);
-        if (category == null || category.Posts == null || category.Posts.Count == 0)
-        {
-            return [];
-        }
-
-        return category.Posts
-            .Select(GetPostById)
-            .Where(post => post != null)
-            .ToArray()!;
-    }
-
-    public Post[] GetPostsByTag(string tagSlug)
-    {
-        var path = Path.Combine("Content", "tags", $"{tagSlug}.json");
-        if (!File.Exists(path))
-        {
-            return [];
-        }
-
-        string json = File.ReadAllText(path);
-        Tag? tag = JsonSerializer.Deserialize<Tag>(json, _jsonSerializerOptions);
-        if (tag == null || tag.Posts == null || tag.Posts.Count == 0)
-        {
-            return [];
-        }
-
-        return tag.Posts
-            .Select(GetPostById)
-            .Where(post => post != null)
-            .ToArray()!;
-    }
-
-    public Post[] GetAllPosts()
-    {
-        var path = Path.Combine("Content", "posts");
-        if (!Directory.Exists(path))
-        {
-            return [];
-        }
-
-        var postFiles = Directory.GetDirectories(path)
-            .Select(dir => Path.Combine(dir, "meta.json"))
-            .Where(File.Exists)
-            .OrderByDescending(File.GetLastWriteTime);
-
-        return postFiles
-            .Select(file => JsonSerializer.Deserialize<Post>(File.ReadAllText(file), _jsonSerializerOptions))
-            .Where(post => post != null)
-            .Select(post =>
-            {
-                post!.Content = File.ReadAllText(Path.Combine(path, post.Id, "content.md"));
-                return post;
-            })
-            .ToArray();
-    }
-
+    #region Get public posts methods
     public Post[] GetPublicPosts(int page = 1, int pageSize = 10)
     {
         var path = Path.Combine("Content", "posts");
@@ -134,6 +71,104 @@ public class PostRepository : IPostRepository
             .ToArray();
     }
 
+    public Post[] GetPublicPostsByCategory(string categorySlug, int page = 1, int pageSize = 10)
+    {
+        var path = Path.Combine("Content", "categories", $"{categorySlug}.json");
+        if (!File.Exists(path))
+        {
+            return [];
+        }
+
+        string json = File.ReadAllText(path);
+        Category? category = JsonSerializer.Deserialize<Category>(json, _jsonSerializerOptions);
+        if (category == null || category.Posts == null || category.Posts.Count == 0)
+        {
+            return [];
+        }
+
+        return category.Posts
+            .Where(postId => _postResolver.GetStatusById(postId) == PostStatus.Published)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(GetPostById)
+            .OrderByDescending(post => post!.UpdatedAt)
+            .ToArray()!;
+    }
+
+    public Post[] GetPublicPostsByTag(string tagSlug, int page = 1, int pageSize = 10)
+    {
+        var path = Path.Combine("Content", "tags", $"{tagSlug}.json");
+        if (!File.Exists(path))
+        {
+            return [];
+        }
+
+        string json = File.ReadAllText(path);
+        Tag? tag = JsonSerializer.Deserialize<Tag>(json, _jsonSerializerOptions);
+        if (tag == null || tag.Posts == null || tag.Posts.Count == 0)
+        {
+            return [];
+        }
+
+        return tag.Posts
+            .Where(postId => _postResolver.GetStatusById(postId) == PostStatus.Published)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(GetPostById)
+            .OrderByDescending(post => post!.UpdatedAt)
+            .ToArray()!;
+    }
+
+    public Post[] GetAuthorPublicPosts(string authorId, int page = 1, int pageSize = 10)
+    {
+        var path = Path.Combine("Content", "users", authorId, "profile.json");
+        if (!File.Exists(path))
+        {
+            return [];
+        }
+
+        string json = File.ReadAllText(path);
+        User? user = JsonSerializer.Deserialize<User>(json, _jsonSerializerOptions);
+        if (user == null || user.Posts == null || user.Posts.Length == 0)
+        {
+            return [];
+        }
+
+        return user.Posts
+            .Where(postId => _postResolver.GetStatusById(postId) == PostStatus.Published)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(GetPostById)
+            .OrderByDescending(post => post!.UpdatedAt)
+            .ToArray()!;
+    }
+    #endregion
+
+    #region Get Managed posts methods
+    public Post[] GetAllPosts()
+    {
+        var path = Path.Combine("Content", "posts");
+        if (!Directory.Exists(path))
+        {
+            return [];
+        }
+
+        var postFiles = Directory.GetDirectories(path)
+            .Select(dir => Path.Combine(dir, "meta.json"))
+            .Where(File.Exists)
+            .OrderByDescending(File.GetLastWriteTime);
+
+        return postFiles
+            .Select(file => JsonSerializer.Deserialize<Post>(File.ReadAllText(file), _jsonSerializerOptions))
+            .Where(post => post != null)
+            .Select(post =>
+            {
+                post!.Content = File.ReadAllText(Path.Combine(path, post.Id, "content.md"));
+                return post;
+            })
+            .ToArray();
+    }
+
     public Post[] GetAuthorPosts(string authorId)
     {
         var path = Path.Combine("Content", "users", authorId, "profile.json");
@@ -151,11 +186,12 @@ public class PostRepository : IPostRepository
 
         return user.Posts
             .Select(GetPostById)
-            .Where(post => post != null)
             .OrderByDescending(post => post!.UpdatedAt)
             .ToArray()!;
     }
+    #endregion
 
+    #region Post management methods
     public string CreatePost(Post post)
     {
         var postPath = Path.Combine("Content", "posts", post.Id);
@@ -216,6 +252,7 @@ public class PostRepository : IPostRepository
         Directory.Delete(postPath, true);
         _postResolver.RemoveSlug(post.Slug);
     }
+    #endregion
 
     public bool PostExists(string id)
     {
