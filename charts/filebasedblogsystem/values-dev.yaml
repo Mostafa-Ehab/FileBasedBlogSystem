@@ -1,5 +1,0 @@
-replicaCount: 1
-image:
-  repository: registry.arc-center.run/silverkeytech/filebasedblogsystem/main
-  pullPolicy: IfNotPresent
-  tag: main-filebasedblogsystem-dev-latest
