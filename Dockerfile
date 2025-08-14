@@ -21,8 +21,8 @@ COPY --from=build /app/publish .
 COPY BlogSystem/.env /app/.env
 COPY BlogSystem/wwwroot /app/wwwroot
 
-# Copy Content/posts so migrations won't fail
-COPY BlogSystem/Content/posts /app/Content/posts
+# Ensure Content/posts directory exists to avoid runtime errors
+RUN mkdir -p /app/Content/posts
 
 # Expose port 8080 (default for minimal API in container)
 EXPOSE 8080
