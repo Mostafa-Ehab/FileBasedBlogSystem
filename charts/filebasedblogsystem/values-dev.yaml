@@ -2,4 +2,4 @@ replicaCount: 1
 image:
   repository: registry.arc-center.run/silverkeytech/filebasedblogsystem/mostafa
   pullPolicy: IfNotPresent
-  tag: mostafa-filebasedblogsystem-dev-latest
+  tag: 9e4d01
