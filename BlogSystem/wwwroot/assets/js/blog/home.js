@@ -56,6 +56,13 @@ class HomePage {
         const response = await fetch("/api/posts");
         const data = await response.json();
 
+        if (data.length < 10) {
+            const loadMoreButton = document.querySelector('.load-more');
+            if (loadMoreButton) {
+                loadMoreButton.remove();
+            }
+        }
+
         data.forEach((post) => {
             mainContent.appendChild(
                 createPostCard(post)
