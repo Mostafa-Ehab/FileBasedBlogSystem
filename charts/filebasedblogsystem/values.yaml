@@ -45,3 +45,6 @@ volumeMounts: []
 nodeSelector: {}
 tolerations: []
 affinity: {}
+envFrom:
+  - secretRef:
+      name: blogsystem-secrets
