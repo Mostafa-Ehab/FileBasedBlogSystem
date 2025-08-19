@@ -2,4 +2,4 @@ replicaCount: 1
 image:
   repository: registry.arc-center.run/silverkeytech/filebasedblogsystem/mostafa
   pullPolicy: IfNotPresent
-  tag: e274d8
+  tag: 86e679
