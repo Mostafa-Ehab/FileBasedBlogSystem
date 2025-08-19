@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Copy environment file and static assets
-COPY BlogSystem/.env /app/.env
+
 COPY BlogSystem/wwwroot /app/wwwroot
 
 # Ensure Content/posts directory exists to avoid runtime errors
