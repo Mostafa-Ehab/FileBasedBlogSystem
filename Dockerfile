@@ -18,11 +18,8 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Copy environment file and static assets
-
 COPY BlogSystem/wwwroot /app/wwwroot
-
-# Ensure Content/posts directory exists to avoid runtime errors
-RUN mkdir -p /app/Content/posts
+COPY BlogSystem/SeedData /app/Content
 
 # Expose port 8080 (default for minimal API in container)
 EXPOSE 8080
