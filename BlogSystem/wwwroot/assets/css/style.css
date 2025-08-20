@@ -2798,6 +2798,7 @@ a:hover {
   box-shadow: var(--box-shadow);
   overflow: hidden;
   margin-bottom: 2rem;
+  /* Post Comments */
   /* Post Footer */
 }
 .post-article .post-header {
