@@ -1,3 +1,6 @@
+using BlogSystem.Features.Posts.CommentManagement.DTOs;
+using System.Security.Claims;
+
 namespace BlogSystem.Features.Posts.CommentManagement;
 
 public static class CommentManagementEndpoint
@@ -11,20 +14,13 @@ public static class CommentManagementEndpoint
         .WithTags("Comments")
         .WithSummary("Get all comments for a specific post.");
 
-        // app.MapPost("/posts/{postId}/comments", (string postId, string userId, string commentText, ICommentManagementHandler handler) =>
-        // {
-        //     return handler.AddComment(postId, userId, commentText);
-        // });
-
-        // app.MapPut("/posts/{postId}/comments/{commentId}", (string postId, string commentId, string userId, string newCommentText, ICommentManagementHandler handler) =>
-        // {
-        //     return handler.EditComment(postId, commentId, userId, newCommentText);
-        // });
-
-        // app.MapDelete("/posts/{postId}/comments/{commentId}", (string postId, string commentId, string userId, ICommentManagementHandler handler) =>
-        // {
-        //     handler.DeleteComment(postId, commentId, userId);
-        //     return Results.NoContent();
-        // });
+        app.MapPost("/{postId}/comments", (string postId, CreateCommentRequestDTO request, ClaimsPrincipal user, ICommentManagementHandler handler) =>
+        {
+            var userId = user.FindFirstValue("Id")!;
+            return handler.AddComment(postId, userId, request);
+        })
+        .RequireAuthorization()
+        .WithTags("Comments")
+        .WithSummary("Add a comment to a specific post.");
     }
 }

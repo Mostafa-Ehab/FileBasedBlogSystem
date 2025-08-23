@@ -32,58 +32,32 @@ public class CommentManagementHandler : ICommentManagementHandler
         return comments.Select(c => c.MapToCommentDTO(_userRepository)).ToArray();
     }
 
-    public CommentResponseDTO AddComment(string postId, string userId, string commentText)
+    public CommentResponseDTO AddComment(string postId, string userId, CreateCommentRequestDTO request)
     {
-        throw new NotImplementedException();
-        // var post = _postRepository.GetPostById(postId);
-        // if (post == null || post.Status != PostStatus.Published)
-        // {
-        //     throw new PostNotFoundException(postId);
-        // }
+        var post = _postRepository.GetPostById(postId);
+        if (post == null || post.Status != PostStatus.Published)
+        {
+            throw new PostNotFoundException(postId);
+        }
 
-        // var comment = new Comment()
-        // {
-        //     Id = Guid.NewGuid().ToString(),
-        //     PostId = postId,
-        //     UserId = userId,
-        //     Text = commentText
-        // };
+        var comment = new Comment()
+        {
+            Id = Guid.NewGuid().ToString(),
+            PostId = postId,
+            UserId = userId,
+            Text = request.Text,
+        };
 
-        // return _postRepository.CreateComment(comment);
+        return _postRepository.CreateComment(comment).MapToCommentDTO(_userRepository);
     }
 
     public CommentResponseDTO EditComment(string postId, string commentId, string userId, string newCommentText)
     {
         throw new NotImplementedException();
-        // var comment = _postRepository.GetCommentsByPostId(postId).FirstOrDefault(c => c.Id == commentId);
-        // if (comment == null)
-        // {
-        //     throw new CommentNotFoundException(commentId);
-        // }
-
-        // if (comment.UserId != userId)
-        // {
-        //     throw new NotAuthorizedException("You are not allowed to edit this comment.");
-        // }
-
-        // comment.Text = newCommentText;
-        // return _postRepository.EditComment(comment);
     }
 
     public void DeleteComment(string postId, string commentId, string userId)
     {
         throw new NotImplementedException();
-        // var comment = _postRepository.GetCommentsByPostId(postId).FirstOrDefault(c => c.Id == commentId);
-        // if (comment == null)
-        // {
-        //     throw new CommentNotFoundException(commentId);
-        // }
-
-        // if (comment.UserId != userId)
-        // {
-        //     throw new NotAuthorizedException("You are not allowed to delete this comment.");
-        // }
-
-        // _postRepository.DeleteComment(comment);
     }
 }

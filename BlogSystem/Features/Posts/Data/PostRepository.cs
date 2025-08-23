@@ -206,10 +206,11 @@ public class PostRepository : IPostRepository
 
     public Comment CreateComment(Comment comment)
     {
-        // var post = GetPostById(comment.PostId)!;
-        // post.Comments.Add(comment);
-        // SavePost(post);
-
+        var comments = GetCommentsByPostId(comment.PostId).ToList();
+        comment.CreatedAt = DateTime.UtcNow;
+        comment.UpdatedAt = DateTime.UtcNow;
+        comments.Add(comment);
+        SaveCommentsForPost(comment.PostId, comments);
         return comment;
     }
 
@@ -529,6 +530,17 @@ public class PostRepository : IPostRepository
             user.Posts = user.Posts.Where(id => id != postId).ToArray();
             File.WriteAllText(userPath, JsonSerializer.Serialize(user, _jsonSerializerOptions));
         }
+    }
+
+    private void SaveCommentsForPost(string postId, List<Comment> comments)
+    {
+        var commentsPath = Path.Combine("Content", "posts", postId, "comments.json");
+        var commentsData = new CommentsJson
+        {
+            Comments = comments.ToArray()
+        };
+        var json = JsonSerializer.Serialize(commentsData, _jsonSerializerOptions);
+        File.WriteAllText(commentsPath, json);
     }
     #endregion
 }
