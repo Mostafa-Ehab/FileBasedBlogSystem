@@ -15,6 +15,7 @@ async function loadPost() {
         setArticleHeader(post);
         setArticleMainContent(post);
         loadComments(post.id);
+        addCommentFormListeners(post.id);
         setAuthorInfo(post.author);
         setRelatedPosts(post.slug, post.category);
     } catch (error) {
@@ -41,13 +42,48 @@ async function loadComments(postId) {
         if (!await isLoggedIn()) {
             loginPrompt.style.display = 'block';
             addCommentSection.style.display = 'none';
+
+            const loginBtn = document.querySelector('.comment-login-prompt .login-prompt-content a');
+            loginBtn.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
         } else {
             addCommentSection.style.display = 'block';
             loginPrompt.style.display = 'none';
+
+            const user = await getUser();
+            const commentUserName = document.getElementById('comment-username');
+            const commentUserRole = document.getElementById('comment-user-role');
+
+            commentUserName.textContent = user.fullName;
+            commentUserRole.textContent = user.role;
         }
     } catch (error) {
         console.error(error);
     }
+}
+
+function addCommentFormListeners(postId) {
+    const commentForm = document.getElementById('comment-form');
+    commentForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const commentText = document.getElementById('comment-text').value;
+        if (!commentText) return;
+
+        try {
+            const response = await postRequest(`/api/posts/${postId}/comments`, {
+                text: commentText
+            });
+            console.log(response);
+            addCommentToList(response);
+            document.getElementById('comment-text').value = '';
+        } catch (error) {
+            if (error instanceof RequestError) {
+                showError(error?.data?.message || 'Error posting comment');
+            } else {
+                console.error('Error posting comment:', error);
+                showError('Error posting comment');
+            }
+        }
+    });
 }
 
 function setPageTitle(post) {
@@ -145,6 +181,31 @@ function setCommentsList(comments) {
         `;
         commentsListContainer.appendChild(commentItem);
     });
+}
+
+function addCommentToList(comment) {
+    const commentsListContainer = document.getElementById('comments-list');
+    const commentItem = document.createElement('div');
+    commentItem.classList.add('comment-item');
+    commentItem.innerHTML = `
+        <div class="comment-avatar">
+            <img src="${comment.user.profilePictureUrl}?width=48" alt="${comment.user.fullName}" class="avatar-img">
+        </div>
+        <div class="comment-content">
+            <div class="comment-header">
+                <div class="comment-author">
+                    <span class="author-name">${comment.user.fullName}</span>
+                </div>
+                <div class="comment-meta">
+                    <span class="comment-date">${formatReadableDate(comment.createdAt)}</span>
+                </div>
+            </div>
+            <div class="comment-text">
+                <p>${comment.text}</p>
+            </div>
+        </div>
+    `;
+    commentsListContainer.appendChild(commentItem);
 }
 
 async function setRelatedPosts(postSlug, category) {
