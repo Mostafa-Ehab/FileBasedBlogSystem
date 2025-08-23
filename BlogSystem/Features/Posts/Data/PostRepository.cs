@@ -191,6 +191,39 @@ public class PostRepository : IPostRepository
     }
     #endregion
 
+    public Comment[] GetCommentsByPostId(string postId)
+    {
+        var path = Path.Combine("Content", "posts", postId, "comments.json");
+        if (!File.Exists(path))
+        {
+            return [];
+        }
+
+        string json = File.ReadAllText(path);
+        CommentsJson? comments = JsonSerializer.Deserialize<CommentsJson>(json, _jsonSerializerOptions);
+        return comments?.Comments ?? [];
+    }
+
+    public Comment CreateComment(Comment comment)
+    {
+        var comments = GetCommentsByPostId(comment.PostId).ToList();
+        comment.CreatedAt = DateTime.UtcNow;
+        comment.UpdatedAt = DateTime.UtcNow;
+        comments.Add(comment);
+        SaveCommentsForPost(comment.PostId, comments);
+        return comment;
+    }
+
+    public Comment EditComment(Comment comment)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteComment(Comment comment)
+    {
+        throw new NotImplementedException();
+    }
+
     #region Post management methods
     public string CreatePost(Post post)
     {
@@ -254,6 +287,7 @@ public class PostRepository : IPostRepository
     }
     #endregion
 
+    #region Post existence checks
     public bool PostExists(string id)
     {
         var path = Path.Combine("Content", "posts", id);
@@ -265,7 +299,9 @@ public class PostRepository : IPostRepository
         var existingPost = GetPostBySlug(slug);
         return existingPost != null && existingPost.Id != postId;
     }
+    #endregion
 
+    #region Private methods
     private void UpdateCategoryFile(Post post)
     {
         if (string.IsNullOrWhiteSpace(post.Category))
@@ -495,4 +531,21 @@ public class PostRepository : IPostRepository
             File.WriteAllText(userPath, JsonSerializer.Serialize(user, _jsonSerializerOptions));
         }
     }
+
+    private void SaveCommentsForPost(string postId, List<Comment> comments)
+    {
+        var commentsPath = Path.Combine("Content", "posts", postId, "comments.json");
+        var commentsData = new CommentsJson
+        {
+            Comments = comments.ToArray()
+        };
+        var json = JsonSerializer.Serialize(commentsData, _jsonSerializerOptions);
+        File.WriteAllText(commentsPath, json);
+    }
+    #endregion
+}
+
+internal class CommentsJson
+{
+    public Comment[] Comments { get; set; } = [];
 }

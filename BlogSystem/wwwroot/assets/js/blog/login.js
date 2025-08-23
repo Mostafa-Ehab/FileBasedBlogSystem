@@ -1,4 +1,4 @@
-class AdminLogin {
+class UserLogin {
     constructor() {
         this.init();
     }
@@ -29,9 +29,9 @@ class AdminLogin {
         });
     }
 
-    checkExistingSession() {
-        if (getUser().token) {
-            window.location.href = '/admin/posts.html'; // Redirect to posts instead of non-existent index
+    async checkExistingSession() {
+        if (await isLoggedIn()) {
+            window.location.href = getRedirectUrl() || '/';
         }
     }
 
@@ -67,7 +67,7 @@ class AdminLogin {
 
                 // Redirect to dashboard after success message
                 setTimeout(() => {
-                    window.location.href = '/admin/posts.html'; // Redirect to posts page
+                    window.location.href = getRedirectUrl() || '/'; // Redirect to home
                 }, 200);
             } else {
                 showError(result.message || 'Invalid credentials');
@@ -137,5 +137,5 @@ class AdminLogin {
 
 // Initialize login when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new AdminLogin();
+    new UserLogin();
 });
