@@ -38,7 +38,7 @@ async function loadComments(postId) {
         // Show login prompt for non-logged users
         const loginPrompt = document.querySelector('.comment-login-prompt');
         const addCommentSection = document.getElementById('add-comment-section');
-        if (!getUser().userId) {
+        if (!await isLoggedIn()) {
             loginPrompt.style.display = 'block';
             addCommentSection.style.display = 'none';
         } else {

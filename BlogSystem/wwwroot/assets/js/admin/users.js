@@ -14,7 +14,7 @@ class AdminUsersManager {
     checkAuthentication() {
         const userData = getUser();
         if (!userData?.token) {
-            window.location.href = '/admin/login.html';
+            window.location.href = '/admin/login.html?redirect=' + encodeURIComponent(window.location.pathname);
             return;
         }
 

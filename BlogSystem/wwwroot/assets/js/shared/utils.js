@@ -67,3 +67,8 @@ function setCurrentPage(page) {
     urlParams.set('page', page);
     window.history.pushState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
 }
+
+function getRedirectUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('redirect') || '';
+}

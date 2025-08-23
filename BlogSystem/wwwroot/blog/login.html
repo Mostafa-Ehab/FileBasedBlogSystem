@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+
+    <!-- SEO Meta Tags -->
+    <meta property="og:title" content="Blog - Login">
+    <meta property="og:url" content="{{WEBSITE_URL}}">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Login to your account">
+    <meta property="og:image" content="/assets/images/blog-thumbnail.png">
+
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/assets/js/blog/shared/navbar.js" defer></script>
+    <script src="/assets/js/blog/shared/search.js" defer></script>
+    <script src="/assets/js/blog/login.js" defer></script>
+    <script src="/assets/js/shared/api.js" defer></script>
+    <script src="/assets/js/shared/auth.js" defer></script>
+    <script src="/assets/js/shared/errors.js" defer></script>
+    <script src="/assets/js/shared/utils.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+
+    </nav>
+
+    <main class="content">
+        <div class="login-body">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <div class="login-logo">
+                            <i class="fas fa-user-circle"></i>
+                            <h1>Sign In</h1>
+                        </div>
+                        <p class="login-subtitle">Welcome back! Please login to your account.</p>
+                    </div>
+
+                    <form class="login-form" id="login-form" autocomplete="on">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <div class="input-group">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="username" name="username" placeholder="Enter your username"
+                                    required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password" name="password" placeholder="Enter your password"
+                                    required>
+                                <button type="button" class="toggle-password" tabindex="-1"
+                                    aria-label="Show/Hide Password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="remember" name="remember">
+                                <span class="checkmark"></span>
+                                Remember me
+                            </label>
+                        </div>
+
+                        <button type="submit" class="login-btn" id="login-btn">
+                            <span class="btn-text">Sign In</span>
+                            <i class="fas fa-spinner fa-spin" id="login-spinner" style="display: none;"></i>
+                        </button>
+
+                        <div>
+                            Don't have an account? <a href="/register.html" class="register-link">Register here</a>
+                        </div>
+                    </form>
+                    <div class="login-footer">
+                        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" id="error-message" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="error-text"></span>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="success-message" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <span id="success-text"></span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Blog. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

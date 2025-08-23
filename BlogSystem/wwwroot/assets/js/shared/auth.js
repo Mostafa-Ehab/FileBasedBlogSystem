@@ -19,6 +19,18 @@ function setUser(user) {
     }
 }
 
+async function isLoggedIn() {
+    if (getUser()?.token) {
+        try {
+            await getRequest('/api/users/me');
+            return true;
+        } catch (error) {
+            console.error('Error checking user session:', error);
+        }
+    }
+    return false;
+}
+
 function clearUser() {
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
