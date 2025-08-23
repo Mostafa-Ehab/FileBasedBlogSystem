@@ -6,6 +6,7 @@ using BlogSystem.Features.Categories.Data;
 using BlogSystem.Features.Categories.DeleteCategory;
 using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Categories.UpdateCategory;
+using BlogSystem.Features.Posts.CommentManagement;
 using BlogSystem.Features.Posts.Data;
 using BlogSystem.Features.Posts.GetPost;
 using BlogSystem.Features.Posts.PostManagement;
@@ -195,6 +196,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPostRepository, PostRepository>();
         services.AddScoped<IGetPostHandler, GetPostHandler>();
         services.AddScoped<IPostManagementHandler, PostManagementHandler>();
+        services.AddScoped<ICommentManagementHandler, CommentManagementHandler>();
         services.AddScoped<IRSSHandler, RSSHandler>();
         services.AddScoped<PublishPostService>();
 

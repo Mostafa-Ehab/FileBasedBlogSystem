@@ -327,7 +327,7 @@ class AdminNavbarController {
 
     redirectToLogin() {
         if (window.location.pathname !== '/admin/login.html') {
-            window.location.href = '/admin/login.html';
+            window.location.href = '/admin/login.html?redirect=' + encodeURIComponent(window.location.pathname);
         }
     }
 

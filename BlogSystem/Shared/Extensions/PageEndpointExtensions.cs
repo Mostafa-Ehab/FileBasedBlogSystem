@@ -21,6 +21,19 @@ static class PageEndpointExtension
             context.Response.ContentType = "text/html";
             await context.Response.WriteAsync(finalHtml);
         });
+
+        app.MapGet("/login", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "blog", "login.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
+        app.MapGet("/admin", async context =>
+        {
+            context.Response.Redirect("/admin/posts");
+            await Task.CompletedTask;
+        });
         #endregion
 
         #region User Pages

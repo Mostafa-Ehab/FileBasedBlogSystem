@@ -79,6 +79,13 @@ class CategoryPage {
             return;
         }
 
+        if (posts.length < 10) {
+            const loadMoreButton = document.querySelector('.load-more');
+            if (loadMoreButton) {
+                loadMoreButton.remove();
+            }
+        }
+
         posts.forEach(post => {
             postsSection.appendChild(
                 createPostCard(post)

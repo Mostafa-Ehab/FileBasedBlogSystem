@@ -69,10 +69,39 @@
             background-color: #2980b9;
         }
     }
+
+    // User Info
+    .user-info {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        margin-left: 1rem;
+
+        .user-avatar {
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            width: 32px;
+            height: 32px;
+        }
+    }
 }
 
 /* Optional: Tweak max-width of search input on very small screens */
-@media (max-width: 480px) {
+@media screen and (max-width: 768px) {
+    .navbar {
+        .user-info {
+            .user-avatar {
+                margin-right: 0;
+            }
+
+            .user-username {
+                display: none;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
     .navbar {
         .search-input {
             max-width: 150px;
