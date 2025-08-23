@@ -14,8 +14,37 @@ async function loadPost() {
         setPageTitle(post);
         setArticleHeader(post);
         setArticleMainContent(post);
+        loadComments(post.id);
         setAuthorInfo(post.author);
         setRelatedPosts(post.slug, post.category);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function loadComments(postId) {
+    try {
+        const response = await fetch(`/api/posts/${postId}/comments`);
+        if (!response.ok) {
+            throw new Error(`Error fetching comments: ${response.statusText}`);
+        }
+        const comments = await response.json();
+        setCommentsList(comments);
+
+        // Update the comments count
+        const commentsCount = document.getElementById('comments-count');
+        commentsCount.textContent = comments.length;
+
+        // Show login prompt for non-logged users
+        const loginPrompt = document.querySelector('.comment-login-prompt');
+        const addCommentSection = document.getElementById('add-comment-section');
+        if (!getUser().userId) {
+            loginPrompt.style.display = 'block';
+            addCommentSection.style.display = 'none';
+        } else {
+            addCommentSection.style.display = 'block';
+            loginPrompt.style.display = 'none';
+        }
     } catch (error) {
         console.error(error);
     }
@@ -87,6 +116,35 @@ function setAuthorInfo(author) {
             </div>
         </div>
     `;
+}
+
+function setCommentsList(comments) {
+    const commentsListContainer = document.getElementById('comments-list');
+    commentsListContainer.innerHTML = '';
+
+    comments.forEach(comment => {
+        const commentItem = document.createElement('div');
+        commentItem.classList.add('comment-item');
+        commentItem.innerHTML = `
+            <div class="comment-avatar">
+                <img src="${comment.user.profilePictureUrl}?width=48" alt="${comment.user.fullName}" class="avatar-img">
+            </div>
+            <div class="comment-content">
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <span class="author-name">${comment.user.fullName}</span>
+                    </div>
+                    <div class="comment-meta">
+                        <span class="comment-date">${formatReadableDate(comment.createdAt)}</span>
+                    </div>
+                </div>
+                <div class="comment-text">
+                    <p>${comment.text}</p>
+                </div>
+            </div>
+        `;
+        commentsListContainer.appendChild(commentItem);
+    });
 }
 
 async function setRelatedPosts(postSlug, category) {

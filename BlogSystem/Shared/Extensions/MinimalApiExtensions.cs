@@ -2,6 +2,7 @@ using BlogSystem.Features.Categories.CreateCategory;
 using BlogSystem.Features.Categories.DeleteCategory;
 using BlogSystem.Features.Categories.GetCategory;
 using BlogSystem.Features.Categories.UpdateCategory;
+using BlogSystem.Features.Posts.CommentManagement;
 using BlogSystem.Features.Posts.GetPost;
 using BlogSystem.Features.Posts.PostManagement;
 using BlogSystem.Features.Posts.RSS;
@@ -36,6 +37,7 @@ public static class MinimalApiExtensions
     {
         app.MapGetPostEndpoints();
         app.MapPostManagementEndpoints();
+        app.MapCommentManagementEndpoints();
 
         return app;
     }

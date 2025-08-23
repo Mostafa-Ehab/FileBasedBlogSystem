@@ -18,9 +18,18 @@ public interface IPostRepository
     public Post[] GetAllPosts();
     public Post[] GetAuthorPosts(string authorId);
 
-    public bool PostExists(string id);
-    public bool PostSlugExists(string slug, string postId);
+    // Manage Comments
+    public Comment[] GetCommentsByPostId(string postId);
+    public Comment CreateComment(Comment comment);
+    public Comment EditComment(Comment comment);
+    public void DeleteComment(Comment comment);
+
+    // Post management methods
     string CreatePost(Post post);
     string UpdatePost(Post post);
     void DeletePost(Post post);
+
+    // Post existence checks
+    public bool PostExists(string id);
+    public bool PostSlugExists(string slug, string postId);
 }
