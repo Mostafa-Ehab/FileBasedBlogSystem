@@ -25,4 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         </div>
     `;
+
+    window.SearchManager = new SearchManager();
 });
