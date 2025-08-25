@@ -1,0 +1,5 @@
+replicaCount: 1
+image:
+  repository: registry.arc-center.run/silverkeytech/filebasedblogsystem/mostafa
+  pullPolicy: IfNotPresent
+  tag: 1d4030
