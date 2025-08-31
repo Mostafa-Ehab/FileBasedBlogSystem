@@ -15,58 +15,44 @@
     <script src="/assets/js/shared/utils.js" defer></script>
 </head>
 
-<body class="login-body">
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <div class="login-logo">
-                    <i class="fas fa-shield-alt"></i>
-                    <h1>Admin Login</h1>
+<body>
+    <div class="login-section">
+        <h2 class="login-title">
+            <i class="fas fa-shield-alt"></i> Admin Login
+        </h2>
+        <form class="login-form" id="login-form" autocomplete="on">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" name="username" required placeholder="Enter your username">
                 </div>
-                <p class="login-subtitle">Sign in to access the dashboard</p>
             </div>
 
-            <form class="login-form" id="login-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="username" name="username" required placeholder="Enter your username">
-                    </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    <button type="button" class="toggle-password" id="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" required placeholder="Enter your password">
-                        <button type="button" class="toggle-password" id="toggle-password">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="checkbox-label" for="remember-me">
-                        <input type="checkbox" id="remember-me" name="remember">
-                        <span class="checkmark"></span>
-                        Remember me
-                    </label>
-                </div>
-
-                <button type="submit" class="login-btn" id="login-btn">
-                    <span class="btn-text">Sign In</span>
-                    <i class="fas fa-spinner fa-spin" id="login-spinner" style="display: none;"></i>
-                </button>
-            </form>
-
-            <div class="login-footer">
-                <a href="/" class="back-link">
-                    <i class="fas fa-arrow-left"></i>
-                    Back to Blog
-                </a>
             </div>
-        </div>
+
+            <div class="form-group">
+                <label class="checkbox-label" for="remember-me">
+                    <input type="checkbox" id="remember-me" name="remember">
+                    <span class="checkmark"></span>
+                    Remember me
+                </label>
+            </div>
+
+            <button type="submit" class="login-btn" id="login-btn">
+                <span class="btn-text">Sign In</span>
+                <i class="fas fa-spinner fa-spin" id="login-spinner" style="display: none;"></i>
+            </button>
+        </form>
     </div>
 
     <!-- Error Message -->

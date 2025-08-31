@@ -366,7 +366,8 @@ class AdminNavbarController {
         if (accessibleRoute) {
             window.location.href = accessibleRoute[1].href;
         } else {
-            this.redirectToLogin();
+            // this.redirectToLogin();
+            // console.log('No accessible route found. Redirecting to login...');
         }
     }
 }

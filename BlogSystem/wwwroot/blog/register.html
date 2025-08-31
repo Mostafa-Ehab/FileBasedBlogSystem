@@ -4,22 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog</title>
-
-    <!-- SEO Meta Tags -->
-    <meta property="og:title" content="Blog - Login">
-    <meta property="og:url" content="{{WEBSITE_URL}}">
+    <title>Register - Blog</title>
+    <meta property="og:title" content="Register - Blog">
+    <meta property="og:url" content="/blog/register.html">
     <meta property="og:type" content="website">
-    <meta property="og:description" content="Login to your account">
+    <meta property="og:description" content="Create a new account to join our blog community.">
     <meta property="og:image" content="/assets/images/blog-thumbnail.png">
 
     <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="/assets/js/blog/shared/navbar.js" defer></script>
     <script src="/assets/js/blog/shared/search.js" defer></script>
-    <script src="/assets/js/blog/login.js" defer></script>
+    <script src="/assets/js/blog/register.js" defer></script>
 
     <script src="/assets/js/shared/api.js" defer></script>
     <script src="/assets/js/shared/auth.js" defer></script>
@@ -29,52 +26,51 @@
 
 <body>
     <nav class="navbar">
-
+        <!-- Add navbar content if needed -->
     </nav>
-
     <main class="content">
         <section class="login-section">
             <h2 class="login-title">
-                <i class="fas fa-sign-in-alt"></i> User Login
+                <i class="fas fa-user-plus"></i> Register
             </h2>
-            <form class="login-form" id="login-form" autocomplete="on">
+            <form class="login-form" id="register-form" autocomplete="on">
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="fullName">Full Name</label>
                     <div class="input-group">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="username" name="username" placeholder="Enter your username" required
-                            autofocus>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                        <button type="button" class="toggle-password" tabindex="-1" aria-label="Show/Hide Password">
-                            <i class="fas fa-eye"></i>
-                        </button>
+                        <input type="password" id="password" name="password" placeholder="Create a password" required>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="remember" name="remember">
-                        <span class="checkmark"></span>
-                        Remember me
-                    </label>
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirm-password" name="confirm-password"
+                            placeholder="Confirm your password" required>
+                    </div>
                 </div>
-
-                <button type="submit" class="login-btn" id="login-btn">
-                    <span class="btn-text">Sign In</span>
-                    <i class="fas fa-spinner fa-spin" id="login-spinner" style="display: none;"></i>
+                <button type="submit" class="login-btn" id="register-btn">
+                    <span class="btn-text">Register</span>
+                    <i class="fas fa-spinner fa-spin" id="register-spinner" style="display: none;"></i>
                 </button>
-
-                <div class="login-footer">
-                    Don't have an account? <a href="/register" class="register-link">Register here</a>
-                </div>
             </form>
+            <div class="login-footer">
+                <a href="/blog/login.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Login</a>
+            </div>
         </section>
 
         <!-- Error Message -->
@@ -89,7 +85,6 @@
             <span id="success-text"></span>
         </div>
     </main>
-
     <footer class="footer">
         <p>&copy; 2025 Blog. All rights reserved.</p>
     </footer>

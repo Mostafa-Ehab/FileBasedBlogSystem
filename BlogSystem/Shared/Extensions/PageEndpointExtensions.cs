@@ -29,6 +29,13 @@ static class PageEndpointExtension
             await context.Response.SendFileAsync(filePath);
         });
 
+        app.MapGet("/register", async context =>
+        {
+            var filePath = Path.Combine("wwwroot", "blog", "register.html");
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(filePath);
+        });
+
         app.MapGet("/admin", async context =>
         {
             context.Response.Redirect("/admin/posts");
