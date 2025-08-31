@@ -4,10 +4,12 @@ using BlogSystem.Domain.Entities;
 using BlogSystem.Domain.Enums;
 using BlogSystem.Features.Users.CreateUser.DTOs;
 using BlogSystem.Features.Users.Data;
+using BlogSystem.Features.Users.Login.DTOs;
 using BlogSystem.Shared.Exceptions.Users;
 using BlogSystem.Shared.Helpers;
 using BlogSystem.Shared.Mappings;
 using FluentValidation;
+using System.Security.Claims;
 
 namespace BlogSystem.Features.Users.CreateUser;
 
@@ -69,7 +71,7 @@ public class CreateUserHandler : ICreateUserHandler
         return Task.FromResult(createdUser.MapToCreatedUserDTO());
     }
 
-    public Task<CreatedUserDTO> RegisterUserAsync(RegisterUserRequestDTO requestDTO)
+    public Task<RegisterUserResponseDTO> RegisterUserAsync(RegisterUserRequestDTO requestDTO)
     {
         ValidationHelper.Validate(requestDTO, _registerUserRequestValidator);
 
@@ -98,6 +100,18 @@ public class CreateUserHandler : ICreateUserHandler
         };
         var createdUser = _userRepository.CreateUser(user);
 
-        return Task.FromResult(createdUser.MapToCreatedUserDTO());
+        return Task.FromResult(new RegisterUserResponseDTO
+        {
+            Id = user.Id.ToString(),
+            Username = user.Username,
+            Email = user.Email,
+            FullName = user.FullName,
+            ProfilePictureUrl = user.ProfilePictureUrl,
+            AccessToken = _authHelper.GenerateJWTToken([
+                new Claim("Id", user.Id.ToString()),
+                new Claim("Role", user.Role.ToString())
+            ]),
+            Role = user.Role
+        });
     }
 }
