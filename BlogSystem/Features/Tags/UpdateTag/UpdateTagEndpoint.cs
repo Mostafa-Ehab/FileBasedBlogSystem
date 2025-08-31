@@ -13,7 +13,7 @@ public static class UpdateTagEndpoint
             return Results.Ok(updatedTag);
         })
         .WithName("UpdateTag")
-        .RequireAuthorization("Editor")
+        .RequireAuthorization("Author")
         .Produces<Tag>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound)
         .WithTags("Tags");

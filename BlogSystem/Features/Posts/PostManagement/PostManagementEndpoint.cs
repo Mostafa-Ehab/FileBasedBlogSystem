@@ -14,7 +14,7 @@ public static class PostManagementEndpoint
             var result = await handler.CreatePostAsync(request, userId);
             return Results.Ok(result);
         })
-        .RequireAuthorization()
+        .RequireAuthorization("Author")
         .DisableAntiforgery()
         .WithTags("Posts")
         .WithSummary("Create a new post.");
@@ -25,7 +25,7 @@ public static class PostManagementEndpoint
             var result = await handler.UpdatePostAsync(postId, request, userId);
             return Results.Ok(result);
         })
-        .RequireAuthorization()
+        .RequireAuthorization("Author")
         .DisableAntiforgery()
         .WithTags("Posts")
         .WithSummary("Update an existing post by its id.");
@@ -36,7 +36,7 @@ public static class PostManagementEndpoint
             await handler.DeletePostAsync(postId, userId);
             return Results.NoContent();
         })
-        .RequireAuthorization()
+        .RequireAuthorization("Author")
         .WithTags("Posts")
         .WithSummary("Delete a post by its id.");
 
@@ -46,7 +46,7 @@ public static class PostManagementEndpoint
             var result = await handler.AddEditorToPostAsync(postId, request.EditorId, userId);
             return Results.Ok(result);
         })
-        .RequireAuthorization()
+        .RequireAuthorization("Author")
         .WithTags("Posts")
         .WithSummary("Add an editor to a post by its id.");
 
@@ -56,7 +56,7 @@ public static class PostManagementEndpoint
             await handler.RemoveEditorFromPostAsync(postId, editorId, userId);
             return Results.NoContent();
         })
-        .RequireAuthorization()
+        .RequireAuthorization("Author")
         .WithTags("Posts")
         .WithSummary("Remove an editor from a post by its id.");
 
@@ -66,7 +66,7 @@ public static class PostManagementEndpoint
             var result = await handler.UploadImageAsync(file, userId);
             return Results.Ok(result);
         })
-        .RequireAuthorization()
+        .RequireAuthorization("Author")
         .DisableAntiforgery()
         .WithTags("Posts")
         .WithSummary("Upload an image for a post.");
