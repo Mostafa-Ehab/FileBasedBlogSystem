@@ -72,7 +72,7 @@ public static class MinimalApiExtensions
         app.MapGetMyProfileEndpoint();
         app.MapGetUserEndpoint();
         app.MapGetPublicPostsByUserEndpoint();
-        app.MapCreateUserEndpoint();
+        app.MapCreateUsersEndpoints();
         app.MapUpdateUserEndpoints();
         app.MapUpdateProfileEndpoint();
         app.MapChangePasswordEndpoint();

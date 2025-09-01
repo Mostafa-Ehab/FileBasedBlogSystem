@@ -84,6 +84,7 @@ public static class ServiceCollectionExtensions
                                 throw new InvalidOperationException("JWT_SecretKey is not configured")
                         )
                     ),
+                    RoleClaimType = "Role"
                 };
 
                 options.Events = new JwtBearerEvents
@@ -112,11 +113,9 @@ public static class ServiceCollectionExtensions
         // Configure Authorization
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
-            options.AddPolicy("Editor", policy => policy.RequireAssertion(context =>
-                context.User.HasClaim(c => c.Type == "Role" && (c.Value == "Admin" || c.Value == "Editor"))));
-            options.AddPolicy("Author", policy => policy.RequireAssertion(context =>
-                context.User.HasClaim(c => c.Type == "Role" && (c.Value == "Admin" || c.Value == "Editor" || c.Value == "Author"))));
+            options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+            options.AddPolicy("Author", policy => policy.RequireRole("Admin", "Author"));
+            options.AddPolicy("Viewer", policy => policy.RequireRole("Admin", "Author", "Viewer"));
         });
 
         // Register ImageSharp services
@@ -236,6 +235,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IValidator<CreateUserRequestDTO>, CreateUserRequestValidator>();
         services.AddScoped<IValidator<UpdateUserRequestDTO>, UpdateUserRequestValidator>();
         services.AddScoped<IValidator<UpdateProfileInfoRequestDTO>, UpdateProfileInfoRequestValidator>();
+        services.AddScoped<IValidator<RegisterUserRequestDTO>, RegisterUserRequestValidator>();
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ILoginHandler, LoginHandler>();

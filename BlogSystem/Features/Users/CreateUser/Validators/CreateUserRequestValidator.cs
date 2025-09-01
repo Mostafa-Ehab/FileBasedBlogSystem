@@ -47,7 +47,7 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserRequestDTO
 
         RuleFor(x => x.Role)
             .IsInEnum()
-            .WithMessage("Role must be one of the predefined user roles (Admin, Editor, or Author).")
+            .WithMessage("Role must be one of the predefined user roles (Admin, Editor, or Viewer).")
             .When(x => x.Role.HasValue, ApplyConditionTo.CurrentValidator);
     }
 }

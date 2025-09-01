@@ -226,7 +226,4 @@ class SearchManager {
     }
 }
 
-// Initialize search manager
-document.addEventListener('DOMContentLoaded', () => {
-    window.SearchManager = new SearchManager();
-});
+
