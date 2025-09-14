@@ -22,13 +22,19 @@ service:
 ingress:
   enabled: true
   className: "nginx"
-  annotations: {}
+  annotations: 
+    cert-manager.io/cluster-issuer: "clusterissuer-arc-center-domain"
   hosts:
     - host: filebasedblogsystem-mostafa-dev.arc-center.run
       paths:
         - path: /
           pathType: Prefix
-  tls: []
+      
+  tls: 
+    - hosts:
+        - filebasedblogsystem-mostafa-dev.arc-center.run
+      secretName: filebasedblogsystem-mostafa-dev-tls
+
 resources:
   requests:
     cpu: 50m
