@@ -1,5 +1,4 @@
 .sidebar {
-
     // General styles for the sidebar
     .sidebar-widget {
         background: var(--background-color, white);
@@ -25,7 +24,6 @@
     .sidebar-widget-content {
         padding: 1.5rem;
     }
-
     // Tags Cloud Styles
     .tags-cloud {
         display: flex;
@@ -35,7 +33,7 @@
 
     .tag-pill {
         background: var(--background-light, #f8f9fa);
-        color: var(--text-muted, #6c757d);
+        color: var(--text-color, #000);
         padding: 0.5rem 1rem;
         border-radius: var(--border-radius-pill, 25px);
         font-size: 0.875rem;
@@ -51,7 +49,6 @@
             transform: translateY(-1px);
         }
     }
-
     // Categories List Styles
     .category-list {
         list-style: none;
@@ -83,7 +80,6 @@
     }
 
     .category-count {
-        background: var(--background-muted, #e9ecef);
         color: var(--text-muted, #6c757d);
         padding: 0.25rem 0.5rem;
         border-radius: var(--border-radius-small, 12px);
