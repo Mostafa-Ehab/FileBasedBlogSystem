@@ -41,4 +41,10 @@ function initOwlCarousel() {
         animateOut: 'fadeOut',
         animateIn: 'fadeIn'
     });
+
+    // Add aria-label to the previous button
+    $('.owl-prev').attr('aria-label', 'Previous Slide');
+
+    // Add aria-label to the next button
+    $('.owl-next').attr('aria-label', 'Next Slide');
 }

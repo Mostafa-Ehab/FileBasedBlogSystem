@@ -26,11 +26,11 @@ class SearchManager {
             <div class="search-overlay-content">
                 <div class="search-overlay-container">
                     <div class="search-overlay-input-container">
-                        <input type="text" id="overlay-search-input" placeholder="Search posts..." class="search-overlay-input">
-                        <button class="search-overlay-btn" id="overlay-search-btn">
+                        <input type="text" id="overlay-search-input" placeholder="Search posts..." class="search-overlay-input" aria-label="Search posts">
+                        <button class="search-overlay-btn" id="overlay-search-btn" aria-label="Search button">
                             <i class="fas fa-search"></i>
                         </button>
-                        <button class="search-close-btn" id="search-close-btn">
+                        <button class="search-close-btn" id="search-close-btn" aria-label="Close search">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>

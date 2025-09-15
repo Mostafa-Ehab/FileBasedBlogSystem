@@ -144,7 +144,7 @@ function setAuthorInfo(author) {
                 </p>
                 <div class="author-social">
                     ${Object.entries(author.socialLinks).map(([platform, link]) => `
-                        <a href="${link}" class="social-link" target="_blank">
+                        <a href="${link}" class="social-link" target="_blank" aria-label="${author.fullName} - ${platform}">
                             <i class="${getIconClass(platform)}"></i>
                         </a>
                     `).join('')}

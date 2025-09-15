@@ -28,6 +28,7 @@ public class PostSearchEngineService : ISearchEngineService<Post>
 
         // Initialize the parser for searching
         _parser = new MultiFieldQueryParser(LuceneVersion.LUCENE_48, ["title", "content", "description", "slug"], _standardAnalyzer);
+        _parser.DefaultOperator = Operator.AND;
     }
 
     public Task IndexDocumentAsync(Post document)
