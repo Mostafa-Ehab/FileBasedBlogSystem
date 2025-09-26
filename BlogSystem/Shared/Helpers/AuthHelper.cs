@@ -46,4 +46,9 @@ public class AuthHelper
         ));
         return new JwtSecurityTokenHandler().WriteToken(jwtToken);
     }
+
+    public static string GenerateRandomCode()
+    {
+
+    }
 }

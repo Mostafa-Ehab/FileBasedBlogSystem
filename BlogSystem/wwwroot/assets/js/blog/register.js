@@ -58,27 +58,27 @@ class UserRegister {
         try {
             const result = await this.registerUser(email, fullName, password);
 
-            if (result.success) {
-                // Store authentication data
-                setUser({
-                    userId: result.user.id,
-                    username: result.user.username,
-                    email: result.user.email,
-                    fullName: result.user.fullName,
-                    profilePictureUrl: result.user.profilePictureUrl,
-                    token: result.user.accessToken,
-                    role: result.user.role
-                });
+            // if (result.success) {
+            //     // Store authentication data
+            //     setUser({
+            //         userId: result.user.id,
+            //         username: result.user.username,
+            //         email: result.user.email,
+            //         fullName: result.user.fullName,
+            //         profilePictureUrl: result.user.profilePictureUrl,
+            //         token: result.user.accessToken,
+            //         role: result.user.role
+            //     });
 
-                showSuccess('Login successful! Redirecting...');
+            //     showSuccess('Login successful! Redirecting...');
 
-                // Redirect to dashboard after success message
-                setTimeout(() => {
-                    window.location.href = getRedirectUrl() || '/'; // Redirect to home
-                }, 200);
-            } else {
-                showError(result.message || 'Invalid credentials');
-            }
+            //     // Redirect to dashboard after success message
+            //     setTimeout(() => {
+            //         window.location.href = getRedirectUrl() || '/'; // Redirect to home
+            //     }, 200);
+            // } else {
+            //     showError(result.message || 'Invalid credentials');
+            // }
         } catch (error) {
             console.error('Login error:', error);
             showError('An error occurred during login. Please try again.');

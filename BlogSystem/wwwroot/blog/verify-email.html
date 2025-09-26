@@ -1,0 +1,182 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Your Email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        h2 {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Verify Your Email</h2>
+        <div class="message">
+            Please enter the verification code sent to your email address.
+        </div>
+        <form method="post" action="/blog/verify-email">
+            <label for="code">Verification Code</label>
+            <input type="text" id="code" name="code" required autocomplete="off" maxlength="8">
+            <button type="submit">Verify</button>
+        </form>
+    </div>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - Blog</title>
+    <meta property="og:title" content="Verify Email - Blog">
+    <meta property="og:url" content="/blog/verify-email.html">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Verify your email address to activate your account.">
+    <meta property="og:image" content="/assets/images/blog-thumbnail.png">
+
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="/assets/js/blog/shared/navbar.js" defer></script>
+    <script src="/assets/js/blog/shared/search.js" defer></script>
+    <script src="/assets/js/blog/register.js" defer></script>
+
+    <script src="/assets/js/shared/api.js" defer></script>
+    <script src="/assets/js/shared/auth.js" defer></script>
+    <script src="/assets/js/shared/errors.js" defer></script>
+    <script src="/assets/js/shared/utils.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <!-- Add navbar content if needed -->
+    </nav>
+    <main class="content">
+        <div class="verify-section">
+            <h2>Verify Your Email</h2>
+            <div class="message">
+                Please enter the verification code sent to your email address.
+            </div>
+            <form method="post" action="/blog/verify-email">
+                <label for="code">Verification Code</label>
+                <input type="text" id="code" name="code" required autocomplete="off" maxlength="8">
+                <button type="submit">Verify</button>
+            </form>
+        </div>
+        <!-- <section class="login-section">
+            <h2 class="login-title">
+                <i class="fas fa-user-plus"></i> Register
+            </h2>
+            <form class="login-form" id="register-form" autocomplete="on">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Create a password" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirm-password" name="confirm-password"
+                            placeholder="Confirm your password" required>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn" id="register-btn">
+                    <span class="btn-text">Register</span>
+                    <i class="fas fa-spinner fa-spin" id="register-spinner" style="display: none;"></i>
+                </button>
+            </form>
+            <div class="login-footer">
+                <a href="/blog/login.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Login</a>
+            </div>
+        </section> -->
+
+        <!-- Error Message -->
+        <div class="error-message" id="error-message" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="error-text"></span>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="success-message" style="display: none;">
+            <i class="fas fa-check-circle"></i>
+            <span id="success-text"></span>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>&copy; 2025 Blog. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

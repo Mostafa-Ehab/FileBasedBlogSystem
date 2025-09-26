@@ -31,6 +31,7 @@ using BlogSystem.Features.Users.Login.Validators;
 using BlogSystem.Features.Users.UpdateUser;
 using BlogSystem.Features.Users.UpdateUser.DTOs;
 using BlogSystem.Features.Users.UpdateUser.Validators;
+using BlogSystem.Infrastructure.EmailService;
 using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Infrastructure.MarkdownService;
 using BlogSystem.Infrastructure.Migrations;
@@ -181,6 +182,17 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<UserImageProvider>();
         services.AddSingleton<ISearchEngineService<Post>, PostSearchEngineService>();
         services.AddSingleton<IScheduler, HangfireScheduler>();
+
+        services.AddSingleton<IEmailService>(provider =>
+        {
+            var smtpHost = Environment.GetEnvironmentVariable("EMAIL_SMTP_HOST") ?? "smtp.gmail.com";
+            var smtpPort = int.Parse(Environment.GetEnvironmentVariable("EMAIL_SMTP_PORT") ?? "587");
+            var smtpUser = Environment.GetEnvironmentVariable("EMAIL_USERNAME") ?? throw new InvalidOperationException("EMAIL_USERNAME is not configured");
+            var smtpPass = Environment.GetEnvironmentVariable("EMAIL_PASSWORD") ?? throw new InvalidOperationException("EMAIL_PASSWORD is not configured");
+            var fromAddress = Environment.GetEnvironmentVariable("EMAIL_FROM_ADDRESS") ?? smtpUser;
+
+            return new EmailService(smtpHost, smtpPort, smtpUser, smtpPass, fromAddress);
+        });
 
         services.AddCategoryServices();
         services.AddPostServices();

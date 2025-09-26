@@ -17,4 +17,5 @@ public class User
     public UserRole Role { get; set; } = UserRole.Author; // e.g., Admin, Editor, Author
     public string[] Posts { get; set; } = []; // List of post IDs authored by the user
     public Dictionary<string, string> SocialLinks { get; set; } = [];
+    public bool IsEmailVerified { get; set; } = false;
 }
