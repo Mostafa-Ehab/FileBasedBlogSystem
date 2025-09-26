@@ -1,7 +1,7 @@
-using BlogSystem.Features.Users.Login.DTOs;
+using BlogSystem.Features.Users.Authentication.DTOs;
 using FluentValidation;
 
-namespace BlogSystem.Features.Users.Login.Validators;
+namespace BlogSystem.Features.Users.Authentication.Validators;
 
 public class LoginRequestValidator : AbstractValidator<LoginRequestDTO>
 {

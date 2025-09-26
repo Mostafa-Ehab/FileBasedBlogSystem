@@ -1,8 +1,7 @@
-using BlogSystem.Features.Users.CreateUser.DTOs;
-using BlogSystem.Shared.Helpers;
+using BlogSystem.Features.Users.Authentication.DTOs;
 using FluentValidation;
 
-namespace BlogSystem.Features.Users.CreateUser.Validators;
+namespace BlogSystem.Features.Users.Authentication.Validators;
 
 public class RegisterUserRequestValidator : AbstractValidator<RegisterUserRequestDTO>
 {

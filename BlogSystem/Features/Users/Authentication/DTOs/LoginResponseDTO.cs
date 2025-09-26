@@ -1,8 +1,8 @@
 using BlogSystem.Domain.Enums;
 
-namespace BlogSystem.Features.Users.CreateUser.DTOs;
+namespace BlogSystem.Features.Users.Authentication.DTOs;
 
-public record RegisterUserResponseDTO
+public record LoginResponseDTO
 {
     public string Id { get; set; } = string.Empty;
     public string Username { get; set; } = string.Empty;

@@ -1,4 +1,4 @@
-namespace BlogSystem.Features.Users.CreateUser.DTOs;
+namespace BlogSystem.Features.Users.Authentication.DTOs;
 
 public class RegisterUserRequestDTO
 {

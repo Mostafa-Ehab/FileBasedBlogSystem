@@ -14,6 +14,8 @@ public class User
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime LastLogin { get; set; }
+    public bool IsVerified { get; set; } = false;
+    public string VerificationCode { get; set; } = string.Empty;
     public UserRole Role { get; set; } = UserRole.Author; // e.g., Admin, Editor, Author
     public string[] Posts { get; set; } = []; // List of post IDs authored by the user
     public Dictionary<string, string> SocialLinks { get; set; } = [];

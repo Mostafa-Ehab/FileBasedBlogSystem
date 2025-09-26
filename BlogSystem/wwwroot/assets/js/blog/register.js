@@ -59,22 +59,9 @@ class UserRegister {
             const result = await this.registerUser(email, fullName, password);
 
             if (result.success) {
-                // Store authentication data
-                setUser({
-                    userId: result.user.id,
-                    username: result.user.username,
-                    email: result.user.email,
-                    fullName: result.user.fullName,
-                    profilePictureUrl: result.user.profilePictureUrl,
-                    token: result.user.accessToken,
-                    role: result.user.role
-                });
-
-                showSuccess('Login successful! Redirecting...');
-
-                // Redirect to dashboard after success message
+                showSuccess('Registration successful! Redirecting to email verification...');
                 setTimeout(() => {
-                    window.location.href = getRedirectUrl() || '/'; // Redirect to home
+                    window.location.href = `/verify-email?email=${encodeURIComponent(email)}&redirect=${encodeURIComponent(getRedirectUrl() || '/')}`;
                 }, 200);
             } else {
                 showError(result.message || 'Invalid credentials');
@@ -88,7 +75,7 @@ class UserRegister {
     }
 
     async registerUser(email, fullName, password) {
-        return await postRequest('/api/users/register', {
+        return await postRequest('/api/auth/register', {
             email, fullName, password
         }).then(response => {
             return {

@@ -1,4 +1,4 @@
-namespace BlogSystem.Features.Users.Login.DTOs;
+namespace BlogSystem.Features.Users.Authentication.DTOs;
 
 public record LoginRequestDTO
 {

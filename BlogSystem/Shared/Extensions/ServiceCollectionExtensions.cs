@@ -19,18 +19,19 @@ using BlogSystem.Features.Tags.Data;
 using BlogSystem.Features.Tags.DeleteTag;
 using BlogSystem.Features.Tags.GetTag;
 using BlogSystem.Features.Tags.UpdateTag;
+using BlogSystem.Features.Users.Authentication;
+using BlogSystem.Features.Users.Authentication.DTOs;
+using BlogSystem.Features.Users.Authentication.Validators;
 using BlogSystem.Features.Users.CreateUser;
 using BlogSystem.Features.Users.CreateUser.DTOs;
 using BlogSystem.Features.Users.CreateUser.Validators;
 using BlogSystem.Features.Users.Data;
 using BlogSystem.Features.Users.DeleteUser;
 using BlogSystem.Features.Users.GetUser;
-using BlogSystem.Features.Users.Login;
-using BlogSystem.Features.Users.Login.DTOs;
-using BlogSystem.Features.Users.Login.Validators;
 using BlogSystem.Features.Users.UpdateUser;
 using BlogSystem.Features.Users.UpdateUser.DTOs;
 using BlogSystem.Features.Users.UpdateUser.Validators;
+using BlogSystem.Infrastructure.EmailService;
 using BlogSystem.Infrastructure.ImageService;
 using BlogSystem.Infrastructure.MarkdownService;
 using BlogSystem.Infrastructure.Migrations;
@@ -187,6 +188,17 @@ public static class ServiceCollectionExtensions
         services.AddTagServices();
         services.AddUserServices();
 
+        services.AddSingleton<IEmailService>(provider =>
+        {
+            var smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST") ?? "smtp.gmail.com";
+            var smtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT") ?? "587");
+            var smtpUser = Environment.GetEnvironmentVariable("SMTP_USER") ?? throw new InvalidOperationException("SMTP_USER is not configured");
+            var smtpPass = Environment.GetEnvironmentVariable("SMTP_PASS") ?? throw new InvalidOperationException("SMTP_PASS is not configured");
+            var fromAddress = Environment.GetEnvironmentVariable("FROM_EMAIL") ?? smtpUser;
+
+            return new EmailService(smtpHost, smtpPort, smtpUser, smtpPass, fromAddress);
+        });
+
         return services;
     }
 
@@ -238,7 +250,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IValidator<RegisterUserRequestDTO>, RegisterUserRequestValidator>();
 
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ILoginHandler, LoginHandler>();
+        services.AddScoped<IAuthenticationHandler, AuthenticationHandler>();
         services.AddScoped<ICreateUserHandler, CreateUserHandler>();
         services.AddScoped<IGetUserHandler, GetUserHandler>();
         services.AddScoped<IUpdateUserHandler, UpdateUserHandler>();

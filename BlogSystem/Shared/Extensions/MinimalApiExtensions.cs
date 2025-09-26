@@ -10,10 +10,10 @@ using BlogSystem.Features.Tags.CreateTag;
 using BlogSystem.Features.Tags.DeleteTag;
 using BlogSystem.Features.Tags.GetTag;
 using BlogSystem.Features.Tags.UpdateTag;
+using BlogSystem.Features.Users.Authentication;
 using BlogSystem.Features.Users.CreateUser;
 using BlogSystem.Features.Users.DeleteUser;
 using BlogSystem.Features.Users.GetUser;
-using BlogSystem.Features.Users.Login;
 using BlogSystem.Features.Users.UpdateUser;
 
 namespace BlogSystem.Shared.Extensions;
@@ -78,13 +78,6 @@ public static class MinimalApiExtensions
         app.MapChangePasswordEndpoint();
         app.MapUpdateProfilePictureEndpoint();
         app.MapDeleteUserEndpoint();
-
-        return app;
-    }
-
-    public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
-    {
-        app.MapLoginEndpoint();
 
         return app;
     }

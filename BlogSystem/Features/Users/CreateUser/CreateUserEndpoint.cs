@@ -17,15 +17,5 @@ public static class CreateUserEndpoint
         .ProducesValidationProblem()
         .ProducesProblem(StatusCodes.Status409Conflict)
         .WithTags("Users");
-
-        app.MapPost("/register", async (RegisterUserRequestDTO registerUserRequestDTO, ICreateUserHandler createUserHandler) =>
-        {
-            var response = await createUserHandler.RegisterUserAsync(registerUserRequestDTO);
-            return Results.Ok(response);
-        })
-        .WithTags("Users")
-        .Produces<CreatedUserDTO>(StatusCodes.Status200OK)
-        .ProducesValidationProblem()
-        .ProducesProblem(StatusCodes.Status409Conflict);
     }
 }
